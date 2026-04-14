@@ -19,8 +19,8 @@ const lessonCards = [
   {
     slug: "gradient-descent",
     tag: "optimization",
-    title: "Gradient descent",
-    description: "why rolling downhill is a surprisingly good idea",
+    title: "which way is downhill",
+    description: "the geometry behind how machines learn",
     accent: "#5DCAA5",
   },
   {
@@ -83,10 +83,8 @@ export default function HomePage() {
             margin: "0 auto",
           }}
         >
-          <span style={{ fontSize: 18, fontWeight: 400, color: "#e8e8e8" }}>
-            nilay
-          </span>
-          <div style={{ display: "flex", gap: 32 }}>
+          <span />
+<div style={{ display: "flex", gap: 32 }}>
             <a
               href="#lessons"
               onClick={(e) => {
@@ -96,7 +94,7 @@ export default function HomePage() {
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
               style={{
-                color: "#888",
+                color: "#555",
                 textDecoration: "none",
                 fontSize: 14,
                 fontWeight: 400,
@@ -105,15 +103,17 @@ export default function HomePage() {
               lessons
             </a>
             <a
-              href="#"
+              href="https://github.com/nilaycry"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
-                color: "#888",
+                color: "#555",
                 textDecoration: "none",
                 fontSize: 14,
                 fontWeight: 400,
               }}
             >
-              about
+              github
             </a>
           </div>
         </nav>
@@ -170,8 +170,7 @@ export default function HomePage() {
                 maxWidth: 420,
               }}
             >
-              interactive lessons on the ideas I keep coming back to — built by
-              a math major
+              interactive notes on the math I keep coming back to — written the way it finally clicked for me, not the way it&apos;s usually taught
             </p>
 
             <a

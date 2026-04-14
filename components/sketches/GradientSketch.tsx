@@ -1,21 +1,21 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import p5 from "p5";
+import { useP5Sketch } from "@/hooks/useP5Sketch";
 
 export default function GradientSketch() {
   const [learningRate, setLearningRate] = useState(0.05);
-  const [showContours, setShowContours] = useState(true);
+  const [showGradient, setShowGradient] = useState(true);
   const posRef = useRef<{ x: number; y: number; trail: { x: number; y: number }[] } | null>(null);
   const clickRef = useRef<{ x: number; y: number } | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const lrRef = useRef(learningRate);
   lrRef.current = learningRate;
-  const showContoursRef = useRef(showContours);
-  showContoursRef.current = showContours;
+  const showGradientRef = useRef(showGradient);
+  showGradientRef.current = showGradient;
 
   // Objective function: f(x,y) = x^2 + 3y^2 + 0.5*x*y + x - 2y + 5
-  // This creates an elongated bowl shape
   const f = (x: number, y: number) =>
     x * x + 3 * y * y + 0.5 * x * y + x - 2 * y + 5;
 
@@ -30,7 +30,12 @@ export default function GradientSketch() {
       const height = 500;
       const rangeX = [-4, 4] as const;
       const rangeY = [-3, 3] as const;
+      // px per math unit (for converting gradient vectors to screen vectors)
+      const scaleX = width / (rangeX[1] - rangeX[0]);
+      const scaleY = height / (rangeY[1] - rangeY[0]);
       let contourImg: p5.Image | null = null;
+      const levels = [4, 6, 8, 10, 14, 20, 28, 38];
+      let contourSegments: { level: number; segs: [number,number,number,number][] }[] = [];
 
       const toScreenX = (x: number) =>
         p.map(x, rangeX[0], rangeX[1], 0, width);
@@ -40,6 +45,28 @@ export default function GradientSketch() {
         p.map(sx, 0, width, rangeX[0], rangeX[1]);
       const toMathY = (sy: number) =>
         p.map(sy, 0, height, rangeY[0], rangeY[1]);
+
+      const buildContourLines = () => {
+        const step = 4;
+        contourSegments = levels.map(level => {
+          const segs: [number,number,number,number][] = [];
+          for (let px = 0; px < width - step; px += step) {
+            for (let py = 0; py < height - step; py += step) {
+              const f00 = f(toMathX(px),        toMathY(py))        - level;
+              const f10 = f(toMathX(px + step),  toMathY(py))        - level;
+              const f01 = f(toMathX(px),         toMathY(py + step)) - level;
+              const f11 = f(toMathX(px + step),  toMathY(py + step)) - level;
+              const pts: [number, number][] = [];
+              if (f00 * f10 < 0) { const t = f00/(f00-f10); pts.push([px + t*step, py]); }
+              if (f10 * f11 < 0) { const t = f10/(f10-f11); pts.push([px + step, py + t*step]); }
+              if (f01 * f11 < 0) { const t = f01/(f01-f11); pts.push([px + t*step, py + step]); }
+              if (f00 * f01 < 0) { const t = f00/(f00-f01); pts.push([px, py + t*step]); }
+              if (pts.length === 2) segs.push([pts[0][0], pts[0][1], pts[1][0], pts[1][1]]);
+            }
+          }
+          return { level, segs };
+        });
+      };
 
       const buildContourImage = () => {
         contourImg = p.createImage(width, height);
@@ -74,10 +101,29 @@ export default function GradientSketch() {
         contourImg.updatePixels();
       };
 
+      // Draw an arrow from (x1,y1) to (x2,y2) in screen coords
+      const drawArrow = (x1: number, y1: number, x2: number, y2: number) => {
+        p.line(x1, y1, x2, y2);
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        const headLen = 10;
+        p.line(
+          x2, y2,
+          x2 - headLen * Math.cos(angle - Math.PI / 6),
+          y2 - headLen * Math.sin(angle - Math.PI / 6)
+        );
+        p.line(
+          x2, y2,
+          x2 - headLen * Math.cos(angle + Math.PI / 6),
+          y2 - headLen * Math.sin(angle + Math.PI / 6)
+        );
+      };
+
       p.setup = () => {
         p.createCanvas(width, height);
         p.textFont("Inter");
         buildContourImage();
+        buildContourLines();
+        p.noLoop();
       };
 
       p.mousePressed = () => {
@@ -87,37 +133,23 @@ export default function GradientSketch() {
           posRef.current = { x: mx, y: my, trail: [{ x: mx, y: my }] };
           clickRef.current = { x: mx, y: my };
           setIsRunning(true);
+          p.loop();
         }
       };
 
       p.draw = () => {
         const isDark = document.documentElement.classList.contains("dark");
 
-        // Rebuild contour on theme change
         if (!contourImg) buildContourImage();
         if (contourImg) p.image(contourImg, 0, 0);
 
-        // Contour lines
-        if (showContoursRef.current) {
-          p.noFill();
-          p.strokeWeight(1);
-          const levels = [4, 6, 8, 10, 14, 20, 28, 38];
-          for (const level of levels) {
-            p.stroke(isDark ? p.color(255, 255, 255, 25) : p.color(0, 0, 0, 25));
-            p.beginShape();
-            for (let angle = 0; angle < p.TWO_PI; angle += 0.02) {
-              // Approximate contour via parameterization
-              for (let r = 0.1; r < 6; r += 0.05) {
-                const cx = r * p.cos(angle);
-                const cy = r * p.sin(angle);
-                const val = f(cx, cy);
-                if (Math.abs(val - level) < 0.5) {
-                  p.vertex(toScreenX(cx), toScreenY(cy));
-                  break;
-                }
-              }
-            }
-            p.endShape(p.CLOSE);
+        // Contour lines (marching squares, precomputed)
+        p.noFill();
+        p.strokeWeight(1);
+        p.stroke(isDark ? p.color(255, 255, 255, 25) : p.color(0, 0, 0, 25));
+        for (const { segs } of contourSegments) {
+          for (const [x1, y1, x2, y2] of segs) {
+            p.line(x1, y1, x2, y2);
           }
         }
 
@@ -132,8 +164,13 @@ export default function GradientSketch() {
             pos.y -= lrRef.current * gy;
             pos.trail.push({ x: pos.x, y: pos.y });
             if (pos.trail.length > 500) pos.trail.shift();
+            if (Math.abs(pos.x) > 6 || Math.abs(pos.y) > 5) {
+              setIsRunning(false);
+              p.noLoop();
+            }
           } else {
             setIsRunning(false);
+            p.noLoop();
           }
 
           // Draw trail
@@ -154,6 +191,24 @@ export default function GradientSketch() {
             );
           }
 
+          // Gradient arrow at current position
+          if (showGradientRef.current && gradMag > 0.001) {
+            const sx = toScreenX(pos.x);
+            const sy = toScreenY(pos.y);
+            // Convert gradient vector to screen space (no Y flip — toScreenY already maps y=-3→top, y=3→bottom)
+            const arrowScreenX = gx * scaleX;
+            const arrowScreenY = gy * scaleY;
+            // Normalize and cap at 70px so it's always legible
+            const arrowLen = Math.min(gradMag * 20, 70);
+            const arrowMag = Math.sqrt(arrowScreenX * arrowScreenX + arrowScreenY * arrowScreenY);
+            const nx = (arrowScreenX / arrowMag) * arrowLen;
+            const ny = (arrowScreenY / arrowMag) * arrowLen;
+
+            p.strokeWeight(2.5);
+            p.stroke(p.color(255, 255, 255, 220));
+            drawArrow(sx, sy, sx + nx, sy + ny);
+          }
+
           // Starting point
           if (clickRef.current) {
             p.fill(isDark ? p.color(255, 100, 100) : p.color(200, 50, 50));
@@ -166,9 +221,7 @@ export default function GradientSketch() {
           }
 
           // Current position
-          p.fill(
-            isDark ? p.color(255, 220, 80) : p.color(230, 160, 30)
-          );
+          p.fill(isDark ? p.color(255, 220, 80) : p.color(230, 160, 30));
           p.noStroke();
           p.ellipse(toScreenX(pos.x), toScreenY(pos.y), 12);
           p.fill(isDark ? p.color(255, 255, 255) : p.color(255, 255, 255));
@@ -180,26 +233,14 @@ export default function GradientSketch() {
           p.textSize(12);
           p.textAlign(p.LEFT, p.TOP);
           p.text(
-            `f(${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}) = ${f(
-              pos.x,
-              pos.y
-            ).toFixed(3)}`,
+            `f(${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}) = ${f(pos.x, pos.y).toFixed(3)}`,
             14,
             14
           );
           p.text(`Steps: ${pos.trail.length}`, 14, 32);
-        } else {
-          // Instruction text
-          p.fill(isDark ? p.color(180, 185, 200) : p.color(80, 85, 100));
-          p.noStroke();
-          p.textSize(16);
-          p.textAlign(p.CENTER, p.CENTER);
-          p.text("Click anywhere to place starting point", width / 2, height / 2);
         }
 
         // Minimum marker
-        // Minimum of f: df/dx = 2x + 0.5y + 1 = 0, df/dy = 6y + 0.5x - 2 = 0
-        // => x ≈ -0.565, y ≈ 0.380
         const minX = -0.565;
         const minY = 0.380;
         p.stroke(isDark ? p.color(100, 255, 150) : p.color(0, 180, 80));
@@ -217,29 +258,7 @@ export default function GradientSketch() {
       };
   }, el);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const p5Ref = useRef<p5 | null>(null);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    let cancelled = false;
-
-    while (el.firstChild) el.removeChild(el.firstChild);
-
-    const timer = setTimeout(() => {
-      if (cancelled || !el) return;
-      if (p5Ref.current) { p5Ref.current.remove(); p5Ref.current = null; }
-      p5Ref.current = buildSketch(el);
-    }, 0);
-
-    return () => {
-      cancelled = true;
-      clearTimeout(timer);
-      if (p5Ref.current) { p5Ref.current.remove(); p5Ref.current = null; }
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const containerRef = useP5Sketch(buildSketch);
 
   const handleReset = () => {
     posRef.current = null;
@@ -264,7 +283,7 @@ export default function GradientSketch() {
             id="gradient-lr-slider"
             type="range"
             min={0.005}
-            max={0.15}
+            max={0.35}
             step={0.005}
             value={learningRate}
             onChange={(e) => setLearningRate(parseFloat(e.target.value))}
@@ -275,25 +294,25 @@ export default function GradientSketch() {
             <span className="text-sm font-mono font-semibold text-accent">
               {learningRate.toFixed(3)}
             </span>
-            <span className="text-xs text-muted-foreground">0.15</span>
+            <span className="text-xs text-muted-foreground">0.35</span>
           </div>
         </div>
 
-        {/* Contours toggle */}
+        {/* Gradient arrow toggle */}
         <div className="rounded-xl bg-secondary/50 border border-border/50 p-4 flex flex-col justify-between">
           <label className="block text-sm font-medium text-foreground mb-2">
-            Contour Lines
+            Gradient Arrow
           </label>
           <button
-            id="gradient-contours-toggle"
-            onClick={() => setShowContours(!showContours)}
+            id="gradient-arrow-toggle"
+            onClick={() => setShowGradient(!showGradient)}
             className={`w-full py-2.5 rounded-lg text-sm font-medium transition-all ${
-              showContours
+              showGradient
                 ? "bg-accent text-accent-foreground shadow-lg shadow-accent/25"
                 : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
             }`}
           >
-            {showContours ? "✦ Visible" : "Hidden"}
+            {showGradient ? "✦ Visible" : "Hidden"}
           </button>
         </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import Canvas from "@/components/Canvas";
 import p5 from "p5";
 
@@ -186,11 +186,10 @@ export default function FourierSketch() {
           <button
             id="fourier-circles-toggle"
             onClick={() => setShowCircles(!showCircles)}
-            className={`w-full py-2.5 rounded-lg text-sm font-medium transition-all ${
-              showCircles
+            className={`w-full py-2.5 rounded-lg text-sm font-medium transition-all ${showCircles
                 ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
                 : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            }`}
+              }`}
           >
             {showCircles ? "✦ Visible" : "Hidden"}
           </button>

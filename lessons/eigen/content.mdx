@@ -2,6 +2,8 @@
 title: "the directions a matrix can't change"
 description: "what a matrix actually does to space"
 tags: ["linear algebra"]
+color: "from-orange-500 to-rose-500"
+icon: "🔄"
 date: "2026-04-13"
 ---
 
@@ -47,18 +49,30 @@ The trace (a+d) and determinant (ad−bc) fully determine the eigenvalues.
 
 ---
 
-### when it gets weird
+### when it gets interesting
 
-Try the rotation preset — [[0,−1],[1,0]]. The unit circle maps back to a unit
+Try rotation preset. The unit circle maps back to a unit
 circle. No direction is preserved. The eigenvalues are ±i. There are no real
-eigenvectors. Everything spins.
+eigenvectors.
 
-This isn't a failure of the method. It's the method telling you something true
-about the transformation.
+looking at the numbers — [[0,−1],[1,0]] — It gives no intuition for
+why this matrix wouldn't have eigenvectors. But the geometric picture makes it obvious, almost trivial: if
+the transformation is a pure rotation, there's no direction that gets left
+alone. Of course there are no real eigenvectors. The geometry makes the algebra
+feel inevitable instead of arbitrary.
+
+The general principle: real eigenvectors don't exist whenever the transformation
+spins space in a way that no vector lands back on its own line. This happens
+any time the transformation has a rotational component strong enough that every
+direction gets knocked off course — pure rotations, but also certain
+combinations of rotation and reflection where the geometry never settles on a
+fixed axis. Algebraically, this shows up as a negative discriminant in the
+characteristic polynomial. Geometrically, it just means the ellipse is turned
+too far for any input direction to survive.
 
 ---
 
-### why I actually care about this
+### why care about this
 
 I work on a market regime classification project with the UIUC Data Science Club.
 PCA comes up constantly — it's how you find the directions of maximum variance
@@ -74,4 +88,4 @@ It's just finding the axes of the ellipse your data lives on.
 
 Repeated eigenvalues, defective matrices (not enough eigenvectors to span the
 space), and the spectral theorem (when you're guaranteed a full orthogonal set).
-That's MATH 416 stuff. I'll add it when I get there this fall.
+I'll update as I learn more interesting things worth adding.

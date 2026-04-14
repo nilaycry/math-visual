@@ -1,3 +1,7 @@
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+
 export interface LessonMeta {
   slug: string;
   title: string;
@@ -7,35 +11,46 @@ export interface LessonMeta {
   icon: string;
 }
 
-export const lessons: LessonMeta[] = [
-  {
-    slug: "fourier-series",
-    title: "Fourier Series",
-    description:
-      "Watch how simple sine waves combine to build any shape — from smooth curves to sharp square waves.",
-    tags: ["Signal Processing", "Trigonometry", "Series"],
-    color: "from-purple-500 to-blue-500",
-    icon: "〰️",
-  },
-  {
-    slug: "gradient-descent",
-    title: "Gradient Descent",
-    description:
-      "Place a ball on a surface and watch it roll downhill to find the minimum — the heart of machine learning.",
-    tags: ["Optimization", "Machine Learning", "Calculus"],
-    color: "from-emerald-500 to-cyan-500",
-    icon: "⛰️",
-  },
-  {
-    slug: "eigen",
-    title: "the directions a matrix can't change",
-    description: "what a matrix actually does to space",
-    tags: ["linear algebra"],
-    color: "from-orange-500 to-rose-500",
-    icon: "🔄",
-  },
-];
+const lessonsDirectory = path.join(process.cwd(), "lessons");
+
+export function getAllLessons(): LessonMeta[] {
+  const lessonDirs = fs
+    .readdirSync(lessonsDirectory)
+    .filter((dir) => fs.statSync(path.join(lessonsDirectory, dir)).isDirectory());
+
+  return lessonDirs
+    .map((slug) => {
+      const filePath = path.join(lessonsDirectory, slug, "content.mdx");
+      if (!fs.existsSync(filePath)) return null;
+
+      const fileContent = fs.readFileSync(filePath, "utf-8");
+      const { data } = matter(fileContent);
+
+      return {
+        slug,
+        title: data.title as string,
+        description: data.description as string,
+        tags: data.tags as string[],
+        color: data.color as string,
+        icon: data.icon as string,
+      } as LessonMeta;
+    })
+    .filter((lesson): lesson is LessonMeta => lesson !== null);
+}
 
 export function getLessonBySlug(slug: string): LessonMeta | undefined {
+  const lessons = getAllLessons();
   return lessons.find((l) => l.slug === slug);
+}
+
+export function getLessonContent(slug: string): string | null {
+  const filePath = path.join(lessonsDirectory, slug, "content.mdx");
+  if (!fs.existsSync(filePath)) return null;
+  return fs.readFileSync(filePath, "utf-8");
+}
+
+export function getAllLessonSlugs(): string[] {
+  return fs
+    .readdirSync(lessonsDirectory)
+    .filter((dir) => fs.statSync(path.join(lessonsDirectory, dir)).isDirectory());
 }

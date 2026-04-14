@@ -1,21 +1,26 @@
 import { notFound } from "next/navigation";
-import { getLessonBySlug, lessons } from "@/lib/lessons";
+import { getLessonBySlug, getAllLessonSlugs, getLessonContent } from "@/lib/lessons";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { compileMDX } from "next-mdx-remote/rsc";
+import dynamic from "next/dynamic";
 
-// Import lesson content components
-import FourierLesson from "./content/fourier-series";
-import GradientLesson from "./content/gradient-descent";
-import EigenLesson from "./content/eigen";
+// Import sketch components for MDX (dynamic import with ssr: false)
+const FourierSketch = dynamic(() => import("@/components/sketches/FourierSketch"), { ssr: false });
+const GradientSketch = dynamic(() => import("@/components/sketches/GradientSketch"), { ssr: false });
+const EigenSketch = dynamic(() => import("@/components/sketches/EigenSketch"), { ssr: false });
+const NonConvexSketch = dynamic(() => import("@/components/sketches/NonConvexSketch"), { ssr: false });
 
-const lessonComponents: Record<string, React.ComponentType> = {
-  "fourier-series": FourierLesson,
-  "gradient-descent": GradientLesson,
-  eigen: EigenLesson,
+const components = {
+  FourierSketch,
+  GradientSketch,
+  EigenSketch,
+  NonConvexSketch,
 };
 
 export async function generateStaticParams() {
-  return lessons.map((lesson) => ({ slug: lesson.slug }));
+  const slugs = getAllLessonSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -31,7 +36,7 @@ export async function generateMetadata({
   };
 }
 
-export default function LessonPage({
+export default async function LessonPage({
   params,
 }: {
   params: { slug: string };
@@ -39,14 +44,21 @@ export default function LessonPage({
   const lesson = getLessonBySlug(params.slug);
   if (!lesson) notFound();
 
-  const LessonContent = lessonComponents[params.slug];
-  if (!LessonContent) notFound();
+  const mdxSource = getLessonContent(params.slug);
+  if (!mdxSource) notFound();
+
+  const { content } = await compileMDX({
+    source: mdxSource,
+    options: { parseFrontmatter: true },
+    components,
+  });
 
   // Find prev/next
-  const currentIndex = lessons.findIndex((l) => l.slug === params.slug);
-  const prevLesson = currentIndex > 0 ? lessons[currentIndex - 1] : null;
+  const allLessons = getAllLessonSlugs();
+  const currentIndex = allLessons.indexOf(params.slug);
+  const prevLesson = currentIndex > 0 ? getLessonBySlug(allLessons[currentIndex - 1]) : null;
   const nextLesson =
-    currentIndex < lessons.length - 1 ? lessons[currentIndex + 1] : null;
+    currentIndex < allLessons.length - 1 ? getLessonBySlug(allLessons[currentIndex + 1]) : null;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -94,10 +106,8 @@ export default function LessonPage({
         <hr style={{ border: "none", borderTop: "1px solid #1e1e1e", marginTop: 32 }} />
       </header>
 
-      {/* Lesson Content */}
-      <article className="prose">
-        <LessonContent />
-      </article>
+      {/* MDX Content */}
+      <article className="prose">{content}</article>
 
       {/* Navigation */}
       <nav
