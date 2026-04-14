@@ -1,0 +1,77 @@
+---
+title: "the directions a matrix can't change"
+description: "what a matrix actually does to space"
+tags: ["linear algebra"]
+date: "2026-04-13"
+---
+
+import EigenSketch from '@/components/sketches/EigenSketch'
+
+## the directions a matrix can't change
+
+The definition looks simple: Av = λv. A matrix times a vector equals a scalar
+times that same vector. I stared at that for a while before it meant anything.
+What finally made it real was drawing it.
+
+---
+
+### the geometric picture
+
+Take a 2×2 matrix and feed it every point on the unit circle. What comes out is
+an ellipse — the circle gets stretched and possibly rotated. Most vectors get
+knocked off their original direction entirely. But the eigenvectors don't. They
+sit exactly along the axes of that ellipse. The matrix can only stretch them,
+not rotate them. λ is just how much.
+
+The gray circle is the input. The purple ellipse is the output. The colored
+lines are eigenvectors — they pass through the transformation unchanged in
+direction. Drag the sliders or try a preset.
+
+<EigenSketch />
+
+---
+
+### the algebra, motivated by the geometry
+
+If Av = λv, then (A − λI)v = 0. For that to have a nonzero solution,
+(A − λI) has to be singular — it has to squash space down a dimension.
+That only happens when its determinant is zero:
+
+{"\\det(A - \\lambda I) = 0"}
+
+For a 2×2 matrix [[a,b],[c,d]] this expands to:
+
+{"\\lambda^2 - (a+d)\\lambda + (ad-bc) = 0"}
+
+The trace (a+d) and determinant (ad−bc) fully determine the eigenvalues.
+
+---
+
+### when it gets weird
+
+Try the rotation preset — [[0,−1],[1,0]]. The unit circle maps back to a unit
+circle. No direction is preserved. The eigenvalues are ±i. There are no real
+eigenvectors. Everything spins.
+
+This isn't a failure of the method. It's the method telling you something true
+about the transformation.
+
+---
+
+### why I actually care about this
+
+I work on a market regime classification project with the UIUC Data Science Club.
+PCA comes up constantly — it's how you find the directions of maximum variance
+in high-dimensional data. Those directions are eigenvectors of the covariance
+matrix. The eigenvalues tell you how much variance each one captures.
+
+Understanding what eigenvalues geometrically mean makes PCA not feel like magic.
+It's just finding the axes of the ellipse your data lives on.
+
+---
+
+### what this doesn't cover yet
+
+Repeated eigenvalues, defective matrices (not enough eigenvectors to span the
+space), and the spectral theorem (when you're guaranteed a full orthogonal set).
+That's MATH 416 stuff. I'll add it when I get there this fall.
