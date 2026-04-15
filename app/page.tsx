@@ -10,13 +10,6 @@ const HeroSketch = dynamic(
 
 const lessonCards = [
   {
-    slug: "fourier-series",
-    tag: "analysis",
-    title: "Fourier series",
-    description: "any shape, if you're patient enough with circles",
-    accent: "#7F77DD",
-  },
-  {
     slug: "gradient-descent",
     tag: "optimization",
     title: "which way is downhill",
@@ -170,7 +163,7 @@ export default function HomePage() {
                 maxWidth: 420,
               }}
             >
-              notes on the math I keep coming back to — written in way I think about it, not the way it&apos;s usually taught. half teaching, half making sure I really get it
+              math notes i had fun making. written in way i think about it, not the way it&apos;s usually taught. half teaching, half making sure I get it
             </p>
 
             <a

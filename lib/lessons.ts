@@ -26,6 +26,8 @@ export function getAllLessons(): LessonMeta[] {
       const fileContent = fs.readFileSync(filePath, "utf-8");
       const { data } = matter(fileContent);
 
+      if (data.draft) return null;
+
       return {
         slug,
         title: data.title as string,
@@ -52,5 +54,11 @@ export function getLessonContent(slug: string): string | null {
 export function getAllLessonSlugs(): string[] {
   return fs
     .readdirSync(lessonsDirectory)
-    .filter((dir) => fs.statSync(path.join(lessonsDirectory, dir)).isDirectory());
+    .filter((dir) => {
+      if (!fs.statSync(path.join(lessonsDirectory, dir)).isDirectory()) return false;
+      const filePath = path.join(lessonsDirectory, dir, "content.mdx");
+      if (!fs.existsSync(filePath)) return false;
+      const { data } = matter(fs.readFileSync(filePath, "utf-8"));
+      return !data.draft;
+    });
 }

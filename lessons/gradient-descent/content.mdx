@@ -10,66 +10,61 @@ date: "2026-04-13"
 import GradientSketch from '@/components/sketches/GradientSketch'
 import NonConvexSketch from '@/components/sketches/NonConvexSketch'
 
-The update rule looks mechanical: x ← x − α∇f(x). Subtract a scaled gradient
-.I knew how to apply it long before I understood what it was doing
-geometrically.
+explanations usually start with the update rule. i think that's backwards. the geometry is simpler, and once you see it, the formula becomes obvious rather than arbitrary.
 
 ---
 
 ### the picture first
 
-look at the contour plot. each curve connects points at the same height (the surface below is essentialy a bowl).
+look at the contour plot. each curve connects points at the same height (the surface below is essentially a bowl).
 the gradient at any point is perpendicular to the contour line through it: pointing
 directly toward higher values. to minimize, just go the other way. click anywhere to
-drop a point. 
+drop a point.
 
 <div className="not-prose my-8">
   <GradientSketch />
 </div>
 
-
-this is a convex function, just one minimum, no traps. No matter where you start, the
-path is different but the destination isn't. play with the learning rate. At 0.005
-it barely moves. At 0.35 it overshoots and oscillates. 
+this is a convex function, just one minimum, no traps. no matter where you start, the
+path is different but the destination isn't. play with the learning rate. at 0.005
+it barely moves. at 0.35 it overshoots and oscillates.
 
 ---
 
 ### the math, motivated by the geometry
 
-The gradient is the vector of partial derivatives:
+the gradient is the vector of partial derivatives:
 
 <div className="math-highlight">∇f(x, y) = [ ∂f/∂x, ∂f/∂y ]</div>
 
-It points in the direction of steepest ascent. To convince yourself of this formula consider first thinking about the
-vector that points in the direction of steepest ascent. now think about how would you find the components of this vector. the actual update rule:
+it points in the direction of steepest ascent. if you think about what vector would point uphill most steeply and ask what its components must be, you recover this formula. the update rule just goes the other way:
 
 <div className="math-highlight">x_n+1 = x_n − α · ∇f(x_n)</div>
 
 α is the learning rate. it controls how far you step in the direction of −∇f each iteration. too small and convergence crawls; too large and you overshoot the valley entirely.
 
-how large is "too large" depends on the curvature of f at that point. the upper bound on α is set by the largest [eigenvalue](/lessons/eigen) of the Hessian, the matrix of second derivatives(i think this conncection to linear algebra is fascinating). high curvature means smaller steps. that's why the same learning rate that works on a gentle bowl breaks on a sharp one.
+how large is "too large" depends on the curvature of f at that point. the upper bound on α is set by the largest [eigenvalue](/lessons/eigen) of the Hessian, the matrix of second derivatives (I think this connection to linear algebra is fascinating). high curvature means smaller steps. that's why the same learning rate that works on a gentle bowl breaks on a sharp one.
 
 ---
 
 ### the real problem: non-convex landscapes
 
-the convex case is clean. real problems aren't. Neural network loss
+the convex case is clean. real problems aren't. neural network loss
 landscapes have many local minima at different depths, separated by ridges. basic
 gradient descent has no memory and no foresight. it follows the slope and stops
 at the first flat region it finds.
 
-click anywhere on the surface below. the red dots are local minima. the green
-cross is the global minimum.
+click anywhere on the surface below. the red dots are local minima.
 
 <div className="not-prose my-8">
   <NonConvexSketch />
 </div>
 
 depending on where you start, basic gradient descent finds a completely different
-answer and usually not the deepest one. The gradient at a local minimum is zero, so
-the update rule says it's done. i find the ways we overcome this limitation pretty cool
+answer and usually not the deepest one. the gradient at a local minimum is zero, so
+the update rule says it's done.
 
-switch to **momentum** and drop the ball in the same spot. Momentum adds an
+switch to **momentum** and drop the ball in the same spot. momentum adds an
 exponential moving average of past gradients to the update:
 
 <div className="math-highlight">v_t = β · v_{t-1} + ∇f(x_t)</div>
@@ -83,14 +78,15 @@ try the **noisy** mode. the random kick on each step is what stochastic gradient
 descent does in practice: computing gradients on random data subsets adds noise
 that helps escape shallow traps.
 
-neither of these is a clean fix. you can still get stuck, and the right β or noise scale depends on the problem. but that's often how it goes in practice — you accept imperfect tools that do better than the baseline.
+neither of these is a clean fix. you can still get stuck, and the right β or noise scale depends on the problem. 
+but that's often how it goes in practice. you accept imperfect tools that do better than the baseline.
 
 ---
 
 ### what this doesn't cover yet
 
-Second-order methods (Newton's method, L-BFGS) that use curvature information to
-take smarter steps. Convergence rate analysis. The connection between gradient
+second-order methods (Newton's method, L-BFGS) that use curvature information to
+take smarter steps. convergence rate analysis. the connection between gradient
 flow and differential equations. in the limit of infinitesimal steps, gradient
 descent becomes a continuous dynamical system, which is a completely different way
 to think about optimization.
