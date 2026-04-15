@@ -1,33 +1,32 @@
 # math-visual
 
-interactive lessons on the math i keep coming back to — built at uiuc, mostly for myself.
+personal math visualization site — interactive notes on the math i keep coming back to, written the way it finally clicked for me.
 
-**[live →](https://math-visual.vercel.app)** *(deploy link — update after deploying)*
+**[math-visual-nu.vercel.app](https://math-visual-nu.vercel.app)**
 
 ---
 
 ## what this is
 
-a small collection of visual, interactive explainers for math concepts that clicked once i could *see* them. each lesson pairs prose with a live p5.js sketch you can play with.
+each lesson pairs prose with a live p5.js sketch you can play with. geometry first, formula second. writing these out is also how i make sure i actually understand something.
 
 ### lessons
 
 | topic | what it covers |
 |---|---|
-| **fourier series** | epicycle animation building a square wave from sine harmonics |
-| **gradient descent** | click-to-place contour plot optimizer with adjustable learning rate |
-| **eigenvectors** | unit circle → ellipse transformation with real-time eigenvector overlay |
+| **gradient descent** | contour plot with click-to-place optimizer, adjustable learning rate, momentum and noisy SGD modes |
+| **eigenvectors** | unit circle to ellipse transformation, real-time eigenvector overlay, click-to-transform any vector |
 
-more coming as i work through math 416 this fall.
+more coming as i work through topics i find interesting.
 
 ---
 
 ## stack
 
-- **next.js 14** — app router, typescript
-- **p5.js** — all sketches are instance-mode, mounted directly via `useEffect`
-- **tailwind css** — dark-mode-first styling
-- **mdx** — lesson content (prose + embedded sketch components)
+- **next.js** — app router, typescript
+- **p5.js** — all sketches dynamically imported (`ssr: false`), instance mode
+- **tailwind css** — dark only
+- **mdx** via `next-mdx-remote/rsc` — lessons live in `lessons/<slug>/content.mdx`
 
 ## run locally
 
@@ -44,42 +43,25 @@ open [localhost:3000](http://localhost:3000).
 
 ```
 app/
-  page.tsx                          # homepage
+  page.tsx                    # homepage + lesson cards
   lessons/[slug]/
-    page.tsx                        # lesson layout (breadcrumb, header, nav)
-    content/
-      fourier-series.tsx            # lesson prose + sketch
-      gradient-descent.tsx
-      eigen.tsx
+    page.tsx                  # lesson renderer (register new sketches here)
 components/
   sketches/
-    FourierSketch.tsx               # epicycle + waveform
-    GradientSketch.tsx              # contour plot + gradient descent
-    EigenSketch.tsx                 # matrix transformer + eigenvectors
-    HeroSketch.tsx                  # homepage animation
-  Canvas.tsx                        # shared p5 wrapper
-  ConditionalLayout.tsx             # route-aware layout (hides chrome on homepage)
+    GradientSketch.tsx
+    NonConvexSketch.tsx
+    EigenSketch.tsx
+    HeroSketch.tsx
   Navbar.tsx
+hooks/
+  useP5Sketch.ts              # shared p5 lifecycle hook
+lessons/
+  gradient-descent/content.mdx
+  eigen/content.mdx
 lib/
-  lessons.ts                        # lesson metadata
+  lessons.ts                  # metadata loader (respects draft: true frontmatter)
 ```
 
-## adding a new lesson
+## adding a lesson
 
-1. add metadata to `lib/lessons.ts`
-2. create `components/sketches/YourSketch.tsx` — use direct p5 mount pattern:
-   ```tsx
-   useEffect(() => {
-     const timer = setTimeout(() => {
-       if (cancelled) return;
-       p5Ref.current = new p5((p) => { /* setup + draw */ }, el);
-     }, 0);
-     return () => { cancelled = true; clearTimeout(timer); /* cleanup */ };
-   }, []);
-   ```
-3. create `app/lessons/[slug]/content/your-slug.tsx` — prose + `<YourSketch />`
-4. import + register in `app/lessons/[slug]/page.tsx`
-
-## license
-
-mit
+see `CLAUDE.md` for the full guide — sketch rules, lifecycle patterns, design voice, and step-by-step instructions.
