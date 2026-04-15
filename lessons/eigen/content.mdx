@@ -9,8 +9,8 @@ date: "2026-04-13"
 
 import EigenSketch from '@/components/sketches/EigenSketch'
 
-the definition is really simple: Av = λv. A matrix times a vector equals a scalar
-times that same vector. it seems arbitrary — why would this particular equation matter?
+the definition is really simple: Av = λv. a matrix times a vector equals a scalar
+times that same vector. it seems arbitrary. why would this particular equation matter?
 
 ---
 
@@ -22,7 +22,7 @@ sit exactly along the axes of that ellipse. the matrix can only stretch them,
 not rotate them. λ is just how much.
 
 the gray circle is the input. the purple ellipse is the output. the colored
-lines are eigenvectors — they pass through the transformation unchanged in
+lines are eigenvectors: they pass through the transformation unchanged in
 direction. click anywhere on the unit circle to place a vector and watch where the matrix sends it. when you land exactly on an eigenvector, it just scales.
 
 <div className="not-prose my-8">
@@ -34,7 +34,7 @@ direction. click anywhere on the unit circle to place a vector and watch where t
 ### the algebra, motivated by the geometry
 
 if Av = λv, then (A − λI)v = 0. for that to have a nonzero solution,
-(A − λI) has to be singular — it has to squash space down a dimension.
+(A − λI) has to be singular, squash space down a dimension.
 that only happens when its determinant is zero:
 
 <div className="math-highlight">det(A − λI) = 0</div>
@@ -47,13 +47,13 @@ the trace (a+d) and determinant (ad−bc) fully determine the eigenvalues. and s
 
 <div className="math-highlight">λ₁ + λ₂ = trace(A) &nbsp;&nbsp;&nbsp; λ₁ · λ₂ = det(A)</div>
 
-try the Scale preset and check it yourself — it's one of those things that feels like a coincidence the first time and obvious the second.
+try the Scale preset and check it yourself. it's one of those things that feels like a coincidence the first time and obvious the second.
 
 ---
 
 ### when it gets interesting
 
-try rotation. the unit circle maps back to a unit circle. no direction is preserved — there are no real eigenvectors.
+try rotation. the unit circle maps back to a unit circle. no direction is preserved. there are no real eigenvectors.
 
 looking at the numbers [[0, −1], [1, 0]] gives no intuition for why. but the geometric picture makes it obvious, almost trivial: if the transformation is a pure rotation, there's no direction that gets left alone. of course there are no real eigenvectors. the geometry makes the algebra feel inevitable instead of arbitrary.
 
@@ -63,13 +63,6 @@ the discriminant of the characteristic polynomial tells you when this happens: w
 
 ### why care about this
 
-I work on a market regime classification project with the UIUC Data Science Club.
-PCA comes up constantly — it's how you find the directions of maximum variance
-in high-dimensional data. those directions are eigenvectors of the covariance
-matrix. the eigenvalues tell you how much variance each one captures.
-
-understanding what eigenvalues geometrically mean makes PCA not feel like magic.
-it's just finding the axes of the ellipse your data lives on.
 
 eigenvectors show up everywhere once you know to look: Google's PageRank is the dominant eigenvector of a web graph, quantum states are eigenvectors of energy operators, and the stability of a system near equilibrium is determined entirely by the sign of its eigenvalues.
 
