@@ -213,7 +213,7 @@ export default function NonConvexSketch() {
           const stepY = -lrRef.current * gy;
 
           if (modeRef.current === "momentum") {
-            const beta = 0.9;
+            const beta = 0.95;
             velocityX = beta * velocityX + stepX;
             velocityY = beta * velocityY + stepY;
             pos.x += velocityX;
@@ -281,7 +281,7 @@ export default function NonConvexSketch() {
         // Mode label
         const modeLabels: Record<string, string> = {
           basic: "basic gradient descent",
-          momentum: "with momentum (β=0.9)",
+          momentum: "with momentum (β=0.95)",
           noise: "with noise (SGD-like)",
         };
         p.text(`Mode: ${modeLabels[modeRef.current]}`, 14, 50);

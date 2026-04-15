@@ -138,6 +138,16 @@
   @apply bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 bg-clip-text text-transparent;
 }
 
+/* Prose links */
+.prose a {
+  color: #7F77DD;
+  text-decoration: none;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+}
+
 /* Math equation styling */
 .math-highlight {
   @apply px-4 py-3 rounded-lg bg-secondary/50 border border-border font-mono text-sm my-4 overflow-x-auto;

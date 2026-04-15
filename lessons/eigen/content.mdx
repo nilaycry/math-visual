@@ -9,66 +9,55 @@ date: "2026-04-13"
 
 import EigenSketch from '@/components/sketches/EigenSketch'
 
-## the directions a matrix can't change
-
-The definition looks simple: Av = λv. A matrix times a vector equals a scalar
-times that same vector. I stared at that for a while before it meant anything.
-What finally made it real was drawing it.
+the definition is really simple: Av = λv. A matrix times a vector equals a scalar
+times that same vector. it seems arbitrary — why would this particular equation matter?
 
 ---
 
 ### the geometric picture
 
-Take a 2×2 matrix and feed it every point on the unit circle. What comes out is
-an ellipse — the circle gets stretched and possibly rotated. Most vectors get
-knocked off their original direction entirely. But the eigenvectors don't. They
-sit exactly along the axes of that ellipse. The matrix can only stretch them,
+take a 2×2 matrix and feed it every point on the unit circle. the output is an ellipse. most vectors get
+knocked off their original direction entirely. but the eigenvectors don't. they
+sit exactly along the axes of that ellipse. the matrix can only stretch them,
 not rotate them. λ is just how much.
 
-The gray circle is the input. The purple ellipse is the output. The colored
+the gray circle is the input. the purple ellipse is the output. the colored
 lines are eigenvectors — they pass through the transformation unchanged in
-direction. Drag the sliders or try a preset.
+direction. click anywhere on the unit circle to place a vector and watch where the matrix sends it. when you land exactly on an eigenvector, it just scales.
 
-<EigenSketch />
+<div className="not-prose my-8">
+  <EigenSketch />
+</div>
 
 ---
 
 ### the algebra, motivated by the geometry
 
-If Av = λv, then (A − λI)v = 0. For that to have a nonzero solution,
+if Av = λv, then (A − λI)v = 0. for that to have a nonzero solution,
 (A − λI) has to be singular — it has to squash space down a dimension.
-That only happens when its determinant is zero:
+that only happens when its determinant is zero:
 
-{"\\det(A - \\lambda I) = 0"}
+<div className="math-highlight">det(A − λI) = 0</div>
 
-For a 2×2 matrix [[a,b],[c,d]] this expands to:
+for a 2×2 matrix [[a, b], [c, d]] this expands to:
 
-{"\\lambda^2 - (a+d)\\lambda + (ad-bc) = 0"}
+<div className="math-highlight">λ² − (a+d)λ + (ad−bc) = 0</div>
 
-The trace (a+d) and determinant (ad−bc) fully determine the eigenvalues.
+the trace (a+d) and determinant (ad−bc) fully determine the eigenvalues. and since this is a quadratic with λ₁ and λ₂ as roots, Vieta's formulas give you something worth remembering:
+
+<div className="math-highlight">λ₁ + λ₂ = trace(A) &nbsp;&nbsp;&nbsp; λ₁ · λ₂ = det(A)</div>
+
+try the Scale preset and check it yourself — it's one of those things that feels like a coincidence the first time and obvious the second.
 
 ---
 
 ### when it gets interesting
 
-Try rotation preset. The unit circle maps back to a unit
-circle. No direction is preserved. The eigenvalues are ±i. There are no real
-eigenvectors.
+try rotation. the unit circle maps back to a unit circle. no direction is preserved — there are no real eigenvectors.
 
-looking at the numbers — [[0,−1],[1,0]] — It gives no intuition for
-why this matrix wouldn't have eigenvectors. But the geometric picture makes it obvious, almost trivial: if
-the transformation is a pure rotation, there's no direction that gets left
-alone. Of course there are no real eigenvectors. The geometry makes the algebra
-feel inevitable instead of arbitrary.
+looking at the numbers [[0, −1], [1, 0]] gives no intuition for why. but the geometric picture makes it obvious, almost trivial: if the transformation is a pure rotation, there's no direction that gets left alone. of course there are no real eigenvectors. the geometry makes the algebra feel inevitable instead of arbitrary.
 
-The general principle: real eigenvectors don't exist whenever the transformation
-spins space in a way that no vector lands back on its own line. This happens
-any time the transformation has a rotational component strong enough that every
-direction gets knocked off course — pure rotations, but also certain
-combinations of rotation and reflection where the geometry never settles on a
-fixed axis. Algebraically, this shows up as a negative discriminant in the
-characteristic polynomial. Geometrically, it just means the ellipse is turned
-too far for any input direction to survive.
+the discriminant of the characteristic polynomial tells you when this happens: when (a+d)² − 4(ad−bc) < 0, the eigenvalues are complex. geometrically, the transformation spins space too much for any real direction to survive.
 
 ---
 
@@ -76,16 +65,19 @@ too far for any input direction to survive.
 
 I work on a market regime classification project with the UIUC Data Science Club.
 PCA comes up constantly — it's how you find the directions of maximum variance
-in high-dimensional data. Those directions are eigenvectors of the covariance
-matrix. The eigenvalues tell you how much variance each one captures.
+in high-dimensional data. those directions are eigenvectors of the covariance
+matrix. the eigenvalues tell you how much variance each one captures.
 
-Understanding what eigenvalues geometrically mean makes PCA not feel like magic.
-It's just finding the axes of the ellipse your data lives on.
+understanding what eigenvalues geometrically mean makes PCA not feel like magic.
+it's just finding the axes of the ellipse your data lives on.
+
+eigenvectors show up everywhere once you know to look: Google's PageRank is the dominant eigenvector of a web graph, quantum states are eigenvectors of energy operators, and the stability of a system near equilibrium is determined entirely by the sign of its eigenvalues.
 
 ---
 
 ### what this doesn't cover yet
 
-Repeated eigenvalues, defective matrices (not enough eigenvectors to span the
+math is beautifully interconnected and you'd be surprised how far these concepts extend.
+repeated eigenvalues, defective matrices (not enough eigenvectors to span the
 space), and the spectral theorem (when you're guaranteed a full orthogonal set).
 I'll update as I learn more interesting things worth adding.

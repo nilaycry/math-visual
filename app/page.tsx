@@ -84,7 +84,7 @@ export default function HomePage() {
           }}
         >
           <span />
-<div style={{ display: "flex", gap: 32 }}>
+          <div style={{ display: "flex", gap: 32 }}>
             <a
               href="#lessons"
               onClick={(e) => {
@@ -170,7 +170,7 @@ export default function HomePage() {
                 maxWidth: 420,
               }}
             >
-              interactive notes on the math I keep coming back to — written the way it finally clicked for me, not the way it&apos;s usually taught
+              notes on the math I keep coming back to — written in way I think about it, not the way it&apos;s usually taught. half teaching, half making sure I really get it
             </p>
 
             <a

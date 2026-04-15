@@ -56,12 +56,24 @@ Inside `buildSketch`, read `lrRef.current`, never `learningRate` directly.
 
 ### noLoop / loop — always implement this
 Sketches must not run the draw loop when idle (wastes CPU while user reads).
+
+**Simulation sketches** (gradient descent, etc.) — start stopped, run on click, stop on convergence:
 ```ts
 p.setup = () => { ...; p.noLoop(); }
 p.mousePressed = () => { ...; p.loop(); }
 // when converged or done:
 p.noLoop();
 ```
+
+**Static/slider-driven sketches** (EigenSketch, etc.) — use `noLoop` + `redraw()`. These need direct p5 instance access so they keep the inline `useEffect` lifecycle instead of `useP5Sketch`:
+```ts
+// In p.setup: p.noLoop()
+// In p.mousePressed: p.redraw()
+// In slider onChange handlers:
+setter(parseFloat(e.target.value));
+setTimeout(() => p5Ref.current?.redraw(), 0);
+```
+The `setTimeout(..., 0)` ensures the ref update from the setter has flushed before redraw fires.
 
 ### contour lines — use marching squares, not polar rays
 The polar ray approach (`for angle ... for r ...`) produces jagged lines on non-circular landscapes.

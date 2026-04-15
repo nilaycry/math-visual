@@ -41,14 +41,13 @@ The gradient is the vector of partial derivatives:
 <div className="math-highlight">∇f(x, y) = [ ∂f/∂x, ∂f/∂y ]</div>
 
 It points in the direction of steepest ascent. To convince yourself of this formula consider first thinking about the
-vector that points in the direction of steepest ascent. now think about how would you find the components of this vector. 
+vector that points in the direction of steepest ascent. now think about how would you find the components of this vector. the actual update rule:
 
 <div className="math-highlight">x_n+1 = x_n − α · ∇f(x_n)</div>
 
-"small enough" really depends on the curvature. The maximum eigenvalue of
-the Hessian (the matrix of second derivatives) sets the upper bound on α before
-you overshoot (really cool math worth reading). High curvature means smaller steps. This is why the same learning
-rate that works on one problem breaks on another.
+α is the learning rate. it controls how far you step in the direction of −∇f each iteration. too small and convergence crawls; too large and you overshoot the valley entirely.
+
+how large is "too large" depends on the curvature of f at that point. the upper bound on α is set by the largest [eigenvalue](/lessons/eigen) of the Hessian, the matrix of second derivatives(i think this conncection to linear algebra is fascinating). high curvature means smaller steps. that's why the same learning rate that works on a gentle bowl breaks on a sharp one.
 
 ---
 
@@ -76,13 +75,15 @@ exponential moving average of past gradients to the update:
 <div className="math-highlight">v_t = β · v_{t-1} + ∇f(x_t)</div>
 <div className="math-highlight">x_{t+1} = x_t − α · v_t</div>
 
-β = 0.9 means 90% of the step comes from where you were going, 10% from the
-current gradient. The ball has inertia — it can punch through shallow minima that
+β = 0.95 means 95% of the step comes from where you were going, 5% from the
+current gradient. the ball has inertia and can punch through shallow minima that
 would trap basic gradient descent.
 
-try the **noisy** mode. The random kick on each step is what stochastic gradient
+try the **noisy** mode. the random kick on each step is what stochastic gradient
 descent does in practice: computing gradients on random data subsets adds noise
-that helps escape shallow traps. its not a perfect solution but does better than the baseline.
+that helps escape shallow traps.
+
+neither of these is a clean fix. you can still get stuck, and the right β or noise scale depends on the problem. but that's often how it goes in practice — you accept imperfect tools that do better than the baseline.
 
 ---
 
