@@ -1,0 +1,94 @@
+---
+title: "the chain rule on a graph"
+description: "how neural networks actually compute gradients"
+tags: ["calculus", "machine learning", "neural networks"]
+color: "from-purple-500 to-pink-500"
+icon: "🔗"
+date: "2026-04-15"
+---
+
+import BackpropSketch from '@/components/sketches/BackpropSketch'
+
+everyone says backpropagation is just the chain rule. they're right, but that answer never helped me the first few times I heard it. the chain rule on a formula is one thing. the chain rule running backward through a computation graph, reusing cached intermediate values, is something you have to see before it makes sense.
+
+the [gradient descent](/lessons/gradient-descent) lesson assumes you already have the gradients. this is where they come from.
+
+---
+
+### a tiny network
+
+take the simplest nontrivial network: one input x, one hidden neuron with weight w and bias b, one output neuron with weight v and bias c. the forward pass is a chain of four operations:
+
+<div className="math-highlight">z = w · x + b &nbsp;&nbsp;&nbsp; h = σ(z) &nbsp;&nbsp;&nbsp; y = v · h + c &nbsp;&nbsp;&nbsp; L = (y − target)²</div>
+
+σ is the activation function, the nonlinearity that lets the network represent more than a line. I'm using tanh here because its derivative is clean and bounded, which makes the gradients easier to follow visually.
+
+L is a single number. the question is how L changes when you nudge w, v, or b. those are ∂L/∂w, ∂L/∂v, ∂L/∂b, and gradient descent needs all of them. computing them by expanding the full composition and differentiating by hand gets messy quickly. the graph approach keeps the pieces small.
+
+---
+
+### the picture
+
+the sketch draws this network as a computation graph. the forward pass runs left to right — watch the node values update as you drag x or the weights. the backward pass runs right to left, and that's where the gradients come from.
+
+the colored bars on each node show the gradient magnitude at that node — how much a small change there would move the loss. bright means a lot of influence. dim means almost none.
+
+the specific thing to look for: drag x to a large positive or large negative value, so the hidden neuron saturates. watch the gradient bar on w go nearly dark while the bar on v stays lit. the two weights are connected to the same loss, but one is getting almost no gradient signal. that's not a coincidence, and the next section explains why.
+
+<div className="not-prose my-8">
+  <BackpropSketch />
+</div>
+
+---
+
+### the chain rule, but on a graph
+
+the chain rule says: if L depends on y, and y depends on h, and h depends on z, then
+
+<div className="math-highlight">∂L/∂z = ∂L/∂y · ∂y/∂h · ∂h/∂z</div>
+
+on a graph the version of this is: to get the gradient at any node, follow every path from that node to L, multiply the local derivatives along each path, and sum over paths. the local derivatives here are all simple:
+
+<div className="math-highlight">∂L/∂y = 2(y − target)</div>
+<div className="math-highlight">∂y/∂h = v</div>
+<div className="math-highlight">∂h/∂z = σ'(z) = 1 − tanh(z)²</div>
+
+multiply them to get ∂L/∂z. then ∂L/∂w = ∂L/∂z · x, and ∂L/∂b = ∂L/∂z · 1.
+
+pause here. this might feel straightforward on a network this small, but the part that took me a while to really accept is what happens in a larger network. each node only needs to know its own local derivative and the gradient arriving from downstream. it doesn't need to know anything about the rest of the graph. that locality is what makes the whole thing scale.
+
+and because each intermediate gradient is computed once and passed along rather than recomputed from scratch, the whole backward pass is O(n) in the number of parameters. computing gradients by brute force would be O(n²). that's the dynamic programming part, and it's the real reason every framework uses this.
+
+---
+
+### why saturation kills learning
+
+look at σ'(z) = 1 − tanh(z)². when z is large in either direction, tanh(z) is near 1 or −1, and σ'(z) is near 0.
+
+since the backward pass multiplies by σ'(z) at the activation node, a saturated neuron almost completely blocks the gradient from flowing further back. v sits after the tanh, so its gradient is unaffected. w sits before it, so its gradient gets multiplied by that near-zero derivative and becomes nearly nothing. the weight might be badly wrong, but the signal telling it to change has been killed.
+
+this is why relu became the default activation. for positive inputs, its derivative is exactly 1, so the gradient flows through undiminished. it has its own failure mode (neurons that receive only negative inputs die entirely), but at least saturation on the positive side is not the problem.
+
+---
+
+### scaling up is genuinely hard
+
+in a deeper network the same mechanics apply at every layer, but the effects compound. each additional layer multiplies the gradient by another local derivative. if those derivatives are consistently below 1, the gradient reaching the early layers shrinks exponentially. if they're above 1, it explodes.
+
+I think it's worth sitting with how non-obvious the solutions are. batch normalization keeps activations in a range where derivatives stay healthy. residual connections add a path where the gradient flows through addition, bypassing the vanishing problem entirely. careful initialization sets the starting weights so the very first forward pass doesn't immediately saturate anything. none of these were obvious to find, and they each required serious research to land on.
+
+the simple version of backprop you see in this lesson is exactly what runs in practice. the hard part was making it work reliably at scale.
+
+---
+
+### why it matters
+
+backpropagation is not a neural-network-specific algorithm. it's the chain rule applied to a computation graph, with caching to avoid redundant work. PyTorch, JAX, and TensorFlow are all doing this same backward pass automatically, on graphs with millions of nodes.
+
+knowing the mechanics helps when training breaks down. when a loss stops improving and won't move, the gradient is probably vanishing before it reaches the weights that need to change. when it explodes and the loss goes to NaN, multiplications are accumulating rather than shrinking. knowing which layer or activation is the bottleneck is the difference between fixing it in an hour and blaming the architecture for a week.
+
+---
+
+### what this doesn't cover yet
+
+batched training, where gradients are averaged across multiple samples before any update, which is how everything actually runs in practice. different loss functions and their specific output derivatives. and the connection to automatic differentiation in general — the same graph-backward technique powers physics simulations and financial models, not just neural networks. I'll add those when I have a sketch worth building.

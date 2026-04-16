@@ -8,36 +8,34 @@ const HeroSketch = dynamic(
   { ssr: false }
 );
 
-const lessonCards = [
+const subjectAreas = [
   {
-    slug: "gradient-descent",
-    tag: "optimization",
-    title: "which way is downhill",
-    description: "the geometry behind how machines learn",
-    accent: "#5DCAA5",
+    href: "/linear-algebra",
+    tag: "linear algebra",
+    title: "the structure of space",
+    description:
+      "vectors, matrices, and transformations — and the connections between them that most courses never get to",
+    accent: "#5B8DD9",
+    count: 2,
   },
   {
-    slug: "eigen",
-    tag: "linear algebra",
-    title: "the directions a matrix can't change",
-    description: "what a matrix actually does to space",
-    accent: "#D85A30",
+    href: "/machine-learning",
+    tag: "machine learning",
+    title: "geometry underneath the learning",
+    description:
+      "gradient descent, backpropagation, and the math that actually drives how neural networks train",
+    accent: "#5DCAA5",
+    count: 2,
   },
 ];
 
 export default function HomePage() {
   return (
     <>
-      {/*
-        The global layout injects a fixed navbar (64px) with pt-16 on <main>,
-        plus a footer. We counteract both here so the page owns its full viewport.
-      */}
       <style>{`
-        /* Card hover */
-        .lcard { transition: border-color 0.2s ease, border-top-color 0.2s ease; }
-        .lcard:hover { border-color: #2a2a2a !important; }
+        .scard { transition: border-color 0.2s ease; }
+        .scard:hover { border-color: #2a2a2a !important; }
 
-        /* Responsive */
         @media (max-width: 768px) {
           .hero-section {
             flex-direction: column !important;
@@ -45,10 +43,10 @@ export default function HomePage() {
             gap: 40px !important;
           }
           .hero-canvas-col { display: none !important; }
-          .lessons-grid-3 {
+          .subjects-grid {
             grid-template-columns: 1fr !important;
           }
-          .page-nav, .hero-section, .lessons-section {
+          .page-nav, .hero-section, .subjects-section {
             padding-left: 20px !important;
             padding-right: 20px !important;
           }
@@ -79,11 +77,11 @@ export default function HomePage() {
           <span />
           <div style={{ display: "flex", gap: 32 }}>
             <a
-              href="#lessons"
+              href="#explore"
               onClick={(e) => {
                 e.preventDefault();
                 document
-                  .getElementById("lessons")
+                  .getElementById("explore")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
               style={{
@@ -93,7 +91,7 @@ export default function HomePage() {
                 fontWeight: 400,
               }}
             >
-              lessons
+              explore
             </a>
             <a
               href="https://github.com/nilaycry"
@@ -163,15 +161,17 @@ export default function HomePage() {
                 maxWidth: 420,
               }}
             >
-              math notes i had fun making. written in way i think about it, not the way it&apos;s usually taught. half teaching, half making sure I get it
+              math notes i had fun making. written in the way i think about it,
+              not the way it&apos;s usually taught. half teaching, half making sure I
+              get it
             </p>
 
             <a
-              href="#lessons"
+              href="#explore"
               onClick={(e) => {
                 e.preventDefault();
                 document
-                  .getElementById("lessons")
+                  .getElementById("explore")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
               style={{
@@ -182,7 +182,7 @@ export default function HomePage() {
                 cursor: "pointer",
               }}
             >
-              see the lessons ↓
+              explore ↓
             </a>
           </div>
 
@@ -192,10 +192,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── LESSONS GRID ── */}
+        {/* ── SUBJECTS ── */}
         <section
-          id="lessons"
-          className="lessons-section"
+          id="explore"
+          className="subjects-section"
           style={{
             maxWidth: 1200,
             margin: "0 auto",
@@ -213,70 +213,89 @@ export default function HomePage() {
               marginBottom: 32,
             }}
           >
-            lessons
+            topics
           </span>
 
           <div
-            className="lessons-grid-3"
+            className="subjects-grid"
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
+              gridTemplateColumns: "repeat(2, 1fr)",
               gap: 20,
             }}
           >
-            {lessonCards.map((lesson) => (
+            {subjectAreas.map((subject) => (
               <Link
-                key={lesson.slug}
-                href={`/lessons/${lesson.slug}`}
+                key={subject.href}
+                href={subject.href}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <div
-                  className="lcard"
+                  className="scard"
                   style={{
                     backgroundColor: "rgba(255, 255, 255, 0.025)",
                     border: "0.5px solid #1e1e1e",
-                    borderTop: `2px solid ${lesson.accent}33`,
+                    borderTop: `2px solid ${subject.accent}33`,
                     borderRadius: 12,
-                    padding: "20px 24px",
+                    padding: "28px 28px 24px",
                     cursor: "pointer",
+                    height: "100%",
+                    boxSizing: "border-box" as const,
                   }}
                 >
-                  <span
+                  <div
                     style={{
-                      fontSize: 11,
-                      fontWeight: 400,
-                      color: lesson.accent,
-                      opacity: 0.7,
-                      textTransform: "uppercase" as const,
-                      letterSpacing: "0.1em",
-                      display: "block",
-                      marginBottom: 10,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      marginBottom: 14,
                     }}
                   >
-                    {lesson.tag}
-                  </span>
+                    <span
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 400,
+                        color: subject.accent,
+                        opacity: 0.7,
+                        textTransform: "uppercase" as const,
+                        letterSpacing: "0.1em",
+                      }}
+                    >
+                      {subject.tag}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: 11,
+                        color: "#333",
+                        letterSpacing: "0.05em",
+                      }}
+                    >
+                      {subject.count} {subject.count === 1 ? "lesson" : "lessons"}
+                    </span>
+                  </div>
+
                   <span
                     style={{
-                      fontSize: 15,
+                      fontSize: 17,
                       fontWeight: 500,
                       color: "#e8e8e8",
                       display: "block",
-                      marginBottom: 8,
+                      marginBottom: 10,
                       lineHeight: 1.3,
                     }}
                   >
-                    {lesson.title}
+                    {subject.title}
                   </span>
                   <span
                     style={{
                       fontSize: 13,
                       fontWeight: 400,
-                      color: "#666",
-                      lineHeight: 1.5,
+                      color: "#555",
+                      lineHeight: 1.6,
                       display: "block",
                     }}
                   >
-                    {lesson.description}
+                    {subject.description}
                   </span>
                 </div>
               </Link>

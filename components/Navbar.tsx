@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 export default function Navbar() {
   const pathname = usePathname();
 
-  // Homepage has its own navbar
-  if (pathname === "/") return null;
+  // These pages have their own built-in navbars
+  if (pathname === "/" || pathname === "/linear-algebra" || pathname === "/machine-learning") return null;
 
   return (
     <nav

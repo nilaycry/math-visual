@@ -1,0 +1,72 @@
+---
+title: "rotate, stretch, rotate"
+description: "the three hidden steps inside every matrix"
+tags: ["linear algebra"]
+color: "from-blue-500 to-violet-500"
+icon: "⬡"
+date: "2026-04-15"
+---
+
+import SVDSketch from '@/components/sketches/SVDSketch'
+
+in the eigen lesson I said a matrix turns the unit circle into an ellipse, and eigenvectors sit along the ellipse's axes. that's the right picture, but it only works cleanly when the matrix has two real eigenvectors. rotation has none. most matrices don't have the right eigenvectors to tell the full story.
+
+SVD is the fuller story. it works for every matrix, and when I first saw it I found the fact that it always works more surprising than the decomposition itself.
+
+---
+
+### the claim
+
+start with what we already know: A maps the unit circle to an ellipse. that ellipse has two semi-axes, and their lengths are determined by the matrix. I'll call them σ₁ and σ₂, the singular values.
+
+to find them, form AᵀA. I know this looks like it comes from nowhere. the motivation is that AᵀA is always symmetric and positive semidefinite, no matter what A is. and from the eigen lesson, symmetric matrices are guaranteed to have real, nonnegative eigenvalues. so AᵀA always has eigenvalues we can take the square root of. that's the trick that makes SVD work for every matrix, including rotation, which has no real eigenvectors of its own.
+
+pause here. the move "form AᵀA" is not obvious. it's a construction specifically chosen to force the symmetry we need. take a moment with that before moving on.
+
+call the eigenvalues λ₁ and λ₂. the singular values are their square roots:
+
+<div className="math-highlight">σ₁ = √λ₁ &nbsp;&nbsp;&nbsp; σ₂ = √λ₂ &nbsp;&nbsp;&nbsp; where AᵀA vᵢ = λᵢ vᵢ</div>
+
+the eigenvectors v₁ and v₂ of AᵀA are the right singular vectors — the special input directions A sends cleanly onto the ellipse's axes. once you have them, the output directions u₁ and u₂ follow directly:
+
+<div className="math-highlight">u₁ = Av₁ / σ₁ &nbsp;&nbsp;&nbsp; u₂ = Av₂ / σ₂</div>
+
+stack these up and you get the full decomposition:
+
+<div className="math-highlight">A = U Σ Vᵀ</div>
+
+where V = [v₁ v₂], U = [u₁ u₂], and Σ = diag(σ₁, σ₂). in plain terms: A rotates the input (Vᵀ), stretches along the axes (Σ), then rotates the output (U). every linear map has this shape, no matter what matrix you start with.
+
+---
+
+### the picture
+
+the gray circle is the input. the purple ellipse is A applied to every point on the circle.
+
+the solid arrows v₁ and v₂ are the right singular vectors. A maps v₁ to σ₁u₁ and v₂ to σ₂u₂, where u₁ and u₂ are the left singular vectors shown as dashed arrows landing on the ellipse. the specific thing to look for: v₁ and σ₁u₁ point in different directions in general, but their lengths are related by exactly σ₁. that ratio is the whole story.
+
+turn on "Σ step" to see the intermediate shape — the axis-aligned ellipse after Vᵀ and Σ but before the final U rotation. the singular values become concrete here: σ₁ and σ₂ are literally the semi-axis lengths of that intermediate ellipse, before any output rotation is applied.
+
+click anywhere on the unit circle to drop a vector and watch where A sends it.
+
+<div className="not-prose my-8">
+  <SVDSketch />
+</div>
+
+---
+
+### why it shows up everywhere
+
+a few places I find it genuinely interesting:
+
+image compression: an m×n image is just a matrix. its SVD lets you approximate it as a sum of rank-1 pieces, A ≈ σ₁u₁v₁ᵀ + σ₂u₂v₂ᵀ + .... keep only the top k terms (largest σᵢ) and you get a compressed image. the singular values tell you how much information each piece carries.
+
+PCA: the principal components of a dataset are the left singular vectors of the centered data matrix. the singular values tell you how much variance each direction explains. it's the same decomposition, just reframed.
+
+least squares: if Ax = b has no exact solution, the pseudoinverse A⁺ = VΣ⁺Uᵀ gives the closest answer. SVD is how you compute it stably when the matrix is nearly singular.
+
+---
+
+### what this doesn't cover yet
+
+the natural next step is non-square matrices. SVD works for any m×n matrix, and that's where image compression and least squares actually live. I also skipped the proof that the decomposition always exists, which runs through the spectral theorem for symmetric matrices. I'll add those when I have something worth showing.
