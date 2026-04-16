@@ -12,7 +12,7 @@ const mlLessons = [
   },
   {
     slug: "backpropagation",
-    tag: "machine learning",
+    tag: "gradients",
     title: "the chain rule on a graph",
     description: "how neural networks actually compute gradients",
     accent: "#B44FD0",

@@ -9,6 +9,7 @@ export interface LessonMeta {
   tags: string[];
   color: string;
   icon: string;
+  lessonType: "lesson" | "connection";
 }
 
 const lessonsDirectory = path.join(process.cwd(), "lessons");
@@ -35,6 +36,7 @@ export function getAllLessons(): LessonMeta[] {
         tags: data.tags as string[],
         color: data.color as string,
         icon: data.icon as string,
+        lessonType: (data.type === "connection" ? "connection" : "lesson") as "lesson" | "connection",
       } as LessonMeta;
     })
     .filter((lesson): lesson is LessonMeta => lesson !== null);

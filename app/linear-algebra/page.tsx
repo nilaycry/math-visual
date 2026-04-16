@@ -5,14 +5,14 @@ import Link from "next/link";
 const laLessons = [
   {
     slug: "eigen",
-    tag: "linear algebra",
+    tag: "eigenvalues",
     title: "the directions a matrix can't change",
     description: "what a matrix actually does to space",
     accent: "#D85A30",
   },
   {
     slug: "svd",
-    tag: "linear algebra",
+    tag: "decomposition",
     title: "rotate, stretch, rotate",
     description: "the three hidden steps inside every matrix",
     accent: "#5B8DD9",
@@ -31,7 +31,7 @@ const connections = [
     slug: "dot-product-and-matrix-multiplication",
     title: "dot product is matrix multiplication",
     description: "or is it the other way round",
-    status: "soon" as const,
+    status: "live" as const,
   },
   {
     slug: "row-vectors-are-functions",
@@ -164,11 +164,10 @@ export default function LinearAlgebraPage() {
                 margin: "0 0 18px 0",
               }}
             >
-              then things start clicking, usually slowly and out of order. the dot
-              product is matrix multiplication. row vectors are linear functions, not
-              vectors written sideways. SVD and the Fourier transform are both just
-              &quot;find the right basis.&quot; the invertible matrix theorem is eight different
-              statements that are all secretly the same one.
+              then things start clicking, usually slowly and out of order. and when
+              they do, you realize the subject goes a lot deeper than the first course
+              let on. the same idea keeps showing up in different clothes and you
+              start to feel like you&apos;ve been missing something the whole time.
             </p>
             <p
               style={{
@@ -179,10 +178,9 @@ export default function LinearAlgebraPage() {
                 margin: 0,
               }}
             >
-              I had a lot of these confusions and some of them took embarrassingly
-              long to resolve. I&apos;m mapping them out here, both as lessons on
-              individual topics and as shorter notes on the connections. work in
-              progress.
+              I get genuinely uncomfortable when I know I&apos;ve been computing
+              something correctly without really understanding it. linear algebra
+              has a lot of those moments. I&apos;m working through them here.
             </p>
           </div>
         </section>
@@ -317,51 +315,60 @@ export default function LinearAlgebraPage() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {connections.map((conn) => (
-                <div
-                  key={conn.slug}
-                  className="la-conn-card"
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    justifyContent: "space-between",
-                    padding: "14px 0",
-                    borderBottom: "1px solid #141414",
-                    cursor: conn.status === "soon" ? "default" : "pointer",
-                  }}
-                >
-                  <div>
-                    <span
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 400,
-                        color: conn.status === "soon" ? "#444" : "#c8c8c8",
-                        display: "block",
-                        marginBottom: 3,
-                      }}
-                    >
-                      {conn.title}
-                    </span>
-                    <span
-                      style={{ fontSize: 12, color: "#3a3a3a", lineHeight: 1.5 }}
-                    >
-                      {conn.description}
-                    </span>
-                  </div>
-                  <span
+              {connections.map((conn) => {
+                const row = (
+                  <div
+                    key={conn.slug}
+                    className="la-conn-card"
                     style={{
-                      fontSize: 11,
-                      color: "#333",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.08em",
-                      flexShrink: 0,
-                      marginLeft: 24,
+                      display: "flex",
+                      alignItems: "baseline",
+                      justifyContent: "space-between",
+                      padding: "14px 0",
+                      borderBottom: "1px solid #141414",
+                      cursor: conn.status === "soon" ? "default" : "pointer",
                     }}
                   >
-                    soon
-                  </span>
-                </div>
-              ))}
+                    <div>
+                      <span
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 400,
+                          color: conn.status === "soon" ? "#444" : "#c8c8c8",
+                          display: "block",
+                          marginBottom: 3,
+                        }}
+                      >
+                        {conn.title}
+                      </span>
+                      <span
+                        style={{ fontSize: 12, color: "#3a3a3a", lineHeight: 1.5 }}
+                      >
+                        {conn.description}
+                      </span>
+                    </div>
+                    {conn.status === "soon" && (
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: "#333",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          flexShrink: 0,
+                          marginLeft: 24,
+                        }}
+                      >
+                        soon
+                      </span>
+                    )}
+                  </div>
+                );
+                return conn.status === "live" ? (
+                  <Link key={conn.slug} href={`/lessons/${conn.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
+                    {row}
+                  </Link>
+                ) : row;
+              })}
             </div>
           </section>
         </div>

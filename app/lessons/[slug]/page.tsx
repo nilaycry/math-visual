@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getLessonBySlug, getAllLessonSlugs, getLessonContent } from "@/lib/lessons";
+import { getLessonBySlug, getAllLessonSlugs, getLessonContent, type LessonMeta } from "@/lib/lessons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { compileMDX } from "next-mdx-remote/rsc";
@@ -57,12 +57,13 @@ export default async function LessonPage({
     components,
   });
 
-  // Find prev/next
-  const allLessons = getAllLessonSlugs();
-  const currentIndex = allLessons.indexOf(params.slug);
-  const prevLesson = currentIndex > 0 ? getLessonBySlug(allLessons[currentIndex - 1]) : null;
-  const nextLesson =
-    currentIndex < allLessons.length - 1 ? getLessonBySlug(allLessons[currentIndex + 1]) : null;
+  // Find prev/next — only within the same type (lessons don't link to connections and vice versa)
+  const allLessons = getAllLessonSlugs()
+    .map((s) => getLessonBySlug(s))
+    .filter((l): l is LessonMeta => l !== undefined && l.lessonType === lesson.lessonType);
+  const currentIndex = allLessons.findIndex((l) => l.slug === params.slug);
+  const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
+  const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

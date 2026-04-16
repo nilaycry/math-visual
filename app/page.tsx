@@ -161,9 +161,7 @@ export default function HomePage() {
                 maxWidth: 420,
               }}
             >
-              math notes i had fun making. written in the way i think about it,
-              not the way it&apos;s usually taught. half teaching, half making sure I
-              get it
+              won&apos;t cover everything. might change how you see some of it.
             </p>
 
             <a
