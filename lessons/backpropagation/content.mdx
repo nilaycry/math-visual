@@ -8,6 +8,7 @@ date: "2026-04-15"
 ---
 
 import BackpropSketch from '@/components/sketches/BackpropSketch'
+import BackpropTrainSketch from '@/components/sketches/BackpropTrainSketch'
 
 everyone says backpropagation is just the chain rule. they're right, but that answer never helped me the first few times I heard it. the chain rule on a formula is one thing. the chain rule running backward through a computation graph, reusing cached intermediate values, is something you have to see before it makes sense.
 
@@ -29,9 +30,9 @@ L is a single number. the question is how L changes when you nudge w, v, or b. t
 
 ### the picture
 
-the sketch draws this network as a computation graph. the forward pass runs left to right — watch the node values update as you drag x or the weights. the backward pass runs right to left, and that's where the gradients come from.
+the sketch draws this network as a computation graph. the forward pass runs left to right. watch the node values update as you drag x or the weights. the backward pass runs right to left, and that's where the gradients come from.
 
-the colored bars on each node show the gradient magnitude at that node — how much a small change there would move the loss. bright means a lot of influence. dim means almost none.
+the colored bars on each node show the gradient magnitude at that node, how much a small change there would move the loss. bright means a lot of influence. dim means almost none.
 
 the specific thing to look for: drag x to a large positive or large negative value, so the hidden neuron saturates. watch the gradient bar on w go nearly dark while the bar on v stays lit. the two weights are connected to the same loss, but one is getting almost no gradient signal. that's not a coincidence, and the next section explains why.
 
@@ -89,6 +90,22 @@ knowing the mechanics helps when training breaks down. when a loss stops improvi
 
 ---
 
+### what happens next: training
+
+one gradient on one example doesn't train a network. training means repeating the forward pass and the backward pass over a dataset, and at every step nudging each parameter a little in the opposite direction of its gradient. that nudging rule is [gradient descent](/lessons/gradient-descent), now applied to all four parameters at once instead of two.
+
+the sketch below does exactly that. same network as before (x → z → h → y, with parameters w, b, v, c), but now there are six (x, target) points shown as teal dots, and the pink curve is the function the network currently represents. hit start training and watch the pink curve bend toward the teal one as the loss falls.
+
+the four presets are the whole story in 30 seconds. try them in order. good init converges cleanly. saturated init starts with w=3, which pins tanh near ±1 on every data point, so ∂h/∂z ≈ 0 and w barely moves. that's the exact failure mode from the saturation section, now playing out live. lr too high makes the updates overshoot the minimum every step, so the loss oscillates instead of descending. lr too low takes steps so small that training visibly stalls even though everything is technically correct.
+
+<div className="not-prose my-8">
+  <BackpropTrainSketch />
+</div>
+
+this is still a single hidden unit and a toy dataset. real training runs the same loop with more parameters, more data, mini-batches instead of the full dataset at each step, and optimizers that are smarter than raw gradient descent. but the core shape does not change. forward, backward, nudge, repeat.
+
+---
+
 ### what this doesn't cover yet
 
-batched training, where gradients are averaged across multiple samples before any update, which is how everything actually runs in practice. different loss functions and their specific output derivatives. and the connection to automatic differentiation in general — the same graph-backward technique powers physics simulations and financial models, not just neural networks. I'll add those when I have a sketch worth building.
+mini-batch stochasticity, where each step uses a small random subset of the data instead of the full dataset. different loss functions and their specific output derivatives. and the connection to automatic differentiation in general. the same graph-backward technique powers physics simulations and financial models, not just neural networks. I'll add those when I have a sketch worth building.

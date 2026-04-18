@@ -17,6 +17,13 @@ const laLessons = [
     description: "the three hidden steps inside every matrix",
     accent: "#5B8DD9",
   },
+  {
+    slug: "null-space",
+    tag: "structure",
+    title: "the directions a matrix destroys",
+    description: "what the null space is and why it matters",
+    accent: "#E05A7A",
+  },
 ];
 
 // Connection pages — most are placeholders until written

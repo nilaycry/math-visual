@@ -39,24 +39,24 @@ export default function BackpropSketch() {
 
         // ---- layout ----
         // Main chain nodes (left to right)
-        const mainY = 210;
+        const mainY = 215;
         const paramY = 80;
 
         // Spread nodes more: 5 main nodes across 660px
         const mainXs: Record<string, number> = {
-          x: 55,
-          z: 185,
-          h: 330,
-          y: 475,
-          L: 610,
+          x: 60,
+          z: 195,
+          h: 340,
+          y: 480,
+          L: 605,
         };
 
         // Parameter nodes sit above their target
         const paramXs: Record<string, number> = {
-          w: 125, // between x and z, slightly toward z
-          b: 185, // directly above z
-          v: 405, // between h and y
-          c: 475, // directly above y
+          w: 130, // between x and z, slightly toward z
+          b: 195, // directly above z
+          v: 410, // between h and y
+          c: 480, // directly above y
         };
 
         const nodePos: Record<string, { x: number; y: number }> = {
@@ -71,23 +71,33 @@ export default function BackpropSketch() {
           c:  { x: paramXs.c, y: paramY },
         };
 
+        // Node label (top of node) — short symbol only
         const nodeLabels: Record<string, string> = {
           x: "x",
-          z: "z = wx + b",
-          h: "h = tanh(z)",
-          y: "y = vh + c",
-          L: "L = (y−t)²",
+          z: "z",
+          h: "h",
+          y: "y",
+          L: "L",
           w: "w",
           b: "b",
           v: "v",
           c: "c",
         };
 
+        // Node sublabel (formula, shown small under the symbol for main nodes)
+        const nodeSublabels: Record<string, string> = {
+          x: "input",
+          z: "wx + b",
+          h: "tanh(z)",
+          y: "vh + c",
+          L: "(y−t)²",
+        };
+
         const isParam = (id: string) => ["w", "b", "v", "c"].includes(id);
 
-        // Node dimensions
-        const nodeW = (id: string) => isParam(id) ? 50 : 100;
-        const nodeH = 44;
+        // Node dimensions — main nodes are wider and taller to fit symbol + formula + value
+        const nodeW = (id: string) => isParam(id) ? 56 : 110;
+        const nodeH = (id: string) => isParam(id) ? 44 : 64;
 
         // Compute forward + backward pass
         const computeGraph = () => {
@@ -147,7 +157,7 @@ export default function BackpropSketch() {
           const edges: { from: string; to: string; label: string; gradKey: string }[] = [
             // Main chain
             { from: "x", to: "z", label: "×w", gradKey: "z" },
-            { from: "z", to: "h", label: "σ'(z)", gradKey: "h" },
+            { from: "z", to: "h", label: "h'(z)", gradKey: "h" },
             { from: "h", to: "y", label: "×v", gradKey: "y" },
             { from: "y", to: "L", label: "2(y−t)", gradKey: "L" },
             // Parameter edges
@@ -170,8 +180,8 @@ export default function BackpropSketch() {
             // Clamp start/end to node edges
             const fromW = nodeW(edge.from) / 2;
             const toW = nodeW(edge.to) / 2;
-            const fromH2 = nodeH / 2;
-            const toH2 = nodeH / 2;
+            const fromH2 = nodeH(edge.from) / 2;
+            const toH2 = nodeH(edge.to) / 2;
 
             // Compute direction
             const dx = tx - fx;
@@ -220,20 +230,6 @@ export default function BackpropSketch() {
               p.pop();
             }
 
-            // Edge label (only for main chain edges)
-            if (edge.label) {
-              const mx = (startX + endX) / 2;
-              const my = (startY + endY) / 2;
-
-              // Place labels above the edge (negative Y offset)
-              p.fill(140, 140, 170, 220);
-              p.noStroke();
-              p.textSize(10);
-              p.textFont("JetBrains Mono, monospace");
-              p.textAlign(p.CENTER, p.BOTTOM);
-              p.text(edge.label, mx, my - 8);
-              p.textFont("Inter");
-            }
           }
 
           // ---- draw nodes ----
@@ -241,8 +237,10 @@ export default function BackpropSketch() {
           for (const id of allNodeIds) {
             const pos = nodePos[id];
             const nw = nodeW(id);
+            const nh = nodeH(id);
             const intensity = normGrad[id] ?? 0;
             const label = nodeLabels[id];
+            const sublabel = nodeSublabels[id];
 
             // Node background
             const bgR = 20 + 35 * intensity;
@@ -256,46 +254,110 @@ export default function BackpropSketch() {
             p.stroke(borderR, borderG, borderB, Math.min(255, 80 + 175 * intensity));
             p.strokeWeight(1 + 1.5 * intensity);
             p.rectMode(p.CENTER);
-            p.rect(pos.x, pos.y, nw, nodeH, 8);
+            p.rect(pos.x, pos.y, nw, nh, 8);
 
             // Gradient glow
             if (intensity > 0.3) {
               p.noFill();
               p.stroke(255, 80, 100, 30 * intensity);
               p.strokeWeight(4);
-              p.rect(pos.x, pos.y, nw + 6, nodeH + 6, 10);
+              p.rect(pos.x, pos.y, nw + 6, nh + 6, 10);
             }
 
-            // Label
-            p.fill(220, 220, 235, 220 + 35 * intensity);
             p.noStroke();
-            p.textSize(isParam(id) ? 12 : 11);
-            p.textFont("JetBrains Mono, monospace");
-            p.textAlign(p.CENTER, p.CENTER);
-            p.text(label, pos.x, pos.y - 7);
-
-            // Value
-            p.textSize(10);
-            p.textFont("Inter");
-            p.fill(160, 160, 180);
             const valStr = vals[id] !== undefined ? vals[id].toFixed(2) : "";
-            p.text(valStr, pos.x, pos.y + 9);
+
+            if (isParam(id)) {
+              // Param nodes: centered symbol on top, value below
+              p.fill(225, 225, 240, 220 + 35 * intensity);
+              p.textFont("JetBrains Mono, monospace");
+              p.textAlign(p.CENTER, p.CENTER);
+              p.textSize(13);
+              p.text(label, pos.x, pos.y - 9);
+
+              p.fill(160, 160, 180);
+              p.textFont("Inter");
+              p.textSize(10);
+              p.text(valStr, pos.x, pos.y + 10);
+            } else {
+              // Main nodes: symbol / formula / value, evenly stacked
+              const topY = pos.y - nh / 2;
+
+              // Symbol (row 1)
+              p.fill(230, 230, 245, 230 + 25 * intensity);
+              p.textFont("JetBrains Mono, monospace");
+              p.textAlign(p.CENTER, p.CENTER);
+              p.textSize(13);
+              p.text(label, pos.x, topY + 14);
+
+              // Formula (row 2)
+              if (sublabel) {
+                p.fill(145, 145, 170, 220);
+                p.textFont("JetBrains Mono, monospace");
+                p.textSize(9);
+                p.text(sublabel, pos.x, topY + 32);
+              }
+
+              // Value (row 3)
+              p.fill(200, 200, 215);
+              p.textFont("Inter");
+              p.textSize(10);
+              p.text(valStr, pos.x, topY + 50);
+            }
+          }
+
+          // ---- edge labels (drawn after nodes so they sit on top, placed in empty band above the main-node row) ----
+          const labelY = mainY - 52; // main nodes top ≈ mainY - 32; label sits in clear space above
+          for (const edge of edges) {
+            if (!edge.label) continue;
+            const fromPos = nodePos[edge.from];
+            const toPos = nodePos[edge.to];
+            // Only label mostly-horizontal (main-chain) edges
+            if (Math.abs(toPos.x - fromPos.x) < Math.abs(toPos.y - fromPos.y)) continue;
+
+            const mx = (fromPos.x + toPos.x) / 2;
+            const intensity = normGrad[edge.gradKey] ?? 0;
+
+            p.textSize(10);
+            p.textFont("JetBrains Mono, monospace");
+            const padX = 6;
+            const labelW = p.textWidth(edge.label) + padX * 2;
+            const labelH = 17;
+
+            // Dark pill so the label reads against the canvas cleanly
+            p.rectMode(p.CENTER);
+            p.noStroke();
+            p.fill(18, 22, 30, 240);
+            p.rect(mx, labelY, labelW, labelH, 5);
+
+            // Thin accent border hints at gradient intensity on that edge
+            p.noFill();
+            p.stroke(255, 100, 130, 60 + 140 * intensity);
+            p.strokeWeight(1);
+            p.rect(mx, labelY, labelW, labelH, 5);
+
+            // Label text
+            p.noStroke();
+            p.fill(200, 200, 220, 240);
+            p.textAlign(p.CENTER, p.CENTER);
+            p.text(edge.label, mx, labelY);
+            p.textFont("Inter");
           }
 
           // ---- forward / backward labels ----
-          p.fill(80);
           p.noStroke();
           p.textSize(10);
           p.textFont("Inter");
+          p.fill(110, 140, 180, 200);
           p.textAlign(p.LEFT, p.CENTER);
-          p.text("forward →", 50, mainY + 45);
+          p.text("forward →", 50, mainY + 55);
+          p.fill(255, 80, 100, 180);
           p.textAlign(p.RIGHT, p.CENTER);
-          p.fill(255, 80, 100, 100);
-          p.text("← backward", W - 50, mainY + 45);
+          p.text("← backward", W - 50, mainY + 55);
 
           // ---- bottom gradient panel ----
-          const panelY = 300;
-          const panelH = 260;
+          const panelY = 310;
+          const panelH = 250;
 
           // Panel background
           p.fill(16, 20, 28);

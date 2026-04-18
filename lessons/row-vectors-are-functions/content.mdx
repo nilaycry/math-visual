@@ -1,0 +1,62 @@
+---
+title: "row vectors are linear functions"
+description: "not vectors written sideways — something else entirely"
+tags: ["linear algebra"]
+color: "from-violet-500 to-indigo-500"
+icon: "f"
+date: "2026-04-16"
+type: "connection"
+draft: true
+---
+
+when you write a row vector, it looks like a column vector that got rotated.
+it isn't. a row vector is a function. this note is about what that means and
+why it changes how you think about almost everything in linear algebra.
+
+---
+
+### what a linear function from Rⁿ to R looks like
+
+[TODO: any linear function f: Rⁿ → R has to satisfy f(u+v) = f(u) + f(v) and
+f(cv) = cf(v). once you know that, it's completely determined by what it does to
+the basis vectors. those n values are exactly the entries of a row vector.
+so every such function is a row vector, and every row vector is such a function.
+they're the same thing.]
+
+---
+
+### the dual space
+
+[TODO: the set of all linear functions from Rⁿ to R is itself a vector space,
+called the dual space V*. it has the same dimension as V but it's a different space.
+elements of V* are called covectors or 1-forms depending on context.
+the transpose operation moves vectors from V to V*.]
+
+[TODO: pause here moment — this is where to sit with it. Rⁿ and its dual look
+identical (both are just n-tuples of numbers) but they transform differently
+under a change of basis. that's the real distinction.]
+
+---
+
+### how this reframes the dot product
+
+[TODO: aᵀb is not symmetric. aᵀ is a function, b is a vector, aᵀb is the function
+applied to the vector. bᵀa is a different function applied to a different vector.
+they give the same number because of the symmetry of the dot product, not because
+the operation is symmetric. connect to the dot product note.]
+
+---
+
+### how this reframes matrix multiplication
+
+[TODO: a matrix A: Rⁿ → Rᵐ has a transpose Aᵀ: Rᵐ → Rⁿ but in the dual sense.
+Aᵀ pulls functions on Rᵐ back to functions on Rⁿ. this is the pullback.
+the (Ax)·y = x·(Aᵀy) identity from the dot product note is exactly this.]
+
+---
+
+### what this connects to
+
+[TODO: point to vectors-columns-rows for the representation angle.
+mention that this is the starting point for differential forms, gradients
+as covectors, and why physicists write indices up and down.]

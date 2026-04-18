@@ -12,6 +12,8 @@ const EigenSketch = dynamic(() => import("@/components/sketches/EigenSketch"), {
 const NonConvexSketch = dynamic(() => import("@/components/sketches/NonConvexSketch"), { ssr: false });
 const SVDSketch = dynamic(() => import("@/components/sketches/SVDSketch"), { ssr: false });
 const BackpropSketch = dynamic(() => import("@/components/sketches/BackpropSketch"), { ssr: false });
+const BackpropTrainSketch = dynamic(() => import("@/components/sketches/BackpropTrainSketch"), { ssr: false });
+const NullSpaceSketch = dynamic(() => import("@/components/sketches/NullSpaceSketch"), { ssr: false });
 
 const components = {
   FourierSketch,
@@ -20,6 +22,8 @@ const components = {
   NonConvexSketch,
   SVDSketch,
   BackpropSketch,
+  BackpropTrainSketch,
+  NullSpaceSketch,
 };
 
 export async function generateStaticParams() {

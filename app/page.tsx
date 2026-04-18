@@ -16,7 +16,7 @@ const subjectAreas = [
     description:
       "vectors, matrices, and transformations — and the connections between them that most courses never get to",
     accent: "#5B8DD9",
-    count: 2,
+    count: 3,
   },
   {
     href: "/machine-learning",

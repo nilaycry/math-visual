@@ -1,0 +1,131 @@
+---
+title: "the directions a matrix destroys"
+description: "what the null space is and why it matters"
+tags: ["linear algebra"]
+color: "from-rose-500 to-pink-500"
+icon: "∅"
+date: "2026-04-16"
+draft: false
+---
+
+import NullSpaceSketch from '@/components/sketches/NullSpaceSketch'
+
+a matrix takes every vector in its input space and sends it somewhere. most vectors
+land in new positions. but some vectors, sometimes just the zero vector, sometimes an
+entire line or plane full of them, get sent to exactly zero. not shrunk. not rotated.
+erased.
+
+the null space of A is all the vectors that A maps to zero. it's the set of directions
+the matrix completely destroys. understanding what's in it, and how much of it there is,
+tells you something fundamental about what the matrix actually does.
+
+---
+
+### what it is
+
+the null space of A, written N(A), is the set of all vectors x satisfying Ax = 0.
+
+it always contains the zero vector. that's trivial since A times zero is always zero.
+the question is whether it contains anything else.
+
+it's always a subspace. if Ax = 0 and Ay = 0, then A(x+y) = Ax + Ay = 0 + 0 = 0.
+if Ax = 0, then A(cx) = c(Ax) = 0. linearity guarantees it's closed under the
+operations that make a subspace a subspace. this is one of those facts worth
+checking once by hand so it stops feeling like something you have to take on faith.
+
+---
+
+### the picture
+
+try the singular preset. the orange line that appears on the left is the null space.
+every vector along that line maps to zero: they all pile up at the glowing dot on
+the right. drag the sliders slowly from the identity toward the singular preset and
+watch the output ellipse collapse to a line as the orange null space direction grows
+brighter. that collapse is the moment. a whole dimension of input space disappears.
+
+the color coding tells you which input directions are most compressed. orange means
+the output is near zero. teal means the matrix stretches that direction. when the
+matrix is invertible, everything is teal and only the zero vector maps to zero.
+when it's singular, an entire orange line folds to the origin.
+
+<div className="not-prose my-8">
+  <NullSpaceSketch />
+</div>
+
+in 2D, a 2×2 matrix has exactly two options: the null space is either just the zero
+vector (the matrix is invertible, nothing gets destroyed) or an entire line through
+the origin (the matrix is singular, one whole direction collapses). there's no middle
+ground. this is connected to the eigen lesson: a zero eigenvalue means its eigenvector
+lies in the null space. the null space is the eigenspace for λ = 0.
+
+---
+
+### finding it
+
+to find the null space you solve Ax = 0. row reduce the matrix A to row echelon form
+and read off the free variables. each free variable contributes one vector to a basis
+for the null space.
+
+take a concrete case. let A = [[1, 2], [2, 4]]. the second row is twice the first, so
+det(A) = 0 and the matrix is singular.
+
+<div className="math-highlight">[ 1  2 ] → row reduce → [ 1  2 ]
+[ 2  4 ]               [ 0  0 ]</div>
+
+the single equation x₁ + 2x₂ = 0 gives x₁ = -2x₂. setting x₂ = 1 gives the null
+vector [-2, 1]. the null space is the line spanned by [-2, 1]: every scalar multiple
+of it maps to zero. you can verify by hand: A[-2, 1]ᵀ = [(-2 + 2), (-4 + 4)] = [0, 0].
+
+this is where 3D starts appearing even in simple cases. take a 2×3 matrix:
+A = [[1, 0, 1], [0, 1, 1]]. it's already in reduced row echelon form. the third
+column has no pivot so x₃ is free. setting x₃ = 1 gives x₁ = -1, x₂ = -1.
+
+<div className="math-highlight">null space of A spanned by [ -1, -1, 1 ]</div>
+
+the null space is a line in R³. the input is three-dimensional, the output is two-dimensional,
+and one dimension got destroyed in the process. which one is encoded in that vector.
+
+---
+
+### what the dimension tells you
+
+the nullity of A is the dimension of its null space. how many independent directions get
+destroyed. the rank of A is the dimension of its output. how many independent directions
+survive. together they account for everything:
+
+<div className="math-highlight">rank(A) + nullity(A) = n</div>
+
+where n is the number of columns of A.
+
+pause here. the rank-nullity theorem is saying something simple but easy to miss. a matrix
+with n columns takes vectors from an n-dimensional space. it can't create extra dimensions
+in the output, and the dimensions it sends to zero have to come from somewhere. the ones it
+destroys and the ones it preserves add up exactly to n. if you tell me the matrix has
+nullity 2, I immediately know the rank is n-2 without computing anything.
+
+for the 2×2 singular example above: rank 1, nullity 1, total 2. for the 2×3 example:
+rank 2, nullity 1, total 3. the sketch shows this in the bottom bar. watch rank and
+nullity trade off as you slide the matrix toward singular.
+
+---
+
+### in 3D
+
+a 3×3 matrix can have four qualitatively different null spaces. just the zero vector
+(rank 3, the matrix is invertible). a line through the origin (rank 2, one direction
+destroyed). a plane through the origin (rank 1, two directions destroyed). all of R³
+(rank 0, the zero matrix, everything destroyed).
+
+each step down in rank adds a dimension to the null space. the rank-nullity theorem
+is what ties this together. I find it clarifying to think of the nullity as a kind of
+"waste" in the matrix: a rank-2 matrix in R³ has one wasted dimension, a direction it
+flattens to nothing and can never recover. the null space is exactly that waste, made precise.
+
+---
+
+### what this doesn't cover yet
+
+the null space and the column space are complementary in a precise sense. the rank-nullity
+theorem quantifies the tradeoff, but there's a geometric relationship too: the null space
+of Aᵀ is perpendicular to the column space of A. this is the foundation of why least
+squares projections work, and it's worth a separate note. column space is next.

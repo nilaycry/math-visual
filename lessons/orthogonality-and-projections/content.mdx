@@ -1,0 +1,75 @@
+---
+title: "orthogonality and projections"
+description: "the geometry behind least squares and decomposition"
+tags: ["linear algebra"]
+color: "from-sky-500 to-cyan-500"
+icon: "⊥"
+date: "2026-04-16"
+draft: true
+---
+
+two vectors are orthogonal if their dot product is zero. that's the definition.
+but there's a lot packed into it, and the projection that comes with it is one
+of the most useful geometric ideas in all of linear algebra.
+
+---
+
+### what orthogonality actually means geometrically
+
+[TODO: perpendicular in the geometric sense. the shadow picture: if a · b = 0,
+the shadow of a onto b has zero length. they contribute nothing to each other's
+direction. this is the right way to think about "independence" in a geometric sense,
+stronger than linear independence.]
+
+---
+
+### projecting onto a vector
+
+[TODO: given a vector b and a direction u, the projection of b onto u is the
+component of b in the direction of u. formula: proj = (b·u / u·u) u.
+if u is a unit vector this simplifies to (b·u)u.
+the residual b - proj is orthogonal to u. this is the key fact.]
+
+<div className="math-highlight">projᵤ(b) = (b·u / u·u) u</div>
+
+---
+
+### projecting onto a subspace
+
+[TODO: the natural extension. given a subspace (spanned by some columns of a
+matrix A), the projection of b onto that subspace is the closest point in the
+subspace to b. closest means the residual is orthogonal to every vector in the
+subspace. this gives Aᵀ(b - Ax) = 0, which rearranges to the normal equations:
+AᵀAx = Aᵀb.
+
+pause here moment: this is where least squares comes from. when Ax = b has no
+solution (overdetermined system), the best you can do is minimize the residual.
+the minimum is exactly the projection.]
+
+<div className="math-highlight">AᵀAx = Aᵀb</div>
+
+---
+
+### orthogonal bases and why they're nice
+
+[TODO: if you have an orthogonal basis, projecting onto a subspace becomes
+trivial — each coordinate is just a dot product with the corresponding basis vector.
+no matrix inversion needed. this is why orthogonal bases are so useful in practice.
+Gram-Schmidt is the process of building one from any basis.]
+
+---
+
+### the picture
+
+[TODO: sketch idea — 2D or 3D. show a vector b, a subspace (line or plane),
+the projection onto it, and the residual perpendicular to it. interactive:
+drag b around, watch the projection update. Type B sketch.]
+
+---
+
+### what this connects to
+
+[TODO: least squares regression is projection onto the column space of the
+design matrix. PCA finds an orthogonal basis for the directions of maximum
+variance. SVD builds on orthogonal decompositions. Fourier series is projection
+onto an orthogonal basis of sinusoids — point to that lesson.]
