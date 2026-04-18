@@ -93,7 +93,7 @@ export default function HomePage() {
             >
               explore
             </a>
-            <a
+<a
               href="https://github.com/nilaycry"
               target="_blank"
               rel="noopener noreferrer"

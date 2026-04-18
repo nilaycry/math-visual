@@ -4,7 +4,13 @@ description: "or is it the other way round"
 tags: ["linear algebra"]
 color: "from-blue-500 to-violet-500"
 icon: "·"
+accent: "#7F77DD"
 date: "2026-04-15"
+related:
+  - slug: "null-space"
+    note: "the null space is the set of vectors where every row's dot product with x is zero"
+  - slug: "eigen"
+    note: "Ax can be read as n dot products, one per row — this connects directly to how eigenvalues work"
 type: "connection"
 ---
 
@@ -40,7 +46,7 @@ new thing with its own rules, disconnected from everything else. the transpose
 keeps you inside the existing framework: aᵀb is just matrix multiplication,
 no special cases, all the same rules apply. that consistency is the reason.
 
-back to transposes. pause here. what this is really saying is that aᵀ is a different kind of object
+pause here. what this is really saying is that aᵀ is a different kind of object
 than a. a is a vector in Rⁿ. aᵀ is a function that eats a column vector and spits
 out a number, specifically how much that vector projects onto a. every dot product is
 secretly a row vector acting on a column vector. the transpose is what makes that visible.

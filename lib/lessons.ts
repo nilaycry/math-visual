@@ -2,6 +2,11 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
+export interface RelatedEntry {
+  slug: string;
+  note: string;
+}
+
 export interface LessonMeta {
   slug: string;
   title: string;
@@ -9,7 +14,9 @@ export interface LessonMeta {
   tags: string[];
   color: string;
   icon: string;
+  accent: string;
   lessonType: "lesson" | "connection";
+  related: RelatedEntry[];
 }
 
 const lessonsDirectory = path.join(process.cwd(), "lessons");
@@ -36,7 +43,9 @@ export function getAllLessons(): LessonMeta[] {
         tags: data.tags as string[],
         color: data.color as string,
         icon: data.icon as string,
+        accent: (data.accent as string) ?? "#7F77DD",
         lessonType: (data.type === "connection" ? "connection" : "lesson") as "lesson" | "connection",
+        related: (data.related as RelatedEntry[] | undefined) ?? [],
       } as LessonMeta;
     })
     .filter((lesson): lesson is LessonMeta => lesson !== null);
