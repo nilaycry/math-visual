@@ -1,0 +1,161 @@
+---
+title: "vector spaces"
+description: "the definition and why it's exactly what it needs to be"
+week: 1
+date: "2026-04-18"
+---
+
+you've worked with vectors in $\mathbb{R}^2$ and $\mathbb{R}^3$ before: arrows in the
+plane or in space. you can add two of them and scale one by a number, and those
+operations behave nicely. at some point mathematicians noticed that completely
+different-looking objects behave exactly the same way.
+
+polynomials like $p(x) = x^2 + 3x + 1$. matrices. continuous functions. arrows in
+space. you can add two polynomials and scale a polynomial by a number, and the results
+obey the same rules as adding and scaling vectors. same with matrices. same with
+functions.
+
+so instead of proving the same theorems over and over for each type of object, you
+prove them once: define a **vector space** as any object that supports addition and
+scaling satisfying a fixed list of rules. every theorem about vector spaces then
+automatically applies to polynomials, matrices, functions, and arrows simultaneously.
+
+that's the whole point. a vector space is an abstraction that captures the essential
+behavior of "things you can add and scale."
+
+---
+
+### what you're scaling by: fields
+
+before you can define vector spaces, you need to fix what the scalars are.
+
+in $\mathbb{R}^3$ you scale vectors by real numbers. but what if you wanted to scale by
+complex numbers? a **field** is the formal name for a number system where you can add,
+subtract, multiply, and divide (except by zero). $\mathbb{R}$, $\mathbb{C}$, and
+$\mathbb{Q}$ are all fields.
+
+in this course $\mathbf{F}$ stands for either $\mathbb{R}$ or $\mathbb{C}$, and the
+choice is left open so theorems can hold for both. when a result genuinely requires one
+or the other, the proof will say so.
+
+---
+
+### the axioms, motivated
+
+now the eight rules. rather than listing them as a table and moving on, here is why
+each one is there.
+
+**four rules about addition**
+
+$$u + v = v + u$$
+
+order shouldn't matter. this isn't automatic. you have to require it. (matrix
+multiplication, for contrast, doesn't have this property. matrix addition does.)
+
+$$(u + v) + w = u + (v + w)$$
+
+when adding three vectors, grouping shouldn't matter. without this, the expression
+$u + v + w$ is ambiguous.
+
+$$\text{there exists } \mathbf{0} \in V \text{ such that } v + \mathbf{0} = v \text{ for all } v$$
+
+there has to be a "do nothing" element. in $\mathbb{R}^2$ it's the origin. for
+polynomials it's the zero polynomial. for matrices it's the zero matrix. every
+reasonable system has one.
+
+$$\text{for every } v \in V \text{ there exists } w \text{ such that } v + w = \mathbf{0}$$
+
+every vector has an opposite that cancels it. this is what makes subtraction possible:
+$u - v$ is defined as $u + (-v)$.
+
+together these four say that $(V, +)$ is an abelian group. that structure comes up
+everywhere in mathematics.
+
+**four rules about scalar multiplication**
+
+$$1 \cdot v = v$$
+
+scaling by the field's multiplicative identity should do nothing. without this,
+scalar multiplication is disconnected from the field's structure entirely.
+
+$$(ab)v = a(bv)$$
+
+scaling $v$ by $b$ and then by $a$ should give the same result as scaling by $ab$
+directly. this says scalar multiplication is compatible with multiplication in
+$\mathbf{F}$.
+
+$$a(u + v) = au + av$$
+
+scaling distributes over addition in $V$. this is what makes scalar multiplication
+interact coherently with vector addition.
+
+$$(\alpha + \beta)v = \alpha v + \beta v$$
+
+distributing in the other direction: scaling by $\alpha + \beta$ is the same as
+scaling by each separately and adding. this connects scalar multiplication to
+addition in $\mathbf{F}$.
+
+---
+
+### the formal definition
+
+> **Definition.** A **vector space** over a field $\mathbf{F}$ is a set $V$ together
+> with two operations, addition $V \times V \to V$ and scalar multiplication
+> $\mathbf{F} \times V \to V$, satisfying the eight axioms above. Elements of $V$
+> are called **vectors**. Elements of $\mathbf{F}$ are called **scalars**.
+
+pause here. the definition says nothing about what the elements of $V$ actually are.
+they don't have to be tuples or arrows. they just have to support two operations
+satisfying these rules. that's the whole abstraction.
+
+---
+
+### why exactly these eight
+
+not too many, not too few.
+
+strong enough that you can build a rich theory: subspaces, bases, dimension, linear
+maps, eigenvalues. all of it follows from just these eight rules.
+
+weak enough that many different objects satisfy them, so the theory applies broadly.
+
+if you dropped one axiom, something would break. drop the additive inverse and you
+can't subtract. drop associativity of scalar multiplication and scaling becomes
+incompatible with field arithmetic. each one is there because a proof somewhere
+needs it.
+
+---
+
+### examples
+
+$\mathbb{R}^n$ satisfies all eight axioms. so do:
+
+- $\mathcal{P}_n(\mathbf{F})$: polynomials of degree at most $n$ with coefficients
+  in $\mathbf{F}$, with pointwise addition and scalar multiplication
+- $\mathbf{F}^{m \times n}$: all $m \times n$ matrices, with matrix addition and
+  scalar multiplication
+- $C([0,1])$: continuous functions on $[0,1]$, with pointwise operations
+
+one theorem about vector spaces is a theorem about all of these at once.
+
+note that a plane through the origin in $\mathbb{R}^3$ is a vector space (it
+contains the zero vector and is closed under addition and scaling), but a plane that
+misses the origin is not: it fails the additive identity axiom since $\mathbf{0}$
+isn't in the set.
+
+---
+
+### what the definition leaves out
+
+the axioms say nothing about length, distance, or angle. $\mathbb{R}^n$ has all of
+those through the dot product, but a general vector space does not. you can add
+vectors and scale them. you cannot measure them until you add more structure.
+
+the structure that adds measurement is an inner product, a separate definition
+layered on top of a vector space, not part of what a vector space is.
+
+I think it's worth saying explicitly: a lot of $\mathbb{R}^n$ intuition quietly relies
+on the dot product. phrases like "the angle between two vectors" or "the length of a
+vector" don't mean anything in a general vector space until you've defined an inner
+product. importing that intuition into abstract settings is the most common way to
+confuse yourself in this course.

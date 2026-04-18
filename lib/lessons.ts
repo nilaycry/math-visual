@@ -12,64 +12,72 @@ export interface LessonMeta {
   title: string;
   description: string;
   tags: string[];
+  displayTag: string;
   color: string;
   icon: string;
   accent: string;
+  date: string;
   lessonType: "lesson" | "connection";
   related: RelatedEntry[];
 }
 
 const lessonsDirectory = path.join(process.cwd(), "lessons");
 
-export function getAllLessons(): LessonMeta[] {
-  const lessonDirs = fs
+function getSubjectDirs(): string[] {
+  return fs
     .readdirSync(lessonsDirectory)
-    .filter((dir) => fs.statSync(path.join(lessonsDirectory, dir)).isDirectory());
+    .filter((d) => fs.statSync(path.join(lessonsDirectory, d)).isDirectory());
+}
 
-  return lessonDirs
-    .map((slug) => {
-      const filePath = path.join(lessonsDirectory, slug, "content.mdx");
-      if (!fs.existsSync(filePath)) return null;
+export function getAllLessons(): LessonMeta[] {
+  const results: LessonMeta[] = [];
 
-      const fileContent = fs.readFileSync(filePath, "utf-8");
-      const { data } = matter(fileContent);
+  for (const subject of getSubjectDirs()) {
+    const subjectPath = path.join(lessonsDirectory, subject);
+    const slugDirs = fs
+      .readdirSync(subjectPath)
+      .filter((d) => fs.statSync(path.join(subjectPath, d)).isDirectory());
 
-      if (data.draft) return null;
+    for (const slug of slugDirs) {
+      const filePath = path.join(subjectPath, slug, "content.mdx");
+      if (!fs.existsSync(filePath)) continue;
 
-      return {
+      const { data } = matter(fs.readFileSync(filePath, "utf-8"));
+      if (data.draft) continue;
+
+      const tags = (data.tags as string[]) ?? [];
+
+      results.push({
         slug,
         title: data.title as string,
         description: data.description as string,
-        tags: data.tags as string[],
+        tags,
+        displayTag: (data.displayTag as string) ?? tags[0] ?? "",
         color: data.color as string,
         icon: data.icon as string,
         accent: (data.accent as string) ?? "#7F77DD",
+        date: (data.date as string) ?? "",
         lessonType: (data.type === "connection" ? "connection" : "lesson") as "lesson" | "connection",
         related: (data.related as RelatedEntry[] | undefined) ?? [],
-      } as LessonMeta;
-    })
-    .filter((lesson): lesson is LessonMeta => lesson !== null);
+      });
+    }
+  }
+
+  return results.sort((a, b) => a.date.localeCompare(b.date));
 }
 
 export function getLessonBySlug(slug: string): LessonMeta | undefined {
-  const lessons = getAllLessons();
-  return lessons.find((l) => l.slug === slug);
+  return getAllLessons().find((l) => l.slug === slug);
 }
 
 export function getLessonContent(slug: string): string | null {
-  const filePath = path.join(lessonsDirectory, slug, "content.mdx");
-  if (!fs.existsSync(filePath)) return null;
-  return fs.readFileSync(filePath, "utf-8");
+  for (const subject of getSubjectDirs()) {
+    const filePath = path.join(lessonsDirectory, subject, slug, "content.mdx");
+    if (fs.existsSync(filePath)) return fs.readFileSync(filePath, "utf-8");
+  }
+  return null;
 }
 
 export function getAllLessonSlugs(): string[] {
-  return fs
-    .readdirSync(lessonsDirectory)
-    .filter((dir) => {
-      if (!fs.statSync(path.join(lessonsDirectory, dir)).isDirectory()) return false;
-      const filePath = path.join(lessonsDirectory, dir, "content.mdx");
-      if (!fs.existsSync(filePath)) return false;
-      const { data } = matter(fs.readFileSync(filePath, "utf-8"));
-      return !data.draft;
-    });
+  return getAllLessons().map((l) => l.slug);
 }

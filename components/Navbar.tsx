@@ -7,7 +7,9 @@ export default function Navbar() {
   const pathname = usePathname();
 
   // These pages have their own built-in navbars
-  if (pathname === "/" || pathname === "/linear-algebra" || pathname === "/machine-learning" || pathname === "/graph") return null;
+  if (pathname === "/" || pathname === "/linear-algebra" || pathname === "/machine-learning" || pathname === "/graph" || pathname.startsWith("/abstract-algebra")) return null;
+
+  const isNote = false;
 
   return (
     <nav
@@ -21,7 +23,7 @@ export default function Navbar() {
       }}
     >
       <Link
-        href="/"
+        href={isNote ? "/abstract-algebra" : "/"}
         style={{
           color: "#555",
           textDecoration: "none",
@@ -29,7 +31,7 @@ export default function Navbar() {
           fontWeight: 400,
         }}
       >
-        ← lessons
+        {isNote ? "← notes" : "← lessons"}
       </Link>
 
       <div style={{ display: "flex", gap: 32 }}>

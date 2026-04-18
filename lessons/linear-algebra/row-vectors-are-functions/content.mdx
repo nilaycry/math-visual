@@ -1,0 +1,121 @@
+---
+title: "row vectors are linear functions"
+description: "not vectors written sideways — something else entirely"
+tags: ["linear algebra"]
+color: "from-violet-500 to-indigo-500"
+icon: "f"
+accent: "#7F77DD"
+displayTag: "connection"
+date: "2026-04-16"
+type: "connection"
+related:
+  - slug: "dot-product-and-matrix-multiplication"
+    note: "the dot product is a row vector evaluating on a column vector — that note builds on this one"
+  - slug: "null-space"
+    note: "the null space of A is the set of vectors where every row of A evaluates to zero"
+---
+
+when you write a row vector, it looks like a column vector that got rotated.
+it isn't. a row vector is a function. this note is about what that means and
+why it changes how you think about almost everything in linear algebra.
+
+---
+
+### what a linear function from Rⁿ to R looks like
+
+take any linear function f: Rⁿ → R. it has to satisfy two rules: f(u+v) = f(u) + f(v)
+and f(cv) = cf(v) for any scalar c. that's the whole definition. once you know what f
+does to each basis vector, you know everything about it.
+
+concretely: if e₁, e₂, ..., eₙ are the standard basis vectors, then f is completely
+determined by the n numbers f(e₁), f(e₂), ..., f(eₙ). call them a₁, a₂, ..., aₙ.
+then for any x = (x₁, ..., xₙ):
+
+<div className="math-highlight">f(x) = a₁x₁ + a₂x₂ + ··· + aₙxₙ</div>
+
+that's exactly the dot product. every linear function from Rⁿ to R is a dot product
+with something. that something is precisely the row vector [a₁ &nbsp; a₂ &nbsp; ··· &nbsp; aₙ].
+
+so: every linear function from Rⁿ to R is a row vector, and every row vector is such
+a function. they're the same thing, just written differently.
+
+---
+
+### stop and think
+
+pause here and sit with that. you've been computing f(x) = ax in one context and aᵀx
+in another and treating them as two notations for the same formula. they are the same
+calculation. but the objects are different. in one, a is a vector living in the same
+space as x. in the other, aᵀ is a function from that space to R. the formula looks
+identical because the arithmetic is identical. the interpretation is not.
+
+this distinction seems pedantic until you change the basis and watch what happens.
+
+---
+
+### the dual space
+
+the set of all linear functions from Rⁿ to R is itself a vector space. you can add
+functions (add outputs) and scale them (scale outputs), and all the axioms hold. this
+space is called the dual space of Rⁿ and written (Rⁿ)*.
+
+for Rⁿ the dual space looks identical to Rⁿ itself. both are just n-tuples of numbers.
+this is why the distinction is so easy to miss in a first course. but they are
+different spaces, and the difference becomes real when you change coordinates.
+
+suppose you stretch the x-axis by a factor of 2: the new basis vector e₁' = 2e₁.
+a point that was one unit from the origin has coordinate 1/2 in the new system.
+it shrinks in coordinate space because the basis unit grew.
+
+now take a linear function that returns 1 for a unit x-input. in the new basis,
+a one-unit input is twice as large as before, so the function needs half the coefficient
+to return the same value. its coordinate halves when the basis doubles.
+
+column vector coordinates and row vector coordinates transform in opposite directions
+under a basis change. physicists call these contravariant and covariant. the names are
+intimidating but the idea is just: when the ruler gets longer, point coordinates go
+down, and function coefficients go down too. both shrink, but for different reasons,
+and when you compose them the changes cancel, which is why the function value stays fixed.
+
+---
+
+### how this reframes the transpose
+
+the transpose Aᵀ of a matrix A is not just A with rows and columns swapped. it is a
+map between dual spaces.
+
+if A maps column vectors from Rⁿ to Rᵐ, then Aᵀ maps row vectors on Rᵐ back to row
+vectors on Rⁿ. it takes a linear function on the output space and produces a linear
+function on the input space. the arrow runs backward.
+
+the identity (Ax)·y = x·(Aᵀy), which the dot product note derives from scratch, is
+exactly this. apply A to x, then evaluate y on the result. or pull y back through Aᵀ
+and evaluate on x directly. same number, different routes.
+
+this is why the transpose is sometimes called the adjoint: it's the dual map, the
+one that lives in the dual world and pulls functions back.
+
+---
+
+### the gradient is a row vector
+
+the gradient ∇f of a scalar function f: Rⁿ → R is a linear approximation: it maps
+small input changes (directions) to output changes (a number). a map from Rⁿ to R
+is a covector. so ∇f is a row vector, not a column vector.
+
+in most machine learning code, gradients are stored as column vectors. this is a
+convention, not a mathematical fact. it works because Rⁿ and (Rⁿ)* are isomorphic,
+and in flat euclidean space the dot product provides a natural identification between
+them. but in curved geometry, or when the metric isn't the identity, treating gradients
+as column vectors causes subtle errors. the distinction matters as soon as you leave
+flat space.
+
+---
+
+### what this connects to
+
+the dot product note covers why aᵀb is a function evaluated on a vector and what that
+means for matrix multiplication. vectors-columns-rows goes into how the abstract vector,
+the column, and the row relate before and after you pick a basis. the dual space idea
+is the starting point for differential forms and for why physicists write indices
+up and down.

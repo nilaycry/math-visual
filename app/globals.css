@@ -167,3 +167,91 @@
 .math-highlight {
   @apply px-4 py-3 rounded-lg bg-secondary/50 border border-border font-mono text-sm my-4 overflow-x-auto;
 }
+
+/* Notes prose — light theme, hardcoded colors to bypass dark CSS variables */
+.notes-prose p {
+  color: #292524;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  font-size: 1.0625rem;
+}
+
+.notes-prose h3 {
+  color: #1c1917;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.notes-prose strong {
+  color: #1c1917;
+  font-weight: 600;
+}
+
+.notes-prose em {
+  color: #44403c;
+}
+
+.notes-prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.notes-prose ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.notes-prose li {
+  color: #292524;
+  line-height: 1.8;
+  margin-bottom: 0.25rem;
+  font-size: 1.0625rem;
+}
+
+.notes-prose blockquote {
+  border-left: 3px solid #9b7fdd;
+  padding-left: 1.25rem;
+  color: #57534e;
+  margin: 1.75rem 0;
+  font-style: normal;
+}
+
+.notes-prose blockquote p {
+  color: #57534e;
+  margin-bottom: 0.5rem;
+}
+
+.notes-prose blockquote strong {
+  color: #44403c;
+}
+
+.notes-prose hr {
+  border: none;
+  border-top: 1px solid #e8e5df;
+  margin: 2.25rem 0;
+  width: 100%;
+}
+
+.notes-prose hr + h3 {
+  margin-top: 0;
+}
+
+.notes-prose a {
+  color: #6d4fc2;
+  text-decoration: none;
+}
+
+.notes-prose a:hover {
+  text-decoration: underline;
+}
+
+/* KaTeX display math spacing in notes */
+.notes-prose .katex-display {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+}

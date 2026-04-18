@@ -1,60 +1,36 @@
-"use client";
-
 import Link from "next/link";
+import { getAllLessons, type LessonMeta } from "@/lib/lessons";
 
-const laLessons = [
-  {
-    slug: "eigen",
-    tag: "eigenvalues",
-    title: "the directions a matrix can't change",
-    description: "what a matrix actually does to space",
-    accent: "#D85A30",
-  },
-  {
-    slug: "svd",
-    tag: "decomposition",
-    title: "rotate, stretch, rotate",
-    description: "the three hidden steps inside every matrix",
-    accent: "#5B8DD9",
-  },
-  {
-    slug: "null-space",
-    tag: "structure",
-    title: "the directions a matrix destroys",
-    description: "what the null space is and why it matters",
-    accent: "#E05A7A",
-  },
-];
-
-// Connection pages — most are placeholders until written
-const connections = [
+// Planned connections not yet written — remove an entry when its MDX goes live
+const plannedConnections = [
   {
     slug: "vectors-columns-rows",
     title: "a vector, a column, a row",
     description: "what's the same object and what isn't",
-    status: "soon" as const,
-  },
-  {
-    slug: "dot-product-and-matrix-multiplication",
-    title: "dot product is matrix multiplication",
-    description: "or is it the other way round",
-    status: "live" as const,
   },
   {
     slug: "row-vectors-are-functions",
     title: "row vectors are linear functions",
     description: "not vectors written sideways — something else entirely",
-    status: "soon" as const,
   },
   {
     slug: "eight-ways-to-say-invertible",
     title: "eight ways to say the same thing",
     description: "the invertible matrix theorem, all at once",
-    status: "soon" as const,
   },
 ];
 
 export default function LinearAlgebraPage() {
+  const allLessons = getAllLessons();
+  const laLessons = allLessons.filter(
+    (l): l is LessonMeta => l.tags.includes("linear algebra") && l.lessonType === "lesson"
+  );
+  const liveConnections = allLessons.filter(
+    (l): l is LessonMeta => l.tags.includes("linear algebra") && l.lessonType === "connection"
+  );
+  const liveConnectionSlugs = new Set(liveConnections.map((l) => l.slug));
+  const stillPlanned = plannedConnections.filter((p) => !liveConnectionSlugs.has(p.slug));
+
   return (
     <>
       <style>{`
@@ -94,10 +70,7 @@ export default function LinearAlgebraPage() {
             margin: "0 auto",
           }}
         >
-          <Link
-            href="/"
-            style={{ color: "#555", textDecoration: "none", fontSize: 14 }}
-          >
+          <Link href="/" style={{ color: "#555", textDecoration: "none", fontSize: 14 }}>
             ← back
           </Link>
           <a
@@ -113,11 +86,7 @@ export default function LinearAlgebraPage() {
         {/* ── HERO ── */}
         <section
           className="la-hero"
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            padding: "80px 48px 72px",
-          }}
+          style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 48px 72px" }}
         >
           <span
             style={{
@@ -148,43 +117,19 @@ export default function LinearAlgebraPage() {
           </h1>
 
           <div style={{ maxWidth: 580 }}>
-            <p
-              style={{
-                fontSize: 15,
-                fontWeight: 400,
-                lineHeight: 1.8,
-                color: "#666",
-                margin: "0 0 18px 0",
-              }}
-            >
+            <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#666", margin: "0 0 18px 0" }}>
               the first semester of linear algebra is mostly procedures. row
               reduction, matrix multiplication, determinants. you follow the steps,
               you get the answer, you move on. nothing about it suggests that any of
               it is connected, or that any of it is beautiful.
             </p>
-            <p
-              style={{
-                fontSize: 15,
-                fontWeight: 400,
-                lineHeight: 1.8,
-                color: "#666",
-                margin: "0 0 18px 0",
-              }}
-            >
+            <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#666", margin: "0 0 18px 0" }}>
               then things start clicking, usually slowly and out of order. and when
               they do, you realize the subject goes a lot deeper than the first course
               let on. the same idea keeps showing up in different clothes and you
               start to feel like you&apos;ve been missing something the whole time.
             </p>
-            <p
-              style={{
-                fontSize: 15,
-                fontWeight: 400,
-                lineHeight: 1.8,
-                color: "#555",
-                margin: 0,
-              }}
-            >
+            <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#555", margin: 0 }}>
               I get genuinely uncomfortable when I know I&apos;ve been computing
               something correctly without really understanding it. linear algebra
               has a lot of those moments. I&apos;m working through them here.
@@ -192,39 +137,19 @@ export default function LinearAlgebraPage() {
           </div>
         </section>
 
-        <div
-          className="la-content"
-          style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 120px" }}
-        >
+        <div className="la-content" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 120px" }}>
+
           {/* ── LESSONS ── */}
           <section style={{ marginBottom: 80 }}>
-            <div
-              style={{
-                borderTop: "1px solid #1a1a1a",
-                paddingTop: 48,
-                marginBottom: 32,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 400,
-                  color: "#555",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.14em",
-                }}
-              >
+            <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 48, marginBottom: 32 }}>
+              <span style={{ fontSize: 11, fontWeight: 400, color: "#555", textTransform: "uppercase", letterSpacing: "0.14em" }}>
                 lessons
               </span>
             </div>
 
             <div
               className="la-lessons-grid"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 20,
-              }}
+              style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}
             >
               {laLessons.map((lesson) => (
                 <Link
@@ -255,28 +180,12 @@ export default function LinearAlgebraPage() {
                         marginBottom: 10,
                       }}
                     >
-                      {lesson.tag}
+                      {lesson.displayTag}
                     </span>
-                    <span
-                      style={{
-                        fontSize: 15,
-                        fontWeight: 500,
-                        color: "#e8e8e8",
-                        display: "block",
-                        marginBottom: 8,
-                        lineHeight: 1.3,
-                      }}
-                    >
+                    <span style={{ fontSize: 15, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 8, lineHeight: 1.3 }}>
                       {lesson.title}
                     </span>
-                    <span
-                      style={{
-                        fontSize: 13,
-                        color: "#666",
-                        lineHeight: 1.5,
-                        display: "block",
-                      }}
-                    >
+                    <span style={{ fontSize: 13, color: "#666", lineHeight: 1.5, display: "block" }}>
                       {lesson.description}
                     </span>
                   </div>
@@ -287,95 +196,54 @@ export default function LinearAlgebraPage() {
 
           {/* ── CONNECTIONS ── */}
           <section>
-            <div
-              style={{
-                borderTop: "1px solid #1a1a1a",
-                paddingTop: 48,
-                marginBottom: 12,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 400,
-                  color: "#555",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.14em",
-                  display: "block",
-                  marginBottom: 12,
-                }}
-              >
+            <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 48, marginBottom: 12 }}>
+              <span style={{ fontSize: 11, fontWeight: 400, color: "#555", textTransform: "uppercase", letterSpacing: "0.14em", display: "block", marginBottom: 12 }}>
                 connections
               </span>
-              <p
-                style={{
-                  fontSize: 13,
-                  color: "#444",
-                  lineHeight: 1.6,
-                  margin: "0 0 32px 0",
-                  maxWidth: 480,
-                }}
-              >
+              <p style={{ fontSize: 13, color: "#444", lineHeight: 1.6, margin: "0 0 32px 0", maxWidth: 480 }}>
                 shorter notes on why two things that look different are secretly the same,
                 or why something that seemed obvious is actually subtle.
               </p>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {connections.map((conn) => {
-                const row = (
+              {liveConnections.map((conn) => (
+                <Link key={conn.slug} href={`/lessons/${conn.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
                   <div
-                    key={conn.slug}
                     className="la-conn-card"
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      justifyContent: "space-between",
-                      padding: "14px 0",
-                      borderBottom: "1px solid #141414",
-                      cursor: conn.status === "soon" ? "default" : "pointer",
-                    }}
+                    style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", padding: "14px 0", borderBottom: "1px solid #141414", cursor: "pointer" }}
                   >
                     <div>
-                      <span
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 400,
-                          color: conn.status === "soon" ? "#444" : "#c8c8c8",
-                          display: "block",
-                          marginBottom: 3,
-                        }}
-                      >
+                      <span style={{ fontSize: 14, fontWeight: 400, color: "#c8c8c8", display: "block", marginBottom: 3 }}>
                         {conn.title}
                       </span>
-                      <span
-                        style={{ fontSize: 12, color: "#3a3a3a", lineHeight: 1.5 }}
-                      >
+                      <span style={{ fontSize: 12, color: "#3a3a3a", lineHeight: 1.5 }}>
                         {conn.description}
                       </span>
                     </div>
-                    {conn.status === "soon" && (
-                      <span
-                        style={{
-                          fontSize: 11,
-                          color: "#333",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.08em",
-                          flexShrink: 0,
-                          marginLeft: 24,
-                        }}
-                      >
-                        soon
-                      </span>
-                    )}
                   </div>
-                );
-                return conn.status === "live" ? (
-                  <Link key={conn.slug} href={`/lessons/${conn.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
-                    {row}
-                  </Link>
-                ) : row;
-              })}
+                </Link>
+              ))}
+
+              {stillPlanned.map((conn) => (
+                <div
+                  key={conn.slug}
+                  className="la-conn-card"
+                  style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", padding: "14px 0", borderBottom: "1px solid #141414" }}
+                >
+                  <div>
+                    <span style={{ fontSize: 14, fontWeight: 400, color: "#444", display: "block", marginBottom: 3 }}>
+                      {conn.title}
+                    </span>
+                    <span style={{ fontSize: 12, color: "#3a3a3a", lineHeight: 1.5 }}>
+                      {conn.description}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: 11, color: "#333", textTransform: "uppercase", letterSpacing: "0.08em", flexShrink: 0, marginLeft: 24 }}>
+                    soon
+                  </span>
+                </div>
+              ))}
             </div>
           </section>
         </div>

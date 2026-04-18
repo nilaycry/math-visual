@@ -7,7 +7,7 @@ A Next.js personal math visualization site. Lessons are MDX files rendered via `
 ## stack
 
 - Next.js (App Router), TypeScript, Tailwind CSS
-- MDX via `next-mdx-remote/rsc` — lessons live in `lessons/<slug>/content.mdx`
+- MDX via `next-mdx-remote/rsc` — lessons live in `lessons/<subject>/<slug>/content.mdx`
 - p5.js for all interactive sketches — always dynamically imported with `ssr: false`
 - No UI component library — all styling is inline styles or Tailwind utility classes
 
@@ -33,13 +33,13 @@ To add a new subject area: create `app/<subject>/page.tsx` (copy an existing sub
 
 ## adding a new lesson — complete checklist
 
-Do these five things, in order:
+Do these **three** things, in order:
 
-1. Create `lessons/<slug>/content.mdx` — follow the content template below
+1. Create `lessons/<subject>/<slug>/content.mdx` — e.g. `lessons/linear-algebra/my-topic/content.mdx`
 2. Create `components/sketches/<Name>Sketch.tsx` — follow the sketch rules below
 3. Register the sketch in `app/lessons/[slug]/page.tsx`: add a dynamic import and add to the `components` map
-4. Add the lesson card to the correct **subject page** (e.g. `app/linear-algebra/page.tsx`), NOT to `app/page.tsx`
-5. Increment the `count` on the matching subject card in the `subjectAreas` array in `app/page.tsx`
+
+That's it. The subject page and the main-page count update automatically.
 
 For step 3, the pattern is always:
 ```ts
@@ -47,16 +47,21 @@ const YourSketch = dynamic(() => import("@/components/sketches/YourSketch"), { s
 // add YourSketch to the components object below
 ```
 
-For step 4, the lesson card shape used in subject pages is:
-```ts
-{
-  slug: "your-slug",
-  tag: "topic area",
-  title: "lowercase lesson title",
-  description: "one line, conversational",
-  accent: "#hexcolor",
-}
-```
+### how subject pages work
+
+`app/linear-algebra/page.tsx` and `app/machine-learning/page.tsx` are server components that call `getAllLessons()` from `lib/lessons.ts` and filter by tag. A lesson appears on the correct subject page automatically as soon as its MDX frontmatter has the right tag and no `draft: true`.
+
+- Linear algebra lessons: `tags: ["linear algebra"]`
+- Machine learning lessons: `tags: ["machine learning"]`
+- Connection notes: also tagged by subject, plus `type: "connection"` in frontmatter
+
+The `displayTag` frontmatter field sets the small label shown on the lesson card (e.g. "eigenvalues", "decomposition"). If omitted, it falls back to `tags[0]`.
+
+The main page counts (`app/page.tsx`) are also computed from `getAllLessons()` — no manual updating needed.
+
+### planned / coming-soon connections
+
+Each subject page has a small `plannedConnections` array at the top of the file for connections that are not yet written. When a planned connection's MDX goes live (remove `draft: true`), it appears in the live list automatically — remove its entry from `plannedConnections` at that point.
 
 Do NOT add individual lesson cards to `app/page.tsx` — that file only knows about subject areas.
 
@@ -399,22 +404,42 @@ const arrowScreenY = gy * scaleY; // no negation
 - Navbar on lesson pages: `← lessons` left, `github` right, nothing else
 - Lesson cards: accent color top border, lowercase tag, conversational description
 
+### the ThemeProvider dark-class gotcha
+
+`ThemeProvider` in `app/layout.tsx` sets `defaultTheme="dark"` and adds `class="dark"` to `<html>`. This means **all Tailwind CSS variables resolve to dark-mode values** site-wide — `--foreground` is near-white, `--background` is near-black — even if a page overrides the background with a light color inline.
+
+The abstract algebra section (`/abstract-algebra/*`) uses a cream background (`#f7f4ef`) with the `.notes-prose` class for article body text. This class uses **hardcoded hex colors** rather than CSS variables, specifically to bypass the dark-mode variable resolution. Do not use `text-foreground`, `bg-background`, or any Tailwind color variable inside the abstract algebra pages — they will resolve to dark-theme values and look wrong on the light background. Use explicit hex values instead.
+
+### abstract algebra section
+
+- Light/cream theme (`#f7f4ef` background, `#1c1917` text) — intentional contrast with the dark main site
+- Serif article body (Georgia) via `.notes-prose` in `globals.css`
+- KaTeX math rendering via `remark-math` + `rehype-katex` — CSS loaded in `app/abstract-algebra/layout.tsx`
+- Notes at `notes/abstract-algebra/<slug>/content.mdx`, ordered by `week:` frontmatter field
+- Global Navbar suppressed on all `/abstract-algebra/*` paths — each page handles its own nav
+- Use `$$...$$` for display math and `$...$` for inline math in note MDX files
+
 ---
 
 ## file map
 
 ```
 app/
-  page.tsx                      — main page; only contains subjectAreas array (subject cards)
+  page.tsx                      — main page; subject cards with auto-computed counts
   layout.tsx                    — root layout
   linear-algebra/
-    page.tsx                    — LA subject page; edit hero text and laLessons array here
+    page.tsx                    — server component; reads getAllLessons() filtered by tag
   machine-learning/
-    page.tsx                    — ML subject page; edit hero text and mlLessons array here
+    page.tsx                    — server component; reads getAllLessons() filtered by tag
+  abstract-algebra/
+    layout.tsx                  — loads KaTeX CSS for this section only
+    page.tsx                    — server component; reads getAllNotes()
+    [slug]/page.tsx             — note renderer (no sketch registration needed)
   lessons/[slug]/
     page.tsx                    — lesson renderer (register new sketches here)
 components/
-  Navbar.tsx
+  Navbar.tsx                    — suppressed on pages with their own nav
+  SmoothScrollLink.tsx          — thin "use client" wrapper for smooth scroll anchors
   sketches/
     GradientSketch.tsx          — Type A (simulation)
     NonConvexSketch.tsx         — Type A (simulation)
@@ -425,11 +450,13 @@ components/
 hooks/
   useP5Sketch.ts                — shared hook for Type A sketches only
 lessons/
-  gradient-descent/content.mdx
-  eigen/content.mdx
-  fourier-series/content.mdx
-  svd/content.mdx
-  backpropagation/content.mdx
+  linear-algebra/<slug>/content.mdx   — LA lessons and connections
+  machine-learning/<slug>/content.mdx — ML lessons
+  (add a new subject folder here when a new subject area is created)
+notes/
+  abstract-algebra/
+    <slug>/content.mdx          — one directory per note; week: N controls ordering
 lib/
-  lessons.ts                    — lesson metadata + content loader
+  lessons.ts                    — lesson metadata + content loader; sorted by date
+  notes.ts                      — note metadata + content loader; sorted by week then date
 ```

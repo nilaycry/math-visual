@@ -1,35 +1,51 @@
-"use client";
-
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { getAllLessons } from "@/lib/lessons";
+import { getAllNotes } from "@/lib/notes";
+import SmoothScrollLink from "@/components/SmoothScrollLink";
 
 const HeroSketch = dynamic(
   () => import("@/components/sketches/HeroSketch"),
   { ssr: false }
 );
 
-const subjectAreas = [
-  {
-    href: "/linear-algebra",
-    tag: "linear algebra",
-    title: "the structure of space",
-    description:
-      "vectors, matrices, and transformations — and the connections between them that most courses never get to",
-    accent: "#5B8DD9",
-    count: 3,
-  },
-  {
-    href: "/machine-learning",
-    tag: "machine learning",
-    title: "geometry underneath the learning",
-    description:
-      "gradient descent, backpropagation, and the math that actually drives how neural networks train",
-    accent: "#5DCAA5",
-    count: 2,
-  },
-];
-
 export default function HomePage() {
+  const allLessons = getAllLessons();
+  const allNotes = getAllNotes();
+
+  const subjectAreas = [
+    {
+      href: "/linear-algebra",
+      tag: "linear algebra",
+      title: "the structure of space",
+      description:
+        "vectors, matrices, and transformations — and the connections between them that most courses never get to",
+      accent: "#5B8DD9",
+      count: allLessons.filter((l) => l.tags.includes("linear algebra")).length,
+      unit: "lesson",
+    },
+    {
+      href: "/machine-learning",
+      tag: "machine learning",
+      title: "geometry underneath the learning",
+      description:
+        "gradient descent, backpropagation, and the math that actually drives how neural networks train",
+      accent: "#5DCAA5",
+      count: allLessons.filter((l) => l.tags.includes("machine learning")).length,
+      unit: "lesson",
+    },
+    {
+      href: "/abstract-algebra",
+      tag: "abstract linear algebra",
+      title: "the same ideas, built from scratch",
+      description:
+        "math 416 course notes — rigorous definitions, but written the way the intuition came, not the way the proof reads",
+      accent: "#9B7FDD",
+      count: allNotes.length,
+      unit: "note",
+    },
+  ];
+
   return (
     <>
       <style>{`
@@ -76,14 +92,8 @@ export default function HomePage() {
         >
           <span />
           <div style={{ display: "flex", gap: 32 }}>
-            <a
-              href="#explore"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("explore")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
+            <SmoothScrollLink
+              targetId="explore"
               style={{
                 color: "#555",
                 textDecoration: "none",
@@ -92,8 +102,8 @@ export default function HomePage() {
               }}
             >
               explore
-            </a>
-<a
+            </SmoothScrollLink>
+            <a
               href="https://github.com/nilaycry"
               target="_blank"
               rel="noopener noreferrer"
@@ -164,14 +174,8 @@ export default function HomePage() {
               won&apos;t cover everything. might change how you see some of it.
             </p>
 
-            <a
-              href="#explore"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("explore")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
+            <SmoothScrollLink
+              targetId="explore"
               style={{
                 color: "#7F77DD",
                 textDecoration: "none",
@@ -181,7 +185,7 @@ export default function HomePage() {
               }}
             >
               explore ↓
-            </a>
+            </SmoothScrollLink>
           </div>
 
           {/* Right — canvas */}
@@ -268,7 +272,7 @@ export default function HomePage() {
                         letterSpacing: "0.05em",
                       }}
                     >
-                      {subject.count} {subject.count === 1 ? "lesson" : "lessons"}
+                      {subject.count} {subject.count === 1 ? (subject.unit ?? "lesson") : `${subject.unit ?? "lesson"}s`}
                     </span>
                   </div>
 
