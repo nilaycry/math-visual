@@ -70,7 +70,7 @@ export default function BackpropTrainSketch() {
   const [presetKey, setPresetKey] = useState<PresetKey>("good");
   const [running, setRunning] = useState(false);
   const [stepCount, setStepCount] = useState(0);
-  const [currentLoss, setCurrentLoss] = useState(lossFor(PRESETS["good"].init));
+  const [currentLoss, setCurrentLoss] = useState(lossFor(PRESETS["good"].init)); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const presetRef = useRef(presetKey);
   presetRef.current = presetKey;
