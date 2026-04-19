@@ -9,7 +9,6 @@ import Solution from "@/components/Solution";
 
 const BG = "#f7f4ef";
 const FG = "#1c1917";
-const MUTED = "#78716c";
 const FAINT = "#a8a29e";
 const BORDER = "#e8e5df";
 const ACCENT = "#6d4fc2";
