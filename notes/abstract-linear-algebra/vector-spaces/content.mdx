@@ -125,6 +125,37 @@ needs it.
 
 ---
 
+### a note if you've seen proofs before
+
+if you've taken discrete math, something might feel off. in that setting, commutativity
+of addition isn't assumed. it's proved. you define addition on $\mathbb{N}$ recursively
+using the Peano axioms, then prove $a + b = b + a$ by induction. same with
+associativity. those are theorems, not starting points.
+
+so why does linear algebra just write down $u + v = v + u$ and move on?
+
+the answer is that these are two different kinds of work. in discrete math you're
+constructing a specific object, the natural numbers, from almost nothing. commutativity
+is a fact you have to derive about that concrete thing. it's a theorem because you had
+to earn it.
+
+here you're doing something different. you're not constructing a specific object. you're
+defining a class of objects by listing the properties you want them to have. the axioms
+are a filter, not a foundation. they say: I'm interested in studying structures that
+satisfy these eight rules. commutativity is a requirement, not a theorem, because we're
+defining what counts as a vector space.
+
+when you verify that $\mathbb{R}^n$ is a vector space, you're back to proving. you check
+commutativity by reducing it to commutativity of addition in $\mathbb{R}$, which was
+established at the foundational level. the proof exists. it was done elsewhere, once,
+and now we're allowed to use it. for every new example you check, you do the same thing:
+reduce each axiom to something already known.
+
+the abstraction is what gives you the leverage. prove a theorem once, from just the
+eight axioms, and it holds for every vector space automatically.
+
+---
+
 ### examples
 
 the most important example is $\mathbf{F}^n$: the set of all lists of length $n$ with
