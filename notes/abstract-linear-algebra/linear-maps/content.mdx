@@ -4,13 +4,14 @@ description: "functions between vector spaces that respect the structure, and wh
 week: 6
 ---
 
-subspaces are vector spaces sitting inside vector spaces. the natural next question
-is: what are the right kinds of functions *between* vector spaces? not arbitrary
-functions. functions that respect the structure we've defined, meaning they commute
-with addition and scaling.
+we now have the basic architecture: vector spaces, subspaces inside them, and a notion
+of their size. but so far, every space sits by itself. the natural next question is what
+happens when you move between spaces. not arbitrary functions. functions that respect
+the structure we've defined, meaning they commute with addition and scaling.
 
-the answer is a **linear map**, and it turns out to be one of the most important
-definitions in all of mathematics.
+before reading the definition, try to write it yourself. a vector space has exactly two
+operations. a function that respects the structure should commute with both. write down
+what that means. the definition below is what you'd get.
 
 ---
 
@@ -71,15 +72,13 @@ this catches a lot of people off guard. translation feels like a simple,
 "structure-preserving" operation. but it doesn't preserve the zero vector, so it
 isn't linear.
 
-**squaring.** let $T: \mathbb{R} \to \mathbb{R}$ be $T(x) = x^2$. then $T(x + y)
-= (x + y)^2 = x^2 + 2xy + y^2$, while $T(x) + T(y) = x^2 + y^2$. these differ
-by $2xy$, which is nonzero in general. additivity fails.
+**squaring.** let $T: \mathbb{R} \to \mathbb{R}$ be $T(x) = x^2$. then $T(x+y) = (x+y)^2 = x^2 + 2xy + y^2$, while $T(x) + T(y) = x^2 + y^2$. they differ by $2xy$, which is nonzero in general. additivity fails.
 
-**$p(0) = 0$ with multiplication.** define $T: \mathcal{P}(\mathbf{F}) \to
-\mathbf{F}$ by $T(p) = p(0) \cdot p(1)$. then $T(p + q) = (p+q)(0)(p+q)(1) =
-p(0)p(1) + p(0)q(1) + q(0)p(1) + q(0)q(1)$, which doesn't factor as $T(p) + T(q)
-= p(0)p(1) + q(0)q(1)$ in general. any map involving a product of outputs will
-fail linearity.
+**evaluation product.** define $T: \mathcal{P}(\mathbf{F}) \to \mathbf{F}$ by $T(p) = p(0) \cdot p(1)$. expanding $T(p + q)$:
+
+$$T(p+q) = (p+q)(0)\cdot(p+q)(1) = p(0)p(1) + p(0)q(1) + q(0)p(1) + q(0)q(1)$$
+
+but $T(p) + T(q) = p(0)p(1) + q(0)q(1)$. the two cross terms don't vanish. any map built from a product of outputs will fail additivity for the same reason.
 
 ---
 
@@ -121,10 +120,7 @@ this is the fact I find most striking about linear maps.
 > $w_1, \ldots, w_n$ are any vectors in $W$. then there exists a unique linear map
 > $T: V \to W$ such that $T(v_k) = w_k$ for each $k$.
 
-why? because every $v \in V$ can be written uniquely as $v = a_1 v_1 + \cdots +
-a_n v_n$, and linearity forces $T(v) = a_1 T(v_1) + \cdots + a_n T(v_n) = a_1 w_1
-+ \cdots + a_n w_n$. there's only one possibility for each output, so there's only
-one possible $T$.
+why? because every $v \in V$ can be written uniquely as $v = a_1 v_1 + \cdots + a_n v_n$, and linearity forces $T(v) = a_1 T(v_1) + \cdots + a_n T(v_n) = a_1 w_1 + \cdots + a_n w_n$. there's only one possibility for each output, so there's only one possible $T$.
 
 the consequence: once you know what a linear map does to a basis, you know what it
 does to everything. this is why matrices and linear maps are interchangeable. a

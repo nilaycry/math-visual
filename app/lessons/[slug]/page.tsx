@@ -14,6 +14,7 @@ const SVDSketch = dynamic(() => import("@/components/sketches/SVDSketch"), { ssr
 const BackpropSketch = dynamic(() => import("@/components/sketches/BackpropSketch"), { ssr: false });
 const BackpropTrainSketch = dynamic(() => import("@/components/sketches/BackpropTrainSketch"), { ssr: false });
 const NullSpaceSketch = dynamic(() => import("@/components/sketches/NullSpaceSketch"), { ssr: false });
+const GradientFlowSketch = dynamic(() => import("@/components/sketches/GradientFlowSketch"), { ssr: false });
 
 const components = {
   FourierSketch,
@@ -24,6 +25,7 @@ const components = {
   BackpropSketch,
   BackpropTrainSketch,
   NullSpaceSketch,
+  GradientFlowSketch,
 };
 
 export async function generateStaticParams() {

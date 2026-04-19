@@ -83,8 +83,25 @@ try the **noisy** mode. the random kick on each step is what stochastic gradient
 descent does in practice: computing gradients on random data subsets adds noise
 that helps escape shallow traps.
 
-neither of these is a clean fix. you can still get stuck, and the right β or noise scale depends on the problem. 
-but that's often how it goes in practice. you accept imperfect tools that do better than the baseline.
+neither of these is a clean fix. you can still get stuck, and the right β or noise scale depends on the problem.
+but that's often how it goes. you use the thing that fails less often and debug when it doesn't.
+
+---
+
+### why it matters
+
+gradient descent is how every large neural network is trained. not a variant of
+it, not an approximation. the same update rule: compute the gradient, step
+opposite to it, repeat. the difference between the toy version here and the
+real thing is that the gradient comes from backpropagation across millions of
+parameters instead of from a two-variable formula. the geometry is the same.
+
+the loss landscape of a real network is neither convex nor cleanly non-convex.
+it has enormous flat regions, steep ridges, and saddle points. what makes
+modern training work is less about finding the global minimum and more about
+finding a basin that's wide enough to generalize to data the network hasn't
+seen. gradient descent isn't solving the optimization problem cleanly. it's
+navigating it well enough.
 
 ---
 

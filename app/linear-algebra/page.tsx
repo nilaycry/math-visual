@@ -131,8 +131,8 @@ export default function LinearAlgebraPage() {
             </p>
             <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#555", margin: 0 }}>
               I get genuinely uncomfortable when I know I&apos;ve been computing
-              something correctly without really understanding it. linear algebra
-              has a lot of those moments. I&apos;m working through them here.
+              something correctly without understanding it. that feeling shows up
+              a lot in linear algebra. these are the places where I finally got it.
             </p>
           </div>
         </section>

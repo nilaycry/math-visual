@@ -417,7 +417,11 @@ The abstract algebra section (`/abstract-linear-algebra/*`) uses a cream backgro
 - KaTeX math rendering via `remark-math` + `rehype-katex` — CSS loaded in `app/abstract-linear-algebra/layout.tsx`
 - Notes at `notes/abstract-linear-algebra/<slug>/content.mdx`, ordered by `week:` frontmatter field
 - Global Navbar suppressed on all `/abstract-linear-algebra/*` paths — each page handles its own nav
-- Use `$$...$$` for display math and `$...$` for inline math in note MDX files
+- Use `$$...$$` for display math and `$...$` for inline math. **Never split `$...$` across a line break in MDX source** — KaTeX fails silently and renders raw LaTeX as text. For computation chains that would wrap, use `$$...$$` display math instead.
+
+**Index page two-section layout** (`app/abstract-linear-algebra/page.tsx`):
+- `week < 1` → "before you start" card grid (companions: orientation notes, proof toolkit, conceptual essays). Auto-discovered; no registration needed.
+- `week >= 1` → sequence list. Fractional week values (e.g. `5.5`) are checkpoint notes; they appear in the list at the correct position but show no week label (`Number.isInteger(note.week)` controls the label).
 
 ### problems system
 

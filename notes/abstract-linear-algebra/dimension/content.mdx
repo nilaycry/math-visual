@@ -1,0 +1,100 @@
+---
+title: "dimension"
+description: "why all bases of a space have the same length, and what that length tells you"
+week: 5
+---
+
+the last note established that every finite-dimensional space has at least one basis, and that
+different bases give different coordinates. what it left open: do all bases of a given space
+have to be the same size? the answer is yes, and that common size is the dimension.
+
+this isn't immediate. replacing one independent spanning list with another doesn't obviously
+preserve the count. the argument requires a theorem.
+
+---
+
+### the key inequality
+
+> **Theorem.** If $u_1, \ldots, u_m$ is a linearly independent list in $V$ and $w_1, \ldots, w_n$ spans $V$, then $m \leq n$.
+
+the proof uses the linear dependence lemma from the span-and-linear-independence note.
+the idea is an exchange argument: insert the $u$'s one at a time into the spanning list,
+and each insertion forces a removal of one of the $w$'s.
+
+start with $w_1, \ldots, w_n$ spanning $V$. add $u_1$ to the front: the list $u_1, w_1, \ldots, w_n$ still spans $V$ and is now dependent (since $u_1$ is already in the span of $w_1, \ldots, w_n$). the linear dependence lemma says some vector in the list is in the span of the ones before it, and we can remove it without shrinking the span. the lemma guarantees that vector is one of the $w$'s, not $u_1$, because $u_1$ sits first in the list and can't be expressed as a combination of nothing. remove that $w_j$. what remains is a spanning list of length $n$ that includes $u_1$.
+
+now insert $u_2$ at the front. the list is again dependent, and again we remove a $w$, not
+one of the $u$'s, because no $u_k$ is in the span of the others from an independent list.
+
+repeat $m$ times. each step removes exactly one $w$. since we start with $n$ of them,
+we need $m \leq n$.
+
+---
+
+### definition
+
+> **Definition.** If $V$ is finite-dimensional, the **dimension** of $V$, written $\dim V$, is the length of any basis of $V$.
+
+the theorem above is what lets us write "any": since all bases have the same length, it doesn't
+matter which one we pick. for the zero space, the empty list is a basis, so $\dim\{0\} = 0$.
+
+---
+
+### examples
+
+$\dim \mathbf{F}^n = n$. the standard basis $e_1, \ldots, e_n$ has length $n$.
+
+$\dim \mathcal{P}_m(\mathbf{F}) = m + 1$. the basis $1, x, x^2, \ldots, x^m$ has $m + 1$ vectors.
+I found this off-by-one confusing at first. a polynomial of degree at most $m$ has coefficients
+for $1, x, \ldots, x^m$, which is $m + 1$ terms. the degree bound is $m$, but the dimension is $m + 1$.
+
+**a non-example of the right dimension.** the list $(1, 0), (0, 1), (1, 1)$ in $\mathbf{F}^2$ has length 3,
+which exceeds $\dim \mathbf{F}^2 = 2$. by the theorem, it can't be independent, and indeed it isn't:
+$(1, 1) = (1, 0) + (0, 1)$. any list longer than the dimension is automatically dependent.
+
+---
+
+### one condition is enough
+
+once you know $\dim V = n$, checking that a list is a basis gets easier.
+
+> **Proposition.** Let $\dim V = n$. A list of $n$ vectors in $V$ is a basis if and only if it is linearly independent. It is also a basis if and only if it spans $V$.
+
+at the right length, one condition forces the other. if a list of $n$ vectors is independent,
+it can't span only a proper subspace: any spanning list of a proper subspace would be shorter,
+so the independent list would exceed it, violating the inequality. so it spans all of $V$.
+
+conversely, if a list of $n$ vectors spans $V$, it can't be dependent: if it were, we could
+remove one vector and still span $V$, producing a basis of length less than $n$, contradicting
+the definition of dimension.
+
+in practice: to check that $(1, 1, 0), (0, 1, 1), (1, 0, 1)$ is a basis of $\mathbf{F}^3$, you
+only need to verify independence. since the list has length 3 and $\dim \mathbf{F}^3 = 3$, the dimension
+handles the rest.
+
+---
+
+### subspaces
+
+> **Proposition.** If $U$ is a subspace of a finite-dimensional space $V$, then $\dim U \leq \dim V$, with equality if and only if $U = V$.
+
+any basis of $U$ is an independent list inside $V$, so by the key inequality its length is
+at most the length of any spanning list of $V$, which is $\dim V$.
+
+the equality case is the part worth pausing on. if $\dim U = \dim V = n$, then any basis
+of $U$ is an independent list of $n$ vectors inside $V$. by the one-condition proposition, that
+list is already a basis of $V$, which means $U = V$. a proper subspace is always strictly
+smaller in dimension. there's no room for a subspace to match the ambient dimension without
+filling the whole space.
+
+---
+
+### what this leaves out
+
+so far, dimension is attached to a space by itself. but the most important use of dimension
+comes when you study functions between spaces. a linear map $T: V \to W$ imposes a constraint:
+$\dim V = \dim\,\text{null}\,T + \dim\,\text{range}\,T$. this is the rank-nullity theorem, and
+it makes dimension into a computational tool rather than just a label.
+
+to state that theorem cleanly, we first need the definitions: what is a linear map, and what
+are the null space and range? those are the next two notes.

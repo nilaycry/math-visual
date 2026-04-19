@@ -30,7 +30,7 @@ not rotate them. λ is just how much.
 
 the gray circle is the input. the purple ellipse is the output. the colored
 lines are eigenvectors: they pass through the transformation unchanged in
-direction. click anywhere on the unit circle to place a vector and watch where the matrix sends it. when you land exactly on an eigenvector, it just scales.
+direction. click anywhere on the unit circle to place a vector and watch where the matrix sends it. when you land on an eigenvector, the output arrow points in exactly the same direction as the input, stretched or shrunk but not rotated. any other starting point, the output swings to a different direction entirely.
 
 <div className="not-prose my-8">
   <EigenSketch />
@@ -68,16 +68,27 @@ the discriminant of the characteristic polynomial tells you when this happens: w
 
 ---
 
-### why care about this
+### why it matters
 
+the one I find most surprising is PageRank. Google's original ranking algorithm
+is the dominant eigenvector of a giant matrix where entry (i, j) encodes how
+often page j links to page i. the page you're most likely to land on after
+following random links forever is the direction the web graph can't change.
+it's the same equation.
 
-eigenvectors show up everywhere once you know to look: Google's PageRank is the dominant eigenvector of a web graph, quantum states are eigenvectors of energy operators, and the stability of a system near equilibrium is determined entirely by the sign of its eigenvalues.
+quantum mechanics runs on the same structure. observable quantities correspond
+to operators, and the only values you can actually measure are eigenvalues.
+the state of a system before measurement is a superposition of eigenvectors.
+
+in dynamical systems, the sign of the eigenvalues tells you whether a fixed
+point is stable. positive eigenvalue: nearby trajectories run away. negative:
+they come back. the geometry of the long-term behavior is entirely determined
+by the spectrum.
 
 ---
 
 ### what this doesn't cover yet
 
-math is beautifully interconnected and you'd be surprised how far these concepts extend.
 repeated eigenvalues, defective matrices (not enough eigenvectors to span the
 space), and the spectral theorem (when you're guaranteed a full orthogonal set).
-I'll update as I learn more interesting things worth adding.
+I'll add those when I have something worth showing visually.

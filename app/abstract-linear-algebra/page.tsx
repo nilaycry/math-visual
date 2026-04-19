@@ -9,13 +9,17 @@ const BORDER = "#e8e5df";
 const ACCENT = "#6d4fc2";
 
 export default function AbstractAlgebraPage() {
-  const notes = getAllNotes();
+  const allNotes = getAllNotes();
+  const companions = allNotes.filter((n) => n.week < 1);
+  const sequence = allNotes.filter((n) => n.week >= 1);
 
   return (
     <>
       <style>{`
         .aa-note-row { transition: background 0.15s ease; }
         .aa-note-row:hover { background: rgba(0,0,0,0.03) !important; }
+        .aa-companion-card { transition: background 0.15s ease; }
+        .aa-companion-card:hover { background: rgba(0,0,0,0.04) !important; }
 
         @media (max-width: 768px) {
           .aa-page-nav, .aa-hero, .aa-content {
@@ -121,9 +125,11 @@ export default function AbstractAlgebraPage() {
                 margin: "0 0 18px 0",
               }}
             >
-              the notes assume you&apos;ve multiplied matrices and computed eigenvalues.
-              that background isn&apos;t strictly necessary, but it gives you something
-              concrete to check the definitions against.
+              the notes run in sequence, one definition at a time, from vector spaces
+              to the spectral theorem. alongside them sit a few shorter pieces: about
+              what learning this kind of math actually feels like, how to read a
+              definition, where you are in the arc. those are worth reading before the
+              sequence.
             </p>
             <p
               style={{
@@ -152,7 +158,69 @@ export default function AbstractAlgebraPage() {
           </div>
         </section>
 
-        {/* ── NOTES LIST ── */}
+        {/* ── COMPANIONS ── */}
+        {companions.length > 0 && (
+          <div
+            className="aa-content"
+            style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 56px" }}
+          >
+            <div
+              style={{
+                borderTop: `1px solid ${BORDER}`,
+                paddingTop: 48,
+                marginBottom: 24,
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 400,
+                  color: FAINT,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.14em",
+                }}
+              >
+                before you start
+              </span>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              {companions.map((note) => (
+                <Link
+                  key={note.slug}
+                  href={`/abstract-linear-algebra/${note.slug}`}
+                  style={{ textDecoration: "none", color: "inherit", flex: "1 1 260px", maxWidth: 360 }}
+                >
+                  <div
+                    className="aa-companion-card"
+                    style={{
+                      border: `1px solid ${BORDER}`,
+                      borderRadius: 8,
+                      padding: "18px 20px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 400,
+                        color: FG,
+                        display: "block",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {note.title}
+                    </span>
+                    <span style={{ fontSize: 12, color: FAINT, lineHeight: 1.6 }}>
+                      {note.description}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── SEQUENCE NOTES ── */}
         <div
           className="aa-content"
           style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 120px" }}
@@ -177,11 +245,11 @@ export default function AbstractAlgebraPage() {
             </span>
           </div>
 
-          {notes.length === 0 ? (
+          {sequence.length === 0 ? (
             <p style={{ color: FAINT, fontSize: 14, marginTop: 24 }}>no notes yet.</p>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {notes.map((note) => (
+              {sequence.map((note) => (
                 <Link
                   key={note.slug}
                   href={`/abstract-linear-algebra/${note.slug}`}
@@ -216,18 +284,20 @@ export default function AbstractAlgebraPage() {
                         {note.description}
                       </span>
                     </div>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        color: FAINT,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.08em",
-                        flexShrink: 0,
-                        marginLeft: 24,
-                      }}
-                    >
-                      week {note.week}
-                    </span>
+                    {Number.isInteger(note.week) && (
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: FAINT,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          flexShrink: 0,
+                          marginLeft: 24,
+                        }}
+                      >
+                        week {note.week}
+                      </span>
+                    )}
                   </div>
                 </Link>
               ))}

@@ -1,0 +1,64 @@
+---
+title: "every definition is a question"
+description: "how to read a definition in abstract math, and how you could have arrived at it yourself"
+week: 0.5
+---
+
+definitions in abstract math feel different from definitions elsewhere. they're precise in a way
+that can feel arbitrary. why these conditions and not others? why exactly two, or exactly eight?
+
+the antidote is to ask: what question is this definition answering?
+
+every definition in this course is the minimum set of conditions required to capture a specific
+idea precisely. the conditions aren't chosen for elegance or tradition. they're the logical
+consequence of asking one clear question and not letting yourself stop until you've answered
+it exactly.
+
+---
+
+### the question behind a linear map
+
+take the definition of a linear map. a function $T: V \to W$ satisfying $T(u+v) = T(u) + T(v)$ and $T(av) = aT(v)$. those conditions didn't appear from nowhere.
+
+the question behind them: if $V$ and $W$ are vector spaces, what should a "nice" function
+between them look like? where "nice" means it respects the structure we've defined.
+
+so: what structure does a vector space have? exactly two operations. addition and scalar
+multiplication. that's it. a function respects that structure if and only if it commutes
+with both. commutativity with addition gives $T(u+v) = T(u) + T(v)$. commutativity with
+scaling gives $T(av) = aT(v)$. two operations, two conditions.
+
+if you'd been asked to define "structure-preserving function between vector spaces" without
+seeing the definition first, you would have written exactly that. it's the only reasonable
+answer to the question.
+
+---
+
+### the removal test
+
+once you have a definition, a useful habit is to ask whether it's tight. what breaks if you
+drop one of the conditions?
+
+for the vector space axioms, try removing commutativity of addition: $u + v = v + u$. you'd
+get structures where the order of addition matters, and the proof that $-1 \cdot v = -v$ would
+fail. the axiom is there because something specific breaks without it.
+
+for a linear map, try dropping the scaling condition. you'd allow functions that commute with
+addition but not with scaling. over the real numbers, such functions exist and are genuinely
+pathological: they satisfy $T(u + v) = T(u) + T(v)$ for all $u, v$ but are not linear in any
+geometric sense. the scaling condition is what rules them out.
+
+this test, asking what breaks, is more useful than asking what the definition "means" in the
+abstract. the conditions mean exactly the things that break when you remove them.
+
+---
+
+### reading definitions this way
+
+when you encounter a definition in these notes, pause before moving on and ask the question
+behind it. what is this trying to isolate? what would a naive version of this definition look
+like, and why would it be wrong?
+
+for some definitions the answer is immediate. for others, especially the ones that felt
+arbitrary to me at first, working out the answer is most of what makes the definition land.
+the notes try to do this explicitly. but when they don't, the question is always available.

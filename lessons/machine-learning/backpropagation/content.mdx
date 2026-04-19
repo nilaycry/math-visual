@@ -10,6 +10,8 @@ date: "2026-04-15"
 related:
   - slug: "gradient-descent"
     note: "gradient descent is what uses the gradients backprop computes"
+  - slug: "gradient-flow"
+    note: "what happens to gradients in a deep network, the saturation story continues there"
 ---
 
 import BackpropSketch from '@/components/sketches/BackpropSketch'
@@ -69,21 +71,22 @@ and because each intermediate gradient is computed once and passed along rather 
 
 ### why saturation kills learning
 
-look at σ'(z) = 1 − tanh(z)². when z is large in either direction, tanh(z) is near 1 or −1, and σ'(z) is near 0.
+look at σ'(z) = 1 − tanh(z)². when z is large, tanh(z) is near ±1 and σ'(z)
+is near 0. since the backward pass multiplies by σ'(z) at each node, a
+saturated neuron nearly blocks the gradient entirely. that's what you saw in
+the sketch: w barely moves because its gradient gets squeezed through that
+near-zero derivative, while v stays lit because it sits after the saturation.
 
-since the backward pass multiplies by σ'(z) at the activation node, a saturated neuron almost completely blocks the gradient from flowing further back. v sits after the tanh, so its gradient is unaffected. w sits before it, so its gradient gets multiplied by that near-zero derivative and becomes nearly nothing. the weight might be badly wrong, but the signal telling it to change has been killed.
-
-this is why relu became the default activation. for positive inputs, its derivative is exactly 1, so the gradient flows through undiminished. it has its own failure mode (neurons that receive only negative inputs die entirely), but at least saturation on the positive side is not the problem.
+stack several saturated layers and this compounds. that story is in the
+[gradient flow](/lessons/gradient-flow) lesson.
 
 ---
 
 ### scaling up is genuinely hard
 
-in a deeper network the same mechanics apply at every layer, but the effects compound. each additional layer multiplies the gradient by another local derivative. if those derivatives are consistently below 1, the gradient reaching the early layers shrinks exponentially. if they're above 1, it explodes.
+in a deeper network the same mechanics apply at every layer, compounded. each additional layer multiplies the gradient by another local derivative. if those derivatives are consistently below 1, the signal reaching the early layers shrinks exponentially. if they're above 1, it explodes.
 
-I think it's worth sitting with how non-obvious the solutions are. batch normalization keeps activations in a range where derivatives stay healthy. residual connections add a path where the gradient flows through addition, bypassing the vanishing problem entirely. careful initialization sets the starting weights so the very first forward pass doesn't immediately saturate anything. none of these were obvious to find, and they each required serious research to land on.
-
-the simple version of backprop you see in this lesson is exactly what runs in practice. the hard part was making it work reliably at scale.
+batch normalization, residual connections, and careful initialization all exist to keep gradients in a range where they stay usable. I think it's worth sitting with how non-obvious those were to find. they came from years of research on exactly this failure mode, not from theoretical necessity.
 
 ---
 
@@ -113,4 +116,13 @@ this is still a single hidden unit and a toy dataset. real training runs the sam
 
 ### what this doesn't cover yet
 
-mini-batch stochasticity, where each step uses a small random subset of the data instead of the full dataset. different loss functions and their specific output derivatives. and the connection to automatic differentiation in general. the same graph-backward technique powers physics simulations and financial models, not just neural networks. I'll add those when I have a sketch worth building.
+the saturation failure shown here is in one layer. stack several layers with
+tanh activations and the gradient compounds into something much worse. the
+[gradient flow](/lessons/gradient-flow) lesson covers that: why gradients
+vanish, why relu replaced tanh, and what batch normalization and residual
+connections do.
+
+also not yet covered: mini-batch stochasticity, different loss functions and
+their specific output derivatives, and automatic differentiation in general.
+the same graph-backward technique powers physics simulations and financial
+models, not just neural networks.

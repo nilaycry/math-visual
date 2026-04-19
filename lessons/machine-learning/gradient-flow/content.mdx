@@ -1,0 +1,156 @@
+---
+title: "where gradient flow breaks"
+description: "what stops deep networks from training and what actually fixed it"
+tags: ["machine learning"]
+color: "from-orange-500 to-amber-500"
+icon: "⟶"
+accent: "#E07830"
+displayTag: "training"
+date: "2026-04-19"
+related:
+  - slug: "backpropagation"
+    note: "the mechanics of how gradients flow through one network — the prerequisite for this"
+  - slug: "gradient-descent"
+    note: "uses these gradients to update weights — the training story from the optimization side"
+---
+
+import GradientFlowSketch from '@/components/sketches/GradientFlowSketch'
+
+the [backpropagation](/lessons/backpropagation) lesson ended with one saturated
+neuron. its gradient went nearly dark while the weight downstream stayed lit.
+that's the local version of the problem. what happens when you stack six of them?
+
+each layer multiplies the gradient by the local derivative of its activation.
+tanh near its limits has a derivative close to zero. multiply six of those
+together and the gradient reaching the first layer isn't small. it's essentially
+nothing. the first layer trains as though the loss function doesn't know it exists.
+
+this is the vanishing gradient problem. it stopped deep networks from working
+reliably for about two decades.
+
+---
+
+### the compounding picture
+
+set up a concrete case. a tanh neuron with pre-activation z = 2 has derivative
+σ'(2) = 1 − tanh(2)² ≈ 0.07. chain three of them and the gradient at the first
+layer is 0.07³ ≈ 0.0003. chain six and it's about 10⁻⁷.
+
+<div className="math-highlight">gradient at layer k = σ'(z)^k</div>
+
+the gradient decays exponentially with depth. it doesn't matter how good the
+loss function is at the output — the signal about how to improve the first
+layer can't get back there when every activation is squashing it.
+
+---
+
+### the picture
+
+the bars show the gradient magnitude at each layer. the rightmost bar is the
+output layer, always at 1. the bars to the left are the gradient that actually
+reaches each earlier layer during training.
+
+with tanh, drag the saturation slider right. watch the bars on the left go dark
+while the right side stays full. then drag the depth slider up. each layer you
+add cuts whatever is already left by another factor of σ'(z). by depth 7 or 8
+with saturation at 2, nothing meaningful is reaching the input layer.
+
+switch to relu. drag depth to 8. the bars stay uniform. that contrast is the
+whole story.
+
+<div className="not-prose my-8">
+  <GradientFlowSketch />
+</div>
+
+---
+
+### the relu fix
+
+the problem with tanh is that its derivative shrinks toward zero as the neuron
+saturates. relu doesn't have that property. f(z) = max(0, z) has derivative
+exactly 1 for any positive input. a chain of relu neurons with positive
+activations passes the gradient through unchanged. depth doesn't compound
+anything.
+
+<div className="math-highlight">relu'(z) = 1 &nbsp; if z > 0, &nbsp;&nbsp;&nbsp; 0 &nbsp; if z ≤ 0</div>
+
+relu has its own failure mode. a neuron that receives a negative input on every
+training example gets zero gradient forever. its weights never update. it's
+called a dead neuron. how many die depends on initialization and whether early
+updates push activations into negative territory.
+
+but dead relu neurons are a recoverable problem. a network with some dead relu
+neurons still trains. a network with six saturated tanh layers barely trains at
+all. that asymmetry is why the switch happened, and why relu replaced tanh as
+the default activation almost immediately after it was seriously tried.
+
+---
+
+### the engineering fixes
+
+relu solved the local derivative problem. it didn't solve everything.
+
+gradients can also explode instead of vanish. if local derivatives are
+consistently above 1 the gradient magnifies at each layer. by layer ten it's
+enormous, and the updates send the network into oscillation. the loss spikes
+to NaN.
+
+three things exist specifically to keep gradients in a trainable range.
+
+**batch normalization** normalizes activations after each layer to have mean
+zero and variance one. this keeps pre-activations in the range where derivatives
+stay healthy, regardless of what the layer learned to do.
+
+**residual connections** add a skip path from the input of a block directly to
+its output. the gradient can flow backward through the addition, bypassing the
+activation entirely. even if the block itself has vanishing gradients, the skip
+path gives an unobstructed route back. this is what made networks with hundreds
+of layers trainable.
+
+**careful initialization** sets starting weights small enough that the first
+forward pass doesn't push activations into saturation. large initial weights
+mean you start with a semi-dead network and spend the first training steps
+trying to escape before any real learning happens.
+
+pause here. none of these were obvious to find. they arrived across a decade of
+researchers trying to train deep networks, watching them fail, and tracing back
+why. the architecture ideas that make modern networks possible were not new. what
+changed was the ability to train them.
+
+---
+
+### why it matters
+
+knowing which failure mode you're in changes how you debug.
+
+loss not moving for the first many steps: check whether gradients are reaching
+your early layers. print gradient norms per layer, or watch the weight updates.
+if the first few layers are receiving nearly zero gradient, the architecture
+or initialization is the problem, not the learning rate.
+
+loss spikes to NaN: gradient norms are probably exploding. clip them (set a
+maximum norm) or switch to a more careful initialization. the loss going to NaN
+almost always means multiplication is accumulating rather than shrinking.
+
+loss descends but plateaus too early: the network may be training fine with
+healthy gradients and still not have enough capacity. that's a different
+problem and the tools are different.
+
+the reason these feel similar from the outside — loss not moving — is exactly
+why understanding the mechanism matters.
+
+---
+
+### what this doesn't cover yet
+
+adaptive optimizers (Adam, RMSProp) adjust the learning rate per parameter
+based on gradient history. they help with scale sensitivity and robustness, but
+they don't fix vanishing gradients directly — a gradient that's essentially zero
+is still essentially zero after scaling.
+
+layer normalization does what batch normalization does but works more cleanly in
+sequence models. it's why transformers use it instead of batch norm.
+
+the specific initialization strategies (Kaiming/He for relu, Glorot/Xavier for
+tanh) are derived from keeping activation variance constant across layers at
+the start of training. the math is worth seeing once.
