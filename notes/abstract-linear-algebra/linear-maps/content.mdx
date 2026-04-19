@@ -1,0 +1,148 @@
+---
+title: "linear maps"
+description: "functions between vector spaces that respect the structure, and why that constraint is exactly right"
+week: 6
+---
+
+subspaces are vector spaces sitting inside vector spaces. the natural next question
+is: what are the right kinds of functions *between* vector spaces? not arbitrary
+functions. functions that respect the structure we've defined, meaning they commute
+with addition and scaling.
+
+the answer is a **linear map**, and it turns out to be one of the most important
+definitions in all of mathematics.
+
+---
+
+### the definition
+
+> **Definition.** A **linear map** from $V$ to $W$ is a function $T: V \to W$
+> satisfying two conditions for all $u, v \in V$ and all $a \in \mathbf{F}$:
+>
+> $$T(u + v) = T(u) + T(v)$$
+>
+> $$T(av) = a\,T(v)$$
+
+the first condition says $T$ commutes with addition. the second says it commutes
+with scalar multiplication. together they are called **linearity**.
+
+these two conditions can be combined into one: $T(au + bv) = aT(u) + bT(v)$ for
+all $a, b \in \mathbf{F}$ and $u, v \in V$. I find it easier to check them
+separately, though.
+
+one immediate consequence: $T(\mathbf{0}) = \mathbf{0}$. proof: $T(\mathbf{0}) =
+T(0 \cdot \mathbf{0}) = 0 \cdot T(\mathbf{0}) = \mathbf{0}$. so any linear map
+must send the zero vector to the zero vector. this is a fast non-example test.
+
+---
+
+### examples
+
+**differentiation.** let $D: \mathcal{P}(\mathbf{F}) \to \mathcal{P}(\mathbf{F})$
+be the derivative operator $D(p) = p'$. then $D(p + q) = (p + q)' = p' + q' =
+D(p) + D(q)$, and $D(ap) = (ap)' = ap' = a\,D(p)$. differentiation is linear. this
+is not a coincidence. it is the reason calculus works as cleanly as it does.
+
+**the zero map.** $T: V \to W$ defined by $T(v) = \mathbf{0}$ for all $v$ is
+linear. both conditions hold trivially.
+
+**the identity.** $I: V \to V$ defined by $I(v) = v$ is linear.
+
+**multiplication by a matrix.** fix an $m \times n$ matrix $A$ with entries in
+$\mathbf{F}$. the function $T: \mathbf{F}^n \to \mathbf{F}^m$ defined by $T(v) =
+Av$ is linear. this is just the distributive law for matrix multiplication:
+$A(u + v) = Au + Av$ and $A(av) = a\,Av$.
+
+this last example is the one to hold onto. every linear map from $\mathbf{F}^n$ to
+$\mathbf{F}^m$ can be represented as multiplication by some $m \times n$ matrix.
+matrices and linear maps are the same thing, once you choose bases. that connection
+is developed carefully later.
+
+---
+
+### non-examples
+
+**translation.** let $c \in V$ with $c \neq \mathbf{0}$. define $T(v) = v + c$.
+then $T(\mathbf{0}) = c \neq \mathbf{0}$, so $T$ cannot be linear. or directly:
+$T(u + v) = u + v + c$, but $T(u) + T(v) = u + c + v + c = u + v + 2c$. these
+are not equal. translation fails additivity.
+
+this catches a lot of people off guard. translation feels like a simple,
+"structure-preserving" operation. but it doesn't preserve the zero vector, so it
+isn't linear.
+
+**squaring.** let $T: \mathbb{R} \to \mathbb{R}$ be $T(x) = x^2$. then $T(x + y)
+= (x + y)^2 = x^2 + 2xy + y^2$, while $T(x) + T(y) = x^2 + y^2$. these differ
+by $2xy$, which is nonzero in general. additivity fails.
+
+**$p(0) = 0$ with multiplication.** define $T: \mathcal{P}(\mathbf{F}) \to
+\mathbf{F}$ by $T(p) = p(0) \cdot p(1)$. then $T(p + q) = (p+q)(0)(p+q)(1) =
+p(0)p(1) + p(0)q(1) + q(0)p(1) + q(0)q(1)$, which doesn't factor as $T(p) + T(q)
+= p(0)p(1) + q(0)q(1)$ in general. any map involving a product of outputs will
+fail linearity.
+
+---
+
+### the null space and range
+
+two subspaces are naturally attached to any linear map $T: V \to W$.
+
+> **Definition.** The **null space** (or **kernel**) of $T$ is the set of vectors
+> in $V$ that $T$ sends to zero:
+>
+> $$\text{null}\,T = \{v \in V : T(v) = \mathbf{0}\}$$
+
+> **Definition.** The **range** (or **image**) of $T$ is the set of all outputs:
+>
+> $$\text{range}\,T = \{T(v) : v \in V\} = \{w \in W : w = T(v) \text{ for some } v \in V\}$$
+
+both are subspaces. for the null space: $T(\mathbf{0}) = \mathbf{0}$, so
+$\mathbf{0} \in \text{null}\,T$; if $T(u) = T(v) = \mathbf{0}$ then $T(u+v) =
+\mathbf{0}$ and $T(av) = \mathbf{0}$. for the range: $T(\mathbf{0}) = \mathbf{0}$,
+and $T(u) + T(v) = T(u+v)$ and $aT(v) = T(av)$, so sums and scalar multiples stay
+in the range.
+
+the null space tells you what $T$ collapses to zero. the range tells you what $T$
+can actually reach.
+
+pause here. injectivity of $T$ is equivalent to $\text{null}\,T = \{\mathbf{0}\}$.
+proof: if $T(u) = T(v)$, then $T(u - v) = \mathbf{0}$, so $u - v \in
+\text{null}\,T$. if the null space is trivial, then $u - v = \mathbf{0}$, so
+$u = v$. conversely, if $T$ is injective and $T(v) = \mathbf{0} = T(\mathbf{0})$,
+then $v = \mathbf{0}$.
+
+---
+
+### a linear map is determined by where it sends a basis
+
+this is the fact I find most striking about linear maps.
+
+> **Proposition.** Suppose $v_1, \ldots, v_n$ is a basis of $V$ and
+> $w_1, \ldots, w_n$ are any vectors in $W$. then there exists a unique linear map
+> $T: V \to W$ such that $T(v_k) = w_k$ for each $k$.
+
+why? because every $v \in V$ can be written uniquely as $v = a_1 v_1 + \cdots +
+a_n v_n$, and linearity forces $T(v) = a_1 T(v_1) + \cdots + a_n T(v_n) = a_1 w_1
++ \cdots + a_n w_n$. there's only one possibility for each output, so there's only
+one possible $T$.
+
+the consequence: once you know what a linear map does to a basis, you know what it
+does to everything. this is why matrices and linear maps are interchangeable. a
+matrix is just a list of where the standard basis vectors go.
+
+---
+
+### what the definition leaves out
+
+we know the null space and range are subspaces, but we haven't asked how their
+sizes relate to each other. the answer is the **rank-nullity theorem**: for a linear
+map $T: V \to W$ with $V$ finite-dimensional,
+
+$$\dim V = \dim\,\text{null}\,T + \dim\,\text{range}\,T$$
+
+that's coming soon. it's one of the cleanest results in the subject, and it says
+something precise about how much a linear map can compress or expand a space.
+
+we also haven't said anything about composing two linear maps, or about when a
+linear map has an inverse. both questions have clean answers that follow directly
+from the definitions here.

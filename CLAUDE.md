@@ -419,6 +419,17 @@ The abstract algebra section (`/abstract-linear-algebra/*`) uses a cream backgro
 - Global Navbar suppressed on all `/abstract-linear-algebra/*` paths — each page handles its own nav
 - Use `$$...$$` for display math and `$...$` for inline math in note MDX files
 
+### problems system
+
+Each note can have a companion problem set at `notes/abstract-linear-algebra/<slug>/problems.mdx`. No routing registration needed — the note renderer checks for it automatically.
+
+- **To add problems for a note:** create `notes/abstract-linear-algebra/<slug>/problems.mdx`
+- **Effect:** a `problems →` link appears in the note header (accent color, below the description)
+- **Route:** `/abstract-linear-algebra/<slug>/problems` — rendered by `app/abstract-linear-algebra/[slug]/problems/page.tsx`
+- **Detection:** `hasProblems(slug)` and `getProblemsContent(slug)` in `lib/notes.ts`
+- **Format:** plain MDX with KaTeX. Use `###` for section headings (e.g. "verify or refute", "prove it", "true or false"). Number problems with `**1.**` bold prefix. Separate sections with `---`.
+- **Frontmatter:** `title` and `week` matching the parent note — no other fields needed.
+
 ---
 
 ## file map
@@ -434,7 +445,8 @@ app/
   abstract-linear-algebra/
     layout.tsx                  — loads KaTeX CSS for this section only
     page.tsx                    — server component; reads getAllNotes()
-    [slug]/page.tsx             — note renderer (no sketch registration needed)
+    [slug]/page.tsx             — note renderer; shows "problems →" link if problems.mdx exists
+    [slug]/problems/page.tsx    — problem set renderer; auto-discovered, no registration needed
   lessons/[slug]/
     page.tsx                    — lesson renderer (register new sketches here)
 components/
@@ -456,7 +468,8 @@ lessons/
 notes/
   abstract-linear-algebra/
     <slug>/content.mdx          — one directory per note; week: N controls ordering
+    <slug>/problems.mdx         — optional companion problem set; creates /[slug]/problems route
 lib/
   lessons.ts                    — lesson metadata + content loader; sorted by date
-  notes.ts                      — note metadata + content loader; sorted by week then date
+  notes.ts                      — note metadata + content loader; sorted by week; hasProblems/getProblemsContent helpers
 ```

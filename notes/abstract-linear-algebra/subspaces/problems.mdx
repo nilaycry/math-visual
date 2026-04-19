@@ -1,0 +1,210 @@
+---
+title: "subspaces"
+week: 2
+---
+
+### verify or refute
+
+**1.** Let $V = \mathbb{R}^3$ and let $U = \{(x, y, z) : 2x - y + z = 0\}$. Is $U$ a subspace of $V$? Prove it or identify which condition fails.
+
+<Solution>
+
+**the move.** subspace check using the three-condition proposition. the defining equation is linear and homogeneous (right side is 0), so all three conditions should pass. verify each.
+
+**the key observation.** the zero on the right side is what makes everything work. a linear homogeneous equation always defines a subspace of $\mathbb{R}^n$. if the equation were $2x - y + z = 1$, the zero vector would fail condition 1 immediately.
+
+**proof.** $\mathbf{0}$: $2(0) - 0 + 0 = 0$. yes. closure under addition: if $2x_1 - y_1 + z_1 = 0$ and $2x_2 - y_2 + z_2 = 0$, add to get $2(x_1+x_2) - (y_1+y_2) + (z_1+z_2) = 0$. yes. closure under scaling: $2(ax) - a(y) + a(z) = a(2x - y + z) = a \cdot 0 = 0$. yes. so $U$ is a subspace.
+
+</Solution>
+
+**2.** Let $V = \mathcal{P}(\mathbf{F})$ and let $U = \{p \in \mathcal{P}(\mathbf{F}) : p(2) = p(3)\}$. Is $U$ a subspace of $V$?
+
+<Solution>
+
+**the move.** subspace check. rewrite the condition as $p(2) - p(3) = 0$, which is linear and homogeneous in $p$.
+
+**the key observation.** evaluation at a point is a linear operation: $p \mapsto p(a)$ satisfies $(p+q)(a) = p(a)+q(a)$ and $(cp)(a) = c\,p(a)$. so $p(2) - p(3) = 0$ behaves exactly like a homogeneous linear equation, and the argument from problem 1 applies.
+
+**proof.** $\mathbf{0}$: the zero polynomial gives $0(2) = 0 = 0(3)$. addition: $(p+q)(2) = p(2)+q(2) = p(3)+q(3) = (p+q)(3)$. scaling: $(cp)(2) = c\,p(2) = c\,p(3) = (cp)(3)$. so $U$ is a subspace.
+
+</Solution>
+
+**3.** Let $V = \mathbf{F}^n$. Is $U = \{(x_1, \ldots, x_n) : x_1 + \cdots + x_n = 0\}$ a subspace? What about $\{(x_1, \ldots, x_n) : x_1 \cdots x_n = 0\}$?
+
+<Solution>
+
+**the move.** the first condition is linear and homogeneous — it's a subspace by the same argument as problem 1. the second involves a product, which breaks linearity.
+
+**the key observation.** the product condition $x_1 \cdots x_n = 0$ means "at least one coordinate is zero." this describes the union of the $n$ coordinate hyperplanes $\{x_i = 0\}$. a union of subspaces is almost never a subspace — you can add a vector from one hyperplane to a vector from another and land outside both.
+
+**first set.** $U = \{x_1 + \cdots + x_n = 0\}$: homogeneous linear equation, same argument as problem 1. it is a subspace.
+
+**second set.** not a subspace for $n \geq 2$. counterexample in $\mathbf{F}^2$: $(1, 0)$ has product 0 and $(0, 1)$ has product 0, but $(1, 0) + (0, 1) = (1, 1)$ has product $1 \neq 0$. closure under addition fails.
+
+</Solution>
+
+---
+
+### prove it
+
+**4.** Prove that the intersection of any collection of subspaces of $V$ is a subspace of $V$. (The collection can be infinite.)
+
+<Solution>
+
+**the move.** take any collection $\{U_\alpha\}$ of subspaces and verify the three conditions for $\bigcap_\alpha U_\alpha$.
+
+**the key observation.** the intersection is the set of vectors that live in every $U_\alpha$ simultaneously. since each condition holds in every $U_\alpha$ individually, it holds in the intersection too. the argument is identical for finite and infinite collections.
+
+**proof.** Let $S = \bigcap_\alpha U_\alpha$.
+
+$\mathbf{0} \in S$: since $\mathbf{0} \in U_\alpha$ for every $\alpha$, we have $\mathbf{0} \in S$.
+
+closure under addition: if $u, v \in S$, then $u, v \in U_\alpha$ for every $\alpha$. since each $U_\alpha$ is a subspace, $u + v \in U_\alpha$ for every $\alpha$. so $u + v \in S$.
+
+closure under scaling: if $u \in S$ and $a \in \mathbf{F}$, then $u \in U_\alpha$ for every $\alpha$, so $au \in U_\alpha$ for every $\alpha$, so $au \in S$.
+
+</Solution>
+
+**5.** Let $U$ and $W$ be subspaces of $V$. Prove that $U \cup W$ is a subspace of $V$ if and only if $U \subseteq W$ or $W \subseteq U$.
+
+<Solution>
+
+**the move.** iff proof — both directions. the hard direction is ($\Rightarrow$): assuming neither contains the other and deriving a contradiction.
+
+**the key observation.** if $u \in U \setminus W$ and $w \in W \setminus U$, and $U \cup W$ were a subspace, then $u + w \in U \cup W$. but if $u + w \in U$, then $w = (u+w) - u \in U$, contradicting $w \notin U$. and if $u + w \in W$, then $u = (u+w) - w \in W$, contradicting $u \notin W$. so $u + w$ can be in neither, breaking closure.
+
+**proof.**
+
+($\Leftarrow$) if $U \subseteq W$, then $U \cup W = W$, which is a subspace. same if $W \subseteq U$.
+
+($\Rightarrow$) suppose $U \cup W$ is a subspace. assume for contradiction that neither $U \subseteq W$ nor $W \subseteq U$. pick $u \in U \setminus W$ and $w \in W \setminus U$. since $u, w \in U \cup W$ and $U \cup W$ is a subspace, $u + w \in U \cup W$.
+
+case 1: $u + w \in U$. then $w = (u+w) - u \in U$ since $U$ is a subspace. but $w \notin U$. contradiction.
+
+case 2: $u + w \in W$. then $u = (u+w) - w \in W$ since $W$ is a subspace. but $u \notin W$. contradiction.
+
+so $U \subseteq W$ or $W \subseteq U$.
+
+</Solution>
+
+**6.** Let $U$ and $W$ be subspaces of $V$. Prove that $U + W$ is the smallest subspace of $V$ containing both $U$ and $W$. Prove: (a) $U + W$ is a subspace, (b) $U \subseteq U+W$ and $W \subseteq U+W$, (c) if $X$ is any subspace with $U \subseteq X$ and $W \subseteq X$, then $U + W \subseteq X$.
+
+<Solution>
+
+**the move.** prove the three parts in order. part (c) is the "smallest" claim and is the most important — it says $U + W$ doesn't contain anything unnecessary.
+
+**the key observation.** $U + W$ is defined as exactly the set of all vectors you can form by adding one element of $U$ to one element of $W$. any subspace containing both $U$ and $W$ must be closed under addition, so it must contain all such sums. that's (c). parts (a) and (b) are direct checks.
+
+**proof.**
+
+(a) $\mathbf{0} = \mathbf{0} + \mathbf{0} \in U + W$. if $u_1 + w_1$ and $u_2 + w_2$ are in $U + W$, their sum is $(u_1 + u_2) + (w_1 + w_2) \in U + W$. scaling: $a(u + w) = au + aw \in U + W$.
+
+(b) for any $u \in U$: $u = u + \mathbf{0} \in U + W$. for any $w \in W$: $w = \mathbf{0} + w \in U + W$.
+
+(c) let $X$ be any subspace with $U \subseteq X$ and $W \subseteq X$. take any $u + w \in U + W$. then $u \in U \subseteq X$ and $w \in W \subseteq X$, so $u + w \in X$ since $X$ is a subspace.
+
+</Solution>
+
+---
+
+### direct sums
+
+**7.** Suppose $U$ and $W$ are subspaces of $V$ with $U + W = V$ and $\dim(U \cap W) > 0$. Can $V = U \oplus W$? Justify.
+
+<Solution>
+
+**the move.** no. the direct sum condition requires $U \cap W = \{\mathbf{0}\}$, which forces $\dim(U \cap W) = 0$.
+
+**the key observation.** uniqueness of decomposition is the whole point of a direct sum. if there is a nonzero $v \in U \cap W$, then any vector can be decomposed in more than one way: $v = v + \mathbf{0}$ and $v = \mathbf{0} + v$ are two distinct decompositions.
+
+**proof.** if $\dim(U \cap W) > 0$, pick any nonzero $v \in U \cap W$. consider the zero vector: $\mathbf{0} = v + (-v)$ where $v \in U$ and $-v \in W$ (since $W$ is a subspace and $v \in W$), but also $\mathbf{0} = \mathbf{0} + \mathbf{0}$. these are two distinct decompositions of $\mathbf{0}$, so $V \neq U \oplus W$.
+
+</Solution>
+
+**8.** Let $V = \mathbb{R}^2$. Find two different ways to write $V$ as a direct sum of two one-dimensional subspaces.
+
+<Solution>
+
+**the move.** any two distinct lines through the origin intersect only at $\mathbf{0}$, and together they span $\mathbb{R}^2$. pick any two.
+
+**two decompositions.**
+
+First: $\mathbb{R}^2 = \text{span}\{(1,0)\} \oplus \text{span}\{(0,1)\}$. every $(x, y) = (x, 0) + (0, y)$ uniquely.
+
+Second: $\mathbb{R}^2 = \text{span}\{(1,1)\} \oplus \text{span}\{(1,-1)\}$. to find the decomposition of $(x, y)$: solve $a(1,1) + b(1,-1) = (x,y)$. this gives $a+b = x$ and $a-b = y$, so $a = (x+y)/2$ and $b = (x-y)/2$. unique for every $(x,y)$, and the two lines share only $\mathbf{0}$.
+
+</Solution>
+
+**9.** Let $U_e = \{f : \mathbb{R} \to \mathbb{R} : f(-x) = f(x)\}$ and $U_o = \{f : f(-x) = -f(x)\}$. Prove that $\mathbb{R}^{\mathbb{R}} = U_e \oplus U_o$.
+
+<Solution>
+
+**the move.** show every function decomposes uniquely into an even part and an odd part. the decomposition has an explicit formula.
+
+**the key observation.** for any $f$, define
+
+$$f_e(x) = \frac{f(x) + f(-x)}{2} \qquad f_o(x) = \frac{f(x) - f(-x)}{2}$$
+
+then $f = f_e + f_o$, $f_e$ is even, and $f_o$ is odd. this gives existence. for uniqueness, check that $U_e \cap U_o = \{0\}$.
+
+**proof.**
+
+$f_e$ is even: $f_e(-x) = \frac{f(-x)+f(x)}{2} = f_e(x)$. $f_o$ is odd: $f_o(-x) = \frac{f(-x)-f(x)}{2} = -f_o(x)$. and $f_e(x) + f_o(x) = \frac{f(x)+f(-x)}{2} + \frac{f(x)-f(-x)}{2} = f(x)$. so every $f$ decomposes as $f_e + f_o$.
+
+uniqueness: if $f \in U_e \cap U_o$, then $f(-x) = f(x)$ and $f(-x) = -f(x)$, so $f(x) = -f(x)$ for all $x$, giving $f \equiv 0$.
+
+so $\mathbb{R}^{\mathbb{R}} = U_e \oplus U_o$.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**10.** If $W$ is a subspace of $U$, and $U$ is a subspace of $V$, then $W$ is a subspace of $V$.
+
+<Solution>
+
+**true.**
+
+**the move.** the three subspace conditions only reference the operations of addition and scalar multiplication. those operations are the same throughout $V$, $U$, and $W$ — subspaces inherit operations, they don't redefine them.
+
+**proof.** $W$ satisfies the three conditions relative to $U$'s operations. since $U$ inherits its operations from $V$ (the definition requires this), $W$'s conditions hold relative to $V$'s operations too. the zero vector is the same in all three, and every sum and scalar multiple in $W$ is the same element of $V$. so $W$ is a subspace of $V$.
+
+</Solution>
+
+**11.** If $V = U_1 \oplus W$ and $V = U_2 \oplus W$, then $U_1 = U_2$.
+
+<Solution>
+
+**false.**
+
+**the move.** the complement of $W$ in a direct sum is not unique. find two distinct lines in $\mathbb{R}^2$ that each complement the same line.
+
+**counterexample.** let $V = \mathbb{R}^2$, $W = \text{span}\{(0,1)\}$ (the $y$-axis), $U_1 = \text{span}\{(1,0)\}$, $U_2 = \text{span}\{(1,1)\}$.
+
+$V = U_1 \oplus W$: $(x,y) = (x,0) + (0,y)$, unique. $U_1 \cap W = \{\mathbf{0}\}$.
+
+$V = U_2 \oplus W$: $(x,y) = x(1,1) + (y-x)(0,1)$, unique. $U_2 \cap W = \{\mathbf{0}\}$.
+
+but $U_1 = \text{span}\{(1,0)\} \neq \text{span}\{(1,1)\} = U_2$.
+
+</Solution>
+
+**12.** $\{\mathbf{0}\}$ is the only subspace of $V$ that is also a subspace of every other subspace of $V$.
+
+<Solution>
+
+**true.**
+
+**the move.** first confirm $\{\mathbf{0}\}$ is a subspace of every subspace. then show nothing else can be — any other candidate $S$ must be a subspace of $\{\mathbf{0}\}$ itself, which forces $S = \{\mathbf{0}\}$.
+
+**proof.**
+
+$\{\mathbf{0}\}$ qualifies: every subspace of $V$ must contain $\mathbf{0}$ (condition 1), so $\{\mathbf{0}\} \subseteq U$ for any subspace $U$. and $\{\mathbf{0}\}$ is closed under $U$'s operations trivially.
+
+uniqueness: suppose $S$ is a subspace of $V$ that is a subspace of every other subspace of $V$. in particular, $S$ must be a subspace of $\{\mathbf{0}\}$ (which is itself a subspace of $V$). the only subsets of $\{\mathbf{0}\}$ are $\emptyset$ and $\{\mathbf{0}\}$. the empty set is not a subspace (it has no zero vector). so $S = \{\mathbf{0}\}$.
+
+</Solution>

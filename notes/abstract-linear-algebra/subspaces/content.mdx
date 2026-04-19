@@ -2,7 +2,6 @@
 title: "subspaces"
 description: "which subsets of a vector space are vector spaces themselves, and how to check"
 week: 2
-date: "2026-04-18"
 ---
 
 the vector spaces note ended with a concrete example: a plane through the origin in
@@ -25,7 +24,7 @@ $U$ just inherits them from $V$.
 
 the definition as written asks you to verify all eight axioms. but most of them are free,
 because $U$ lives inside $V$ and those axioms already hold in $V$. commutativity of
-addition, associativity, distributivity — if they hold for all vectors in $V$, they hold
+addition, associativity, distributivity. if they hold for all vectors in $V$, they hold
 for all vectors in $U \subseteq V$.
 
 the only things that can actually fail are three:
@@ -49,7 +48,7 @@ vector.
 **lines and planes through the origin in $\mathbb{R}^n$.** any line through the origin
 has the form $\{t \mathbf{v} : t \in \mathbb{R}\}$ for some fixed $\mathbf{v}$. it
 contains $\mathbf{0}$ (take $t = 0$), and it's clearly closed under addition and scaling.
-same for planes through the origin — they're spanned by two vectors, and adding or
+same for planes through the origin. they're spanned by two vectors, and adding or
 scaling stays in the plane.
 
 **$\mathcal{P}_m(\mathbf{F})$ inside $\mathcal{P}(\mathbf{F})$.** the set of polynomials
@@ -59,7 +58,7 @@ and adding or scaling polynomials of degree at most $m$ keeps the degree at most
 **$\{\mathbf{0}\}$.** the set containing only the zero vector is always a subspace. it
 satisfies all three conditions trivially.
 
-**$V$ itself** is always a subspace of $V$. both of these — $\{\mathbf{0}\}$ and $V$ — are
+**$V$ itself** is always a subspace of $V$. both of these, $\{\mathbf{0}\}$ and $V$, are
 the trivial subspaces. every other subspace sits strictly between them.
 
 ---
@@ -89,12 +88,28 @@ subspace. the proof is just checking the three conditions: $\mathbf{0}$ is in bo
 it's in the intersection; if two vectors are in both $U$ and $W$, their sum is in both,
 and so on.
 
-**unions.** $U \cup W$ is almost never a subspace. if $u \in U \setminus W$ and
-$w \in W \setminus U$, then $u + w$ is neither in $U$ nor $W$ in general, so it's not
-in $U \cup W$. the exception is when one is contained in the other.
+**unions.** $U \cup W$ is almost never a subspace. it's worth sitting with a concrete
+example before moving on.
 
-I found the union failure easy to accept but important to be explicit about. the natural
-operation for combining subspaces is not union — it's the sum.
+take $V = \mathbb{R}^2$. let $U$ be the $x$-axis, $\{(x, 0) : x \in \mathbb{R}\}$, and
+let $W$ be the $y$-axis, $\{(0, y) : y \in \mathbb{R}\}$. both are subspaces. their union
+$U \cup W$ is just those two lines: you're either on the $x$-axis or on the $y$-axis,
+nothing else.
+
+now pick $u = (1, 0) \in U$ and $w = (0, 1) \in W$. their sum is $(1, 1)$, which lies on
+neither axis. so $(1, 1) \notin U \cup W$, which means $U \cup W$ fails closure under
+addition and is not a subspace.
+
+pause here. the issue isn't some technicality. the union is geometrically just two crossed
+lines. a subspace has to contain every linear combination of its elements. two lines
+through the origin will generate the entire plane once you start adding vectors from
+different lines. the union doesn't include that plane, so it can't be a subspace.
+
+the only way $U \cup W$ is a subspace is if you never need to add a vector from $U$ to
+one from $W$ to leave the set. that happens exactly when $U \subseteq W$ or $W \subseteq
+U$, i.e. when one is already inside the other and the union collapses to the larger one.
+
+the natural operation for combining subspaces is not union. it's the sum.
 
 **sums.** the **sum** of two subspaces $U$ and $W$ is
 

@@ -121,6 +121,19 @@ export default function AbstractAlgebraPage() {
                 margin: "0 0 18px 0",
               }}
             >
+              the notes assume you&apos;ve seen vectors in &#8477;&#8319; and know how
+              to multiply matrices. that background isn&apos;t needed to follow the
+              definitions, but it gives you something concrete to test them against.
+            </p>
+            <p
+              style={{
+                fontSize: 15,
+                fontWeight: 400,
+                lineHeight: 1.8,
+                color: MUTED,
+                margin: "0 0 18px 0",
+              }}
+            >
               these are course notes from math 416 at uiuc. rigorous definitions, but
               honest about what&apos;s hard and what took me a while to actually believe.
             </p>
@@ -133,8 +146,8 @@ export default function AbstractAlgebraPage() {
                 margin: 0,
               }}
             >
-              they also address the doubts I had when I first read each definition,
-              which are usually the same ones worth resolving.
+              they&apos;re not a complete textbook. they&apos;re the notes I wish
+              I&apos;d had the first time through.
             </p>
           </div>
         </section>

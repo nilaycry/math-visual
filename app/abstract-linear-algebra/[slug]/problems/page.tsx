@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
-import { getAllNotes, getAllNoteSlugs, getNoteBySlug, getNoteContent, hasProblems, type NoteMeta } from "@/lib/notes";
+import { getAllNoteSlugs, getNoteBySlug, getProblemsContent, hasProblems } from "@/lib/notes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import Solution from "@/components/Solution";
 
 const BG = "#f7f4ef";
 const FG = "#1c1917";
@@ -14,8 +15,9 @@ const BORDER = "#e8e5df";
 const ACCENT = "#6d4fc2";
 
 export async function generateStaticParams() {
-  const slugs = getAllNoteSlugs();
-  return slugs.map((slug) => ({ slug }));
+  return getAllNoteSlugs()
+    .filter((slug) => hasProblems(slug))
+    .map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -26,12 +28,12 @@ export async function generateMetadata({
   const note = getNoteBySlug(params.slug);
   if (!note) return { title: "Not Found" };
   return {
-    title: `${note.title} — Math 416`,
-    description: note.description,
+    title: `${note.title} — problems — Math 416`,
+    description: `Practice problems for ${note.title}`,
   };
 }
 
-export default async function NotePage({
+export default async function ProblemsPage({
   params,
 }: {
   params: { slug: string };
@@ -39,8 +41,7 @@ export default async function NotePage({
   const note = getNoteBySlug(params.slug);
   if (!note) notFound();
 
-  const noteHasProblems = hasProblems(params.slug);
-  const mdxSource = getNoteContent(params.slug);
+  const mdxSource = getProblemsContent(params.slug);
   if (!mdxSource) notFound();
 
   const { content } = await compileMDX({
@@ -52,12 +53,8 @@ export default async function NotePage({
         rehypePlugins: [rehypeKatex],
       },
     },
+    components: { Solution },
   });
-
-  const allNotes = getAllNotes().filter((n): n is NoteMeta => n !== undefined);
-  const currentIndex = allNotes.findIndex((n) => n.slug === params.slug);
-  const prevNote = currentIndex > 0 ? allNotes[currentIndex - 1] : null;
-  const nextNote = currentIndex < allNotes.length - 1 ? allNotes[currentIndex + 1] : null;
 
   return (
     <div
@@ -80,19 +77,17 @@ export default async function NotePage({
         }}
       >
         <Link
+          href={`/abstract-linear-algebra/${params.slug}`}
+          style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
+        >
+          ← {note.title}
+        </Link>
+        <Link
           href="/abstract-linear-algebra"
           style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
         >
-          ← notes
+          notes
         </Link>
-        <a
-          href="https://github.com/nilaycry"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
-        >
-          github
-        </a>
       </nav>
 
       {/* ── HEADER ── */}
@@ -113,7 +108,7 @@ export default async function NotePage({
               letterSpacing: "0.14em",
             }}
           >
-            math 416 · week {note.week}
+            math 416 · week {note.week} · problems
           </span>
         </div>
         <h1
@@ -128,18 +123,7 @@ export default async function NotePage({
         >
           {note.title}
         </h1>
-        <p style={{ fontSize: 16, color: MUTED, lineHeight: 1.6, margin: "0 0 20px 0" }}>
-          {note.description}
-        </p>
-        {noteHasProblems && (
-          <Link
-            href={`/abstract-linear-algebra/${params.slug}/problems`}
-            style={{ fontSize: 13, color: ACCENT, textDecoration: "none" }}
-          >
-            problems →
-          </Link>
-        )}
-        <hr style={{ border: "none", borderTop: `1px solid ${BORDER}`, marginTop: noteHasProblems ? 20 : 0 }} />
+        <hr style={{ border: "none", borderTop: `1px solid ${BORDER}`, marginTop: 32 }} />
       </header>
 
       {/* ── CONTENT ── */}
@@ -147,7 +131,7 @@ export default async function NotePage({
         style={{
           maxWidth: 860,
           margin: "0 auto",
-          padding: "0 48px 48px",
+          padding: "0 48px 80px",
         }}
       >
         <article
@@ -160,45 +144,6 @@ export default async function NotePage({
           {content}
         </article>
       </main>
-
-      {/* ── NAVIGATION ── */}
-      <footer
-        style={{
-          maxWidth: 860,
-          margin: "0 auto",
-          padding: "32px 48px 80px",
-          borderTop: `1px solid ${BORDER}`,
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        {prevNote ? (
-          <Link
-            href={`/abstract-linear-algebra/${prevNote.slug}`}
-            style={{ textDecoration: "none", display: "flex", flexDirection: "column", alignItems: "flex-start" }}
-          >
-            <span style={{ fontSize: 11, color: FAINT, marginBottom: 4 }}>← previous</span>
-            <span style={{ fontSize: 14, fontWeight: 500, color: MUTED }}>
-              {prevNote.title}
-            </span>
-          </Link>
-        ) : (
-          <div />
-        )}
-        {nextNote ? (
-          <Link
-            href={`/abstract-linear-algebra/${nextNote.slug}`}
-            style={{ textDecoration: "none", display: "flex", flexDirection: "column", alignItems: "flex-end" }}
-          >
-            <span style={{ fontSize: 11, color: FAINT, marginBottom: 4 }}>next →</span>
-            <span style={{ fontSize: 14, fontWeight: 500, color: MUTED }}>
-              {nextNote.title}
-            </span>
-          </Link>
-        ) : (
-          <div />
-        )}
-      </footer>
     </div>
   );
 }

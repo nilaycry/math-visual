@@ -7,7 +7,6 @@ export interface NoteMeta {
   title: string;
   description: string;
   week: number;
-  date: string;
 }
 
 const notesDirectory = path.join(process.cwd(), "notes", "abstract-linear-algebra");
@@ -31,11 +30,10 @@ export function getAllNotes(): NoteMeta[] {
         title: data.title as string,
         description: data.description as string,
         week: (data.week as number) ?? 1,
-        date: (data.date as string) ?? "",
       } as NoteMeta;
     })
     .filter((note): note is NoteMeta => note !== null)
-    .sort((a, b) => a.week - b.week || a.date.localeCompare(b.date));
+    .sort((a, b) => a.week - b.week);
 }
 
 export function getNoteBySlug(slug: string): NoteMeta | undefined {
@@ -46,6 +44,16 @@ export function getNoteContent(slug: string): string | null {
   const filePath = path.join(notesDirectory, slug, "content.mdx");
   if (!fs.existsSync(filePath)) return null;
   return fs.readFileSync(filePath, "utf-8");
+}
+
+export function getProblemsContent(slug: string): string | null {
+  const filePath = path.join(notesDirectory, slug, "problems.mdx");
+  if (!fs.existsSync(filePath)) return null;
+  return fs.readFileSync(filePath, "utf-8");
+}
+
+export function hasProblems(slug: string): boolean {
+  return fs.existsSync(path.join(notesDirectory, slug, "problems.mdx"));
 }
 
 export function getAllNoteSlugs(): string[] {
