@@ -109,8 +109,8 @@ export default function AbstractAlgebraPage() {
               }}
             >
               concrete linear algebra tells you how to compute. abstract linear
-              algebra asks why those computations work, and what the minimum structure
-              needed to make them work actually is.
+              algebra asks why those computations work, and what the bare minimum
+              structure you need for them to work is.
             </p>
             <p
               style={{
@@ -121,9 +121,9 @@ export default function AbstractAlgebraPage() {
                 margin: "0 0 18px 0",
               }}
             >
-              the notes assume you&apos;ve seen vectors in &#8477;&#8319; and know how
-              to multiply matrices. that background isn&apos;t needed to follow the
-              definitions, but it gives you something concrete to test them against.
+              the notes assume you&apos;ve multiplied matrices and computed eigenvalues.
+              that background isn&apos;t strictly necessary, but it gives you something
+              concrete to check the definitions against.
             </p>
             <p
               style={{
@@ -134,8 +134,9 @@ export default function AbstractAlgebraPage() {
                 margin: "0 0 18px 0",
               }}
             >
-              these are course notes from math 416 at uiuc. rigorous definitions, but
-              honest about what&apos;s hard and what took me a while to actually believe.
+              these are my notes from math 416 at uiuc. the definitions are rigorous,
+              but I try to be honest about what&apos;s hard. some of this I didn&apos;t
+              believe until I&apos;d stared at the proof for a while.
             </p>
             <p
               style={{
@@ -146,8 +147,7 @@ export default function AbstractAlgebraPage() {
                 margin: 0,
               }}
             >
-              they&apos;re not a complete textbook. they&apos;re the notes I wish
-              I&apos;d had the first time through.
+              they&apos;re not a textbook. they&apos;re how I made sense of it.
             </p>
           </div>
         </section>
