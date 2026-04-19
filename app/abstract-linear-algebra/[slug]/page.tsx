@@ -79,7 +79,7 @@ export default async function NotePage({
         }}
       >
         <Link
-          href="/abstract-algebra"
+          href="/abstract-linear-algebra"
           style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
         >
           ← notes
@@ -165,7 +165,7 @@ export default async function NotePage({
       >
         {prevNote ? (
           <Link
-            href={`/abstract-algebra/${prevNote.slug}`}
+            href={`/abstract-linear-algebra/${prevNote.slug}`}
             style={{ textDecoration: "none", display: "flex", flexDirection: "column", alignItems: "flex-start" }}
           >
             <span style={{ fontSize: 11, color: FAINT, marginBottom: 4 }}>← previous</span>
@@ -178,7 +178,7 @@ export default async function NotePage({
         )}
         {nextNote ? (
           <Link
-            href={`/abstract-algebra/${nextNote.slug}`}
+            href={`/abstract-linear-algebra/${nextNote.slug}`}
             style={{ textDecoration: "none", display: "flex", flexDirection: "column", alignItems: "flex-end" }}
           >
             <span style={{ fontSize: 11, color: FAINT, marginBottom: 4 }}>next →</span>

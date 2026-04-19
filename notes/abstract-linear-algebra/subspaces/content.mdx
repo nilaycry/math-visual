@@ -1,0 +1,134 @@
+---
+title: "subspaces"
+description: "which subsets of a vector space are vector spaces themselves, and how to check"
+week: 2
+date: "2026-04-18"
+---
+
+the vector spaces note ended with a concrete example: a plane through the origin in
+$\mathbb{R}^3$ is a vector space, but a plane that misses the origin is not. the
+natural question is: what makes a subset of a vector space a vector space in its own
+right? what's the minimum you have to check?
+
+that question is what a subspace is about. and the answer is simpler than you'd expect.
+
+---
+
+### the definition
+
+> **Definition.** A subset $U$ of a vector space $V$ over $\mathbf{F}$ is a **subspace**
+> of $V$ if $U$ is itself a vector space over $\mathbf{F}$ under the same operations of
+> addition and scalar multiplication.
+
+by "same operations" I mean: you're not allowed to redefine what addition or scaling means.
+$U$ just inherits them from $V$.
+
+the definition as written asks you to verify all eight axioms. but most of them are free,
+because $U$ lives inside $V$ and those axioms already hold in $V$. commutativity of
+addition, associativity, distributivity — if they hold for all vectors in $V$, they hold
+for all vectors in $U \subseteq V$.
+
+the only things that can actually fail are three:
+
+> **Proposition.** A subset $U \subseteq V$ is a subspace if and only if:
+>
+> 1. $\mathbf{0} \in U$
+> 2. $u, w \in U \Rightarrow u + w \in U$ (closed under addition)
+> 3. $a \in \mathbf{F},\, u \in U \Rightarrow au \in U$ (closed under scalar multiplication)
+
+pause here. condition 1 is not redundant. you might think: if $U$ is closed under scalar
+multiplication, then taking $a = 0$ gives $0 \cdot u = \mathbf{0} \in U$. that's true,
+but only if $U$ is non-empty in the first place. condition 1 is really just a cleaner way
+of ruling out the empty set, which fails to be a vector space because it has no zero
+vector.
+
+---
+
+### examples
+
+**lines and planes through the origin in $\mathbb{R}^n$.** any line through the origin
+has the form $\{t \mathbf{v} : t \in \mathbb{R}\}$ for some fixed $\mathbf{v}$. it
+contains $\mathbf{0}$ (take $t = 0$), and it's clearly closed under addition and scaling.
+same for planes through the origin — they're spanned by two vectors, and adding or
+scaling stays in the plane.
+
+**$\mathcal{P}_m(\mathbf{F})$ inside $\mathcal{P}(\mathbf{F})$.** the set of polynomials
+of degree at most $m$ is a subspace of all polynomials. the zero polynomial is in it,
+and adding or scaling polynomials of degree at most $m$ keeps the degree at most $m$.
+
+**$\{\mathbf{0}\}$.** the set containing only the zero vector is always a subspace. it
+satisfies all three conditions trivially.
+
+**$V$ itself** is always a subspace of $V$. both of these — $\{\mathbf{0}\}$ and $V$ — are
+the trivial subspaces. every other subspace sits strictly between them.
+
+---
+
+### non-examples
+
+**a plane that misses the origin.** the set $\{(x, y, z) \in \mathbb{R}^3 : x + y + z = 1\}$
+fails condition 1. $(0, 0, 0)$ gives $0 + 0 + 0 = 0 \neq 1$, so $\mathbf{0} \notin U$.
+this is the example from the vector spaces note made precise.
+
+**$\{(x, y) \in \mathbb{R}^2 : x \geq 0\}$.** the first quadrant and its boundary looks
+reasonable but fails condition 3. take $u = (1, 0)$ and $a = -1$. then $au = (-1, 0)$,
+which has negative first coordinate and is not in the set.
+
+**polynomials with $p(0) = 1$.** this set fails condition 1 and condition 2. the zero
+polynomial has $p(0) = 0 \neq 1$, so it's not in the set. and if $p(0) = 1$ and
+$q(0) = 1$, then $(p + q)(0) = 2 \neq 1$, so it's not closed under addition either.
+
+---
+
+### intersections and sums
+
+two results about combining subspaces are worth knowing now.
+
+**intersections.** if $U$ and $W$ are both subspaces of $V$, then $U \cap W$ is also a
+subspace. the proof is just checking the three conditions: $\mathbf{0}$ is in both, so
+it's in the intersection; if two vectors are in both $U$ and $W$, their sum is in both,
+and so on.
+
+**unions.** $U \cup W$ is almost never a subspace. if $u \in U \setminus W$ and
+$w \in W \setminus U$, then $u + w$ is neither in $U$ nor $W$ in general, so it's not
+in $U \cup W$. the exception is when one is contained in the other.
+
+I found the union failure easy to accept but important to be explicit about. the natural
+operation for combining subspaces is not union — it's the sum.
+
+**sums.** the **sum** of two subspaces $U$ and $W$ is
+
+$$U + W = \{u + w : u \in U,\, w \in W\}$$
+
+this is the smallest subspace of $V$ containing both $U$ and $W$. it's a subspace:
+$\mathbf{0} = \mathbf{0} + \mathbf{0} \in U + W$, and sums and scalar multiples stay in
+the form $u + w$.
+
+---
+
+### direct sums
+
+a sum $U + W$ is a **direct sum**, written $U \oplus W$, when every vector in $U + W$
+can be written as $u + w$ in exactly one way.
+
+> **Proposition.** $U + W$ is a direct sum if and only if $U \cap W = \{\mathbf{0}\}$.
+
+the proof idea: if $v = u_1 + w_1 = u_2 + w_2$, then $u_1 - u_2 = w_2 - w_1$. the
+left side is in $U$, the right in $W$, so both are in $U \cap W$. if that intersection
+is just $\{\mathbf{0}\}$, then $u_1 = u_2$ and $w_1 = w_2$, giving uniqueness.
+
+direct sums matter because they let you split a space into independent pieces. $\mathbb{R}^2$
+is the direct sum of the $x$-axis and the $y$-axis: every vector $(x, y)$ decomposes
+uniquely as $(x, 0) + (0, y)$. the two subspaces share only the origin.
+
+---
+
+### what the definition leaves out
+
+knowing that $U$ is a subspace tells you it's a vector space in its own right. it doesn't
+yet tell you how big $U$ is relative to $V$, or how many "independent directions" it
+contains. that's the question of dimension, which requires span and linear independence
+first.
+
+the next step is asking: given a set of vectors in $V$, what's the smallest subspace
+containing all of them? that's the concept of **span**.

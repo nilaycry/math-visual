@@ -10,7 +10,7 @@ export interface NoteMeta {
   date: string;
 }
 
-const notesDirectory = path.join(process.cwd(), "notes", "abstract-algebra");
+const notesDirectory = path.join(process.cwd(), "notes", "abstract-linear-algebra");
 
 export function getAllNotes(): NoteMeta[] {
   if (!fs.existsSync(notesDirectory)) return [];

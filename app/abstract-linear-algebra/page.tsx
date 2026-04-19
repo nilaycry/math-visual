@@ -171,7 +171,7 @@ export default function AbstractAlgebraPage() {
               {notes.map((note) => (
                 <Link
                   key={note.slug}
-                  href={`/abstract-algebra/${note.slug}`}
+                  href={`/abstract-linear-algebra/${note.slug}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <div

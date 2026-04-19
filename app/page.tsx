@@ -35,7 +35,7 @@ export default function HomePage() {
       unit: "lesson",
     },
     {
-      href: "/abstract-algebra",
+      href: "/abstract-linear-algebra",
       tag: "abstract linear algebra",
       title: "the same ideas, built from scratch",
       description:

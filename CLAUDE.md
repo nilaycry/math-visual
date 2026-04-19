@@ -408,15 +408,15 @@ const arrowScreenY = gy * scaleY; // no negation
 
 `ThemeProvider` in `app/layout.tsx` sets `defaultTheme="dark"` and adds `class="dark"` to `<html>`. This means **all Tailwind CSS variables resolve to dark-mode values** site-wide — `--foreground` is near-white, `--background` is near-black — even if a page overrides the background with a light color inline.
 
-The abstract algebra section (`/abstract-algebra/*`) uses a cream background (`#f7f4ef`) with the `.notes-prose` class for article body text. This class uses **hardcoded hex colors** rather than CSS variables, specifically to bypass the dark-mode variable resolution. Do not use `text-foreground`, `bg-background`, or any Tailwind color variable inside the abstract algebra pages — they will resolve to dark-theme values and look wrong on the light background. Use explicit hex values instead.
+The abstract algebra section (`/abstract-linear-algebra/*`) uses a cream background (`#f7f4ef`) with the `.notes-prose` class for article body text. This class uses **hardcoded hex colors** rather than CSS variables, specifically to bypass the dark-mode variable resolution. Do not use `text-foreground`, `bg-background`, or any Tailwind color variable inside the abstract algebra pages — they will resolve to dark-theme values and look wrong on the light background. Use explicit hex values instead.
 
 ### abstract algebra section
 
 - Light/cream theme (`#f7f4ef` background, `#1c1917` text) — intentional contrast with the dark main site
 - Serif article body (Georgia) via `.notes-prose` in `globals.css`
-- KaTeX math rendering via `remark-math` + `rehype-katex` — CSS loaded in `app/abstract-algebra/layout.tsx`
-- Notes at `notes/abstract-algebra/<slug>/content.mdx`, ordered by `week:` frontmatter field
-- Global Navbar suppressed on all `/abstract-algebra/*` paths — each page handles its own nav
+- KaTeX math rendering via `remark-math` + `rehype-katex` — CSS loaded in `app/abstract-linear-algebra/layout.tsx`
+- Notes at `notes/abstract-linear-algebra/<slug>/content.mdx`, ordered by `week:` frontmatter field
+- Global Navbar suppressed on all `/abstract-linear-algebra/*` paths — each page handles its own nav
 - Use `$$...$$` for display math and `$...$` for inline math in note MDX files
 
 ---
@@ -431,7 +431,7 @@ app/
     page.tsx                    — server component; reads getAllLessons() filtered by tag
   machine-learning/
     page.tsx                    — server component; reads getAllLessons() filtered by tag
-  abstract-algebra/
+  abstract-linear-algebra/
     layout.tsx                  — loads KaTeX CSS for this section only
     page.tsx                    — server component; reads getAllNotes()
     [slug]/page.tsx             — note renderer (no sketch registration needed)
@@ -454,7 +454,7 @@ lessons/
   machine-learning/<slug>/content.mdx — ML lessons
   (add a new subject folder here when a new subject area is created)
 notes/
-  abstract-algebra/
+  abstract-linear-algebra/
     <slug>/content.mdx          — one directory per note; week: N controls ordering
 lib/
   lessons.ts                    — lesson metadata + content loader; sorted by date
