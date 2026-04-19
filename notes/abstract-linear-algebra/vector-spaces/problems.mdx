@@ -1,0 +1,122 @@
+---
+title: "vector spaces"
+week: 1
+---
+
+### check the axioms
+
+**1.** Consider the set $V = \{(x, y) \in \mathbb{R}^2 : x > 0,\, y > 0\}$ with operations $(x_1, y_1) \oplus (x_2, y_2) = (x_1 x_2,\, y_1 y_2)$ and $a \odot (x, y) = (x^a,\, y^a)$. Is $V$ a vector space over $\mathbb{R}$?
+
+<Solution>
+
+**the move.** these are non-standard operations, so check all eight axioms from scratch. the natural hint is that taking $\log$ of coordinates turns multiplication into addition and exponentiation into scaling — so this space is secretly isomorphic to $\mathbb{R}^2$ with standard operations.
+
+**the key observation.** the zero vector is $(1, 1)$, since $(x, y) \oplus (1, 1) = (x \cdot 1, y \cdot 1) = (x, y)$. the additive inverse of $(x, y)$ is $(1/x, 1/y)$, since their product is $(1, 1)$.
+
+**proof.** Commutativity: $(x_1 x_2, y_1 y_2) = (x_2 x_1, y_2 y_1)$. Associativity: $(x_1 x_2)x_3 = x_1(x_2 x_3)$. Additive identity: $(1,1) \in V$ and $(x,y)\oplus(1,1) = (x,y)$. Additive inverse: $(x,y)\oplus(1/x, 1/y) = (1,1)$ and $1/x, 1/y > 0$. Multiplicative identity: $1\odot(x,y) = (x^1,y^1) = (x,y)$. Associativity of scaling: $(ab)\odot(x,y) = (x^{ab}, y^{ab}) = a\odot(x^b,y^b) = a\odot(b\odot(x,y))$. Distributivity over $V$-addition: $a\odot((x_1,y_1)\oplus(x_2,y_2)) = ((x_1 x_2)^a, (y_1 y_2)^a) = (x_1^a x_2^a, y_1^a y_2^a) = (a\odot(x_1,y_1))\oplus(a\odot(x_2,y_2))$. Distributivity over scalar addition: $(a+b)\odot(x,y) = (x^{a+b}, y^{a+b}) = (x^a x^b, y^a y^b) = (a\odot(x,y))\oplus(b\odot(x,y))$. All eight hold.
+
+</Solution>
+
+**2.** Let $V = \mathbb{R}^2$ with standard addition but with scalar multiplication redefined as $a \cdot (x, y) = (ax, 0)$. Is $V$ a vector space?
+
+<Solution>
+
+**the move.** try the axiom $1 \cdot v = v$ immediately — this is a fast check for broken scalar multiplication.
+
+$1 \cdot (0, 1) = (1 \cdot 0, 0) = (0, 0) \neq (0, 1)$. The multiplicative identity axiom fails. Not a vector space.
+
+</Solution>
+
+**3.** Is the set of all functions $f: \mathbb{R} \to \mathbb{R}$ satisfying $f(0) = 0$ a vector space under pointwise addition and scalar multiplication?
+
+<Solution>
+
+**the move.** recognize this as a subspace check inside $\mathbb{R}^{\mathbb{R}}$. the condition $f(0) = 0$ is linear and homogeneous in $f$.
+
+Zero function: $0(0) = 0$. Closure under addition: $(f+g)(0) = f(0) + g(0) = 0$. Closure under scaling: $(af)(0) = a \cdot f(0) = 0$. All three conditions hold, so this is a subspace of $\mathbb{R}^{\mathbb{R}}$, hence a vector space.
+
+</Solution>
+
+---
+
+### non-examples
+
+**4.** For each of the following, identify exactly which axiom fails and give an explicit counterexample.
+
+(a) $V = \mathbb{R}^2$ with $(x_1, y_1) + (x_2, y_2) = (x_1 x_2, y_1 y_2)$ and standard scalar multiplication.
+
+(b) $V = \{(x, y) \in \mathbb{R}^2 : x \geq 0\}$ with standard operations.
+
+(c) $V = \mathcal{P}_2(\mathbb{R})$ with $(p + q)(x) = p(x) \cdot q(x)$ (pointwise product) and standard scalar multiplication.
+
+<Solution>
+
+**(a)** The additive identity under this $+$ would be $(x_e, y_e)$ with $x x_e = x$ for all $x$, so $x_e = 1$. Similarly $y_e = 1$. So the identity is $(1,1)$. The additive inverse of $(x,y)$ is $(1/x, 1/y)$, which requires $x \neq 0$ and $y \neq 0$. The element $(0, 1)$ has no additive inverse: $0 \cdot x' = 0 \neq 1$ for any $x'$. **Additive inverse fails.**
+
+**(b)** Take $(1, 0) \in V$. Its additive inverse under standard addition is $(-1, 0)$, which has negative first coordinate and is not in $V$. **Additive inverse fails.**
+
+**(c)** Distributivity of scalar multiplication over vector addition should give $a(p + q) = (ap) + (aq)$ in $V$. Under the new addition, $(ap) + (aq) = (ap)(aq) = a^2 pq$. But $a(p+q) = a \cdot (pq) = apq$. These differ when $a \neq 0, 1$. **Distributivity fails.**
+
+</Solution>
+
+---
+
+### prove it
+
+**5.** Let $V$ be a vector space. Prove that $\mathbf{0}$ is unique, and that additive inverses are unique.
+
+<Solution>
+
+**the move.** both are uniqueness arguments: assume two elements satisfy the defining property, show they are equal.
+
+**Zero vector:** Suppose $\mathbf{0}$ and $\mathbf{0}'$ both satisfy $v + \mathbf{0} = v$ for all $v$. Then $\mathbf{0} = \mathbf{0} + \mathbf{0}' = \mathbf{0}'$ (first equality: $\mathbf{0}'$ is a zero; second: $\mathbf{0}$ is a zero).
+
+**Additive inverse:** Fix $v$. Suppose $w$ and $w'$ both satisfy $v + w = \mathbf{0}$ and $v + w' = \mathbf{0}$. Then $w = w + \mathbf{0} = w + (v + w') = (w + v) + w' = \mathbf{0} + w' = w'$.
+
+</Solution>
+
+**6.** Let $V$ be a vector space. Prove: (a) $0 \cdot v = \mathbf{0}$ for all $v$, (b) $a \cdot \mathbf{0} = \mathbf{0}$ for all $a \in \mathbf{F}$, (c) $(-1) \cdot v = -v$ for all $v$.
+
+<Solution>
+
+**the move.** all three follow from the axioms alone. the key step in each is isolating the unknown by using additive inverses.
+
+**(a)** $0 \cdot v = (0 + 0) \cdot v = 0 \cdot v + 0 \cdot v$. Add the inverse of $0 \cdot v$ to both sides: $\mathbf{0} = 0 \cdot v$.
+
+**(b)** $a \cdot \mathbf{0} = a \cdot (\mathbf{0} + \mathbf{0}) = a \cdot \mathbf{0} + a \cdot \mathbf{0}$. Add the inverse: $\mathbf{0} = a \cdot \mathbf{0}$.
+
+**(c)** $v + (-1) \cdot v = 1 \cdot v + (-1) \cdot v = (1 + (-1)) \cdot v = 0 \cdot v = \mathbf{0}$. So $(-1) \cdot v$ is the additive inverse of $v$, which is $-v$.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**7.** Every subset of a vector space that contains $\mathbf{0}$ is a subspace.
+
+<Solution>
+
+**false.** In $\mathbb{R}^2$, let $U = \{(0,0),\, (1,0),\, (0,1)\}$. Then $\mathbf{0} \in U$, but $(1,0) + (0,1) = (1,1) \notin U$. Closure under addition fails.
+
+</Solution>
+
+**8.** If $V$ is a vector space and $v + v = v$ for some $v \in V$, then $v = \mathbf{0}$.
+
+<Solution>
+
+**true.** From $v + v = v$, add $-v$ to both sides: $v + v + (-v) = v + (-v)$, giving $v = \mathbf{0}$.
+
+</Solution>
+
+**9.** $\mathbb{R}^2$ can be given a vector space structure over $\mathbb{C}$.
+
+<Solution>
+
+**false.** A vector space over $\mathbb{C}$ requires scalar multiplication $\mathbb{C} \times V \to V$. But $\mathbb{R}^2$ has only 2 real dimensions. As a $\mathbb{C}$-vector space, any nonzero space has even real dimension (since $\mathbb{C} \cong \mathbb{R}^2$ as real vector spaces). Specifically: $\mathbb{R}^2$ has real dimension 2, so if it were a $\mathbb{C}$-vector space, it would have complex dimension 1. But then $i \cdot (1, 0)$ must be some element of $\mathbb{R}^2$, say $(a, b)$. Then $i \cdot (a, b) = i \cdot (i \cdot (1, 0)) = i^2 \cdot (1, 0) = -(1, 0) = (-1, 0)$. But also $i \cdot (a, b)$ must be the $\mathbb{C}$-scalar-multiple of $(a,b)$ by $i$, which lands in the same complex line as $(1,0)$ — requiring $(a,b)$ and $(-1,0)$ to lie on that complex line, eventually forcing $a^2 + b^2 = 1$ and $b = 0$, so $(a,b) = (\pm 1, 0)$. But then $i \cdot (1,0) = (1, 0)$ or $(-1, 0)$, neither of which satisfies $i \cdot (i \cdot v) = -v$ consistently. The structure breaks down.
+
+(Concisely: $\mathbb{R}^2$ over $\mathbb{C}$ would require $i \cdot v$ to be defined for every $v$, but then $i^2 \cdot v = -v$ and $|i|^2 = 1$ force the norm to behave like a complex modulus, which is impossible on $\mathbb{R}^2$ without leaving $\mathbb{R}^2$. No consistent assignment works.)
+
+</Solution>

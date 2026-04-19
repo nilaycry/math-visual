@@ -1,0 +1,146 @@
+---
+title: "span and linear independence"
+description: "what you can build from a list of vectors, and when that list has no wasted pieces"
+week: 3
+---
+
+the smallest subspace containing a given set of vectors is the set of everything you can
+build from them by scaling and adding. that set is called the span, and it's the
+concrete answer to the question the subspaces note left open.
+
+---
+
+### what you can build
+
+a **linear combination** of vectors $v_1, \ldots, v_m$ is any expression of the form
+$a_1 v_1 + \cdots + a_m v_m$ where each $a_i \in \mathbf{F}$. the scalars can be
+anything: positive, negative, zero.
+
+> **Definition.** The **span** of a list $v_1, \ldots, v_m$ is the set of all their
+> linear combinations:
+>
+> $$\text{span}(v_1, \ldots, v_m) = \{a_1 v_1 + \cdots + a_m v_m : a_1, \ldots, a_m \in \mathbf{F}\}$$
+
+the span of the empty list is $\{\mathbf{0}\}$ by convention.
+
+the span is always a subspace. $\mathbf{0}$ is in it
+(take all $a_i = 0$). the sum of two linear combinations is another linear combination.
+a scalar multiple of a linear combination is still a linear combination. all three
+subspace conditions come for free, just from the definition.
+
+and it's the *smallest* subspace containing all the $v_i$. any subspace containing $v_1,
+\ldots, v_m$ must be closed under linear combinations, so it must already contain the
+entire span. the span is exactly what you're forced to have and nothing more.
+
+if $\text{span}(v_1, \ldots, v_m) = V$, the list **spans** $V$.
+
+in $\mathbb{R}^2$: $(1, 0)$ and $(0, 1)$ span the whole space since $(x, y) = x(1,0) +
+y(0,1)$. but $(1, 0)$ and $(2, 0)$ together only span the $x$-axis. the second vector
+adds nothing because it's already in the reach of the first.
+
+in $\mathcal{P}_2(\mathbf{F})$: the list $1, x, x^2$ spans everything since any polynomial
+$a + bx + cx^2$ is a linear combination with coefficients $a, b, c$. the list $1, x^2$
+does not span: no combination $a \cdot 1 + b \cdot x^2$ ever produces $x$.
+
+---
+
+### the redundancy problem
+
+here's a situation that bothered me for a while. the list $(1, 0), (0, 1), (1, 1)$ spans
+$\mathbb{R}^2$. so does the list $(1, 0), (0, 1)$. three vectors, two vectors, same
+reach. the third one is doing nothing: it's already $(1,0) + (0,1)$, a combination of
+the first two.
+
+so spanning lists can be wasteful. this raises a precise question: when does a list have
+no wasted pieces? when is every vector in the list contributing something genuinely new,
+pointing in a direction the others can't reach?
+
+the obvious definition of "no redundancy" would be: no vector in the list is a linear
+combination of the others. that's correct but awkward to check directly, because you'd
+have to test every vector against all the rest.
+
+the cleaner equivalent condition, the one Axler uses, is about the zero vector.
+
+> **Definition.** A list $v_1, \ldots, v_m$ is **linearly independent** if the only
+> solution to
+>
+> $$a_1 v_1 + \cdots + a_m v_m = \mathbf{0}$$
+>
+> is $a_1 = \cdots = a_m = 0$.
+
+if any nontrivial solution exists (some $a_i \neq 0$), the list is **linearly dependent**.
+
+pause here. it is not obvious why this is the right definition. checking that no vector is
+a combination of the others feels directly meaningful. checking that $\mathbf{0}$ can't
+be written non-trivially feels like an accident.
+
+the reason they're equivalent: if $v_k$ is a combination of the others, say $v_k = \sum_{j \neq k}
+c_j v_j$, then
+
+$$\sum_{j \neq k} c_j v_j - v_k = \mathbf{0}$$
+
+which is a nontrivial relation (the coefficient on $v_k$ is $-1 \neq 0$). and conversely,
+any nontrivial relation $\sum a_j v_j = \mathbf{0}$ with $a_k \neq 0$ lets you solve for
+$v_k$:
+
+$$v_k = -\sum_{j \neq k} \frac{a_j}{a_k} v_j$$
+
+so $v_k$ is in the span of the others. redundancy in the geometric sense (a vector is
+covered by the rest) is exactly the same as redundancy in the algebraic sense (there's a
+nontrivial relation summing to zero). the definition is packaging that equivalence.
+
+---
+
+### checking independence
+
+a few examples make the definition concrete.
+
+the standard basis vectors $e_1 = (1, 0, \ldots, 0), \ldots, e_n = (0, \ldots, 0, 1)$
+in $\mathbb{R}^n$ are independent. if $a_1 e_1 + \cdots + a_n e_n = \mathbf{0}$, looking
+at the $k$-th coordinate forces $a_k = 0$. each basis vector is the only contributor to
+its coordinate.
+
+the polynomials $1, x, x^2$ in $\mathcal{P}_2(\mathbf{F})$ are independent. if $a + bx +
+cx^2$ is the zero polynomial, then its coefficients are all zero: $a = b = c = 0$.
+polynomials are useful this way: the coefficient representation pins down the scalars.
+
+any list containing $\mathbf{0}$ is dependent, immediately. the relation $1 \cdot \mathbf{0}
+= \mathbf{0}$ is nontrivial with coefficient 1 on $\mathbf{0}$. you can't include the
+zero vector and have independence.
+
+and $(1,0), (0,1), (1,1)$ in $\mathbb{R}^2$ is dependent, as expected: solving $a(1,0) + b(0,1) + c(1,1) = (0,0)$ gives $a + c = 0$ and $b + c = 0$. taking $c = 1$ gives $a = b = -1$,
+a nontrivial solution. the algebra confirms what the geometry already said: $(1,1)$ is
+redundant, already reachable from the other two, adding no new direction.
+
+---
+
+### removing redundancy
+
+the following lemma is the backbone of everything about bases and dimension.
+
+> **Lemma (Linear Dependence).** If $v_1, \ldots, v_m$ is linearly dependent in $V$, then
+> some $v_k$ lies in $\text{span}(v_1, \ldots, v_{k-1})$, and removing $v_k$ leaves the
+> span unchanged.
+
+take a nontrivial dependence relation and let $k$ be the largest index with $a_k \neq 0$.
+the vectors after $v_k$ in the list don't appear (their coefficients are zero by choice of
+$k$), so you can solve for $v_k$ in terms of $v_1, \ldots, v_{k-1}$. that puts $v_k$ in
+the span of the earlier ones, and any linear combination involving $v_k$ can be rewritten
+without it.
+
+what this really says: if your spanning list has any redundancy, you can find a specific
+vector to remove without losing coverage. do this repeatedly and you eventually reach an
+independent spanning list. at that point, every vector in the list is genuinely necessary.
+that's a basis.
+
+---
+
+### what the definition leaves out
+
+we still haven't asked how long a basis has to be. if I find one independent spanning
+list with $n$ vectors and you find a different one, do they necessarily have the same
+length? the answer is yes, and that common length is the **dimension** of $V$.
+
+the argument comes directly from the linear dependence lemma: any independent list can't
+be longer than any spanning list. from that one inequality, the whole theory of dimension
+follows.

@@ -1,0 +1,69 @@
+---
+title: "what axioms actually do"
+description: "why we assume commutativity here when you proved it in discrete math"
+week: 0
+---
+
+if you've taken a course that builds mathematics from the ground up, something about the
+vector space axioms might feel off. in that setting, commutativity of addition isn't
+assumed. it's proved. you define addition on $\mathbb{N}$ recursively using the Peano
+axioms, then prove $a + b = b + a$ by induction. same with associativity. these are
+theorems, not starting points.
+
+so why does linear algebra just write down "commutativity: $u + v = v + u$" and move on?
+
+---
+
+### two different kinds of work
+
+the confusion comes from mixing up two different levels of mathematics.
+
+at the **foundational level**, you're constructing specific objects: the natural numbers,
+the integers, the reals. you start from almost nothing (the Peano axioms, or set theory)
+and build up. commutativity of addition on $\mathbb{N}$ is a fact you derive about a
+specific, concretely defined thing. it's a theorem because you had to earn it.
+
+at the **structural level**, you're doing something different. you're not constructing a
+specific object. you're defining a class of objects by listing the properties you want
+them to have. the vector space axioms don't make a claim about the world. they say: I'm
+interested in studying structures that satisfy these eight rules. commutativity is a
+requirement, not a theorem, because we're defining what counts as a vector space.
+
+the axioms are a filter, not a foundation.
+
+---
+
+### what happens when you check an example
+
+when you verify that $\mathbb{R}^n$ is a vector space, you're back to proving. you have
+a specific construction: lists of real numbers with componentwise operations. you then
+check each axiom. for commutativity:
+
+$$(x_1, \ldots, x_n) + (y_1, \ldots, y_n) = (x_1 + y_1, \ldots, x_n + y_n) = (y_1 + x_1, \ldots, y_n + x_n)$$
+
+that last step uses commutativity of addition in $\mathbb{R}$, which was established
+at the foundational level. so the proof exists. it was done elsewhere, once, for $\mathbb{R}$, and now we're allowed to use it.
+
+the same happens for every example. polynomials, matrices, functions. for each one, you
+prove the axioms hold by reducing each check to something already known.
+
+---
+
+### what this buys you
+
+once you've verified that some object is a vector space, every theorem you prove about
+abstract vector spaces applies to it automatically. you don't re-prove anything.
+
+I find this the most compelling reason for the abstraction. you prove a theorem once,
+in full generality, from just the eight axioms. that theorem is then simultaneously a
+fact about $\mathbb{R}^n$, about polynomials, about continuous functions, about every
+other vector space you'll ever meet. the filter is what gives you the leverage.
+
+---
+
+### the short answer
+
+in discrete math, commutativity was a claim about a specific object that had to be
+proved. in linear algebra, it's a requirement on whatever you're calling a vector space.
+when you check that $\mathbb{R}^n$ qualifies, you do prove it, using the commutativity
+of $\mathbb{R}$ that was already established. the proof didn't disappear. it's upstream.

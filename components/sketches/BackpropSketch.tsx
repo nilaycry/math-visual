@@ -506,7 +506,7 @@ export default function BackpropSketch() {
               step={0.1}
               value={value}
               onChange={handleChange(setter)}
-              className="w-full h-2 rounded-full appearance-none bg-gradient-to-r from-purple-500 to-pink-500 cursor-pointer"
+              className="w-full h-2 rounded-full appearance-none bg-gradient-to-r from-amber-500 to-orange-400 cursor-pointer"
             />
             <div className="text-center mt-1">
               <span className="text-sm font-mono font-semibold text-primary">

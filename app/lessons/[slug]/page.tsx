@@ -75,7 +75,7 @@ export default async function LessonPage({
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm mb-12" style={{ color: "#555" }}>
         <Link href="/" style={{ color: "#555", textDecoration: "none" }}

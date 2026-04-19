@@ -1,0 +1,148 @@
+---
+title: "linear maps"
+week: 6
+---
+
+### check linearity
+
+**1.** For each function, determine whether it is a linear map. If yes, prove it. If no, identify which condition fails and give a concrete counterexample.
+
+(a) $T: \mathbb{R}^2 \to \mathbb{R}$ defined by $T(x, y) = 3x - 2y$.
+
+(b) $T: \mathbb{R}^2 \to \mathbb{R}^2$ defined by $T(x, y) = (x + 1,\, y)$.
+
+(c) $T: \mathcal{P}(\mathbf{F}) \to \mathcal{P}(\mathbf{F})$ defined by $(Tp)(x) = x \cdot p(x)$.
+
+(d) $T: \mathbb{R} \to \mathbb{R}$ defined by $T(x) = |x|$.
+
+<Solution>
+
+**(a) Linear.** $T(u + v) = 3(x_1 + x_2) - 2(y_1+y_2) = T(u) + T(v)$. $T(av) = 3(ax) - 2(ay) = a(3x - 2y) = aT(v)$.
+
+**(b) Not linear.** $T(\mathbf{0}) = T(0,0) = (1, 0) \neq \mathbf{0}$. A linear map must send zero to zero.
+
+**(c) Linear.** $(T(p+q))(x) = x(p(x)+q(x)) = xp(x)+xq(x) = (Tp)(x)+(Tq)(x)$. $(T(ap))(x) = x \cdot ap(x) = a \cdot xp(x) = a(Tp)(x)$.
+
+**(d) Not linear.** $T(-1 \cdot 1) = T(-1) = 1$, but $-1 \cdot T(1) = -1$. Homogeneity fails.
+
+</Solution>
+
+**2.** Let $T: \mathbf{F}^3 \to \mathbf{F}^2$ be defined by $T(x, y, z) = (x - y,\, 2z)$. Find $\text{null}\,T$ and $\text{range}\,T$.
+
+<Solution>
+
+**null space.** Solve $T(x,y,z) = (0,0)$: we need $x - y = 0$ and $2z = 0$, so $x = y$ and $z = 0$.
+
+$$\text{null}\,T = \{(t, t, 0) : t \in \mathbf{F}\} = \text{span}((1, 1, 0))$$
+
+Dimension 1.
+
+**range.** For any $(a, b) \in \mathbf{F}^2$, take $(a, 0, b/2)$: then $T(a, 0, b/2) = (a - 0, 2 \cdot b/2) = (a, b)$. Every output is achieved.
+
+$$\text{range}\,T = \mathbf{F}^2$$
+
+Dimension 2.
+
+**sanity check.** $\dim\,\text{null}\,T + \dim\,\text{range}\,T = 1 + 2 = 3 = \dim\,\mathbf{F}^3$. This matches the rank-nullity theorem.
+
+</Solution>
+
+---
+
+### prove it
+
+**3.** Let $T: V \to W$ be linear. Prove that $\text{null}\,T$ is a subspace of $V$ and $\text{range}\,T$ is a subspace of $W$.
+
+<Solution>
+
+**the move.** three-condition subspace check on each.
+
+**null space.** $T(\mathbf{0}) = \mathbf{0}$, so $\mathbf{0} \in \text{null}\,T$. If $T(u) = T(v) = \mathbf{0}$: $T(u+v) = T(u)+T(v) = \mathbf{0}$ and $T(av) = aT(v) = \mathbf{0}$. Closed.
+
+**range.** $T(\mathbf{0}) = \mathbf{0} \in \text{range}\,T$. If $w_1 = T(v_1)$ and $w_2 = T(v_2)$: $w_1 + w_2 = T(v_1+v_2) \in \text{range}\,T$ and $aw_1 = T(av_1) \in \text{range}\,T$. Closed.
+
+</Solution>
+
+**4.** Let $T: V \to W$ be linear. Prove that $T$ is injective if and only if $\text{null}\,T = \{\mathbf{0}\}$.
+
+<Solution>
+
+**($\Rightarrow$)** Suppose $T$ is injective. If $T(v) = \mathbf{0} = T(\mathbf{0})$, then $v = \mathbf{0}$ by injectivity. So $\text{null}\,T \subseteq \{\mathbf{0}\}$, and $\mathbf{0}$ is always in the null space.
+
+**($\Leftarrow$)** Suppose $\text{null}\,T = \{\mathbf{0}\}$. If $T(u) = T(v)$, then $T(u-v) = \mathbf{0}$, so $u - v \in \text{null}\,T = \{\mathbf{0}\}$, giving $u = v$.
+
+</Solution>
+
+**5.** Let $S: U \to V$ and $T: V \to W$ be linear. Prove that $T \circ S: U \to W$ is linear.
+
+<Solution>
+
+$(T \circ S)(u + v) = T(S(u+v)) = T(S(u)+S(v)) = T(S(u)) + T(S(v)) = (T\circ S)(u) + (T\circ S)(v)$.
+
+$(T \circ S)(av) = T(S(av)) = T(aS(v)) = aT(S(v)) = a(T \circ S)(v)$.
+
+</Solution>
+
+**6.** Let $T: V \to W$ be linear and let $U$ be a subspace of $V$. Prove that $T(U) = \{T(u) : u \in U\}$ is a subspace of $W$.
+
+<Solution>
+
+$T(\mathbf{0}) = \mathbf{0} \in T(U)$. If $T(u_1), T(u_2) \in T(U)$: $T(u_1) + T(u_2) = T(u_1+u_2)$ and $u_1 + u_2 \in U$, so the sum is in $T(U)$. Similarly $aT(u_1) = T(au_1) \in T(U)$.
+
+</Solution>
+
+---
+
+### find the map
+
+**7.** Find a linear map $T: \mathbb{R}^2 \to \mathbb{R}^3$ with $\text{null}\,T = \{(t, 2t) : t \in \mathbb{R}\}$.
+
+<Solution>
+
+**the move.** I need $T(1, 2) = \mathbf{0}$ and $T$ nonzero on something not in the null space. I'll use the proposition that a linear map is determined by where it sends a basis.
+
+Choose basis $\{(1, 2), (1, 0)\}$ for $\mathbb{R}^2$. Define $T(1, 2) = (0,0,0)$ and $T(1, 0) = (1, 0, 0)$.
+
+For any $(x, y) = a(1, 2) + b(1, 0)$: solving gives $b = x - y/2$ and $a = y/2$. So $T(x, y) = b \cdot (1, 0, 0) = (x - y/2, 0, 0)$.
+
+Check: $T(1, 2) = (1 - 1, 0, 0) = (0,0,0)$. And $T(1, 0) = (1, 0, 0) \neq \mathbf{0}$. So $\text{null}\,T = \{(x,y) : x = y/2\} = \{(t, 2t)\}$. Correct.
+
+</Solution>
+
+**8.** Suppose $T: \mathbf{F}^4 \to \mathbf{F}^2$ is linear and surjective. What are the possible dimensions of $\text{null}\,T$?
+
+<Solution>
+
+**the move.** apply rank-nullity: $\dim\,\text{null}\,T + \dim\,\text{range}\,T = \dim\,\mathbf{F}^4 = 4$. Surjective means $\text{range}\,T = \mathbf{F}^2$, so $\dim\,\text{range}\,T = 2$.
+
+Therefore $\dim\,\text{null}\,T = 4 - 2 = 2$. The dimension of the null space is exactly 2, with no other possibility.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**9.** If $T: V \to W$ is linear and $\{T(v_1), \ldots, T(v_m)\}$ is linearly independent in $W$, then $\{v_1, \ldots, v_m\}$ is linearly independent in $V$.
+
+<Solution>
+
+**true.**
+
+Suppose $a_1 v_1 + \cdots + a_m v_m = \mathbf{0}$. Applying $T$: $a_1 T(v_1) + \cdots + a_m T(v_m) = T(\mathbf{0}) = \mathbf{0}$. Since $\{T(v_1), \ldots, T(v_m)\}$ is linearly independent, $a_1 = \cdots = a_m = 0$. So $\{v_1, \ldots, v_m\}$ is linearly independent.
+
+</Solution>
+
+**10.** If $T: V \to V$ is linear and $T^2 = T \circ T = T$, then $V = \text{null}\,T \oplus \text{range}\,T$.
+
+<Solution>
+
+**true.** (Such a map is called a *projection*.)
+
+**existence of decomposition.** For any $v \in V$: write $v = (v - T(v)) + T(v)$. Then $T(v - T(v)) = T(v) - T(T(v)) = T(v) - T(v) = \mathbf{0}$ (using $T^2 = T$). So $v - T(v) \in \text{null}\,T$ and $T(v) \in \text{range}\,T$.
+
+**uniqueness (direct sum condition).** Suppose $w \in \text{null}\,T \cap \text{range}\,T$. Then $w = T(u)$ for some $u$, and $T(w) = \mathbf{0}$. So $\mathbf{0} = T(w) = T(T(u)) = T^2(u) = T(u) = w$. Thus $\text{null}\,T \cap \text{range}\,T = \{\mathbf{0}\}$.
+
+</Solution>

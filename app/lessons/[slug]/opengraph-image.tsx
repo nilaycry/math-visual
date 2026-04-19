@@ -43,7 +43,7 @@ const LESSONS: Record<string, OGData> = {
     title: "dot product is matrix multiplication",
     description: "or is it the other way round",
     tag: "linear algebra",
-    accent: "#7F77DD",
+    accent: "#E8A020",
   },
 };
 
@@ -51,7 +51,7 @@ const FALLBACK: OGData = {
   title: "math visual",
   description: "",
   tag: "math",
-  accent: "#7F77DD",
+  accent: "#E8A020",
 };
 
 export default function Image({ params }: { params: { slug: string } }) {

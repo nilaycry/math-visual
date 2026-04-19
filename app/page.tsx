@@ -177,7 +177,7 @@ export default function HomePage() {
             <SmoothScrollLink
               targetId="explore"
               style={{
-                color: "#7F77DD",
+                color: "#E8A020",
                 textDecoration: "none",
                 fontSize: 14,
                 fontWeight: 400,

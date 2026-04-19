@@ -1,0 +1,109 @@
+---
+title: "bases"
+description: "an independent spanning list, and why it gives every vector a unique address"
+week: 4
+---
+
+the previous note ended with a process: take a spanning list, remove redundant vectors
+one by one until none remain. what you're left with is a list that spans $V$ and has no
+redundancy. that object deserves a name.
+
+---
+
+### the definition
+
+> **Definition.** A **basis** of $V$ is a list of vectors in $V$ that is linearly
+> independent and spans $V$.
+
+that's it. two conditions, both of which we already understand. a basis is the leanest
+possible description of a space: enough vectors to reach everything, no vector wasted.
+
+what I found surprising at first is that there's no uniqueness in the definition. a
+vector space can have many different bases. $\mathbb{R}^2$ has the standard basis
+$(1,0), (0,1)$, but also $(1,1), (1,-1)$, and infinitely many others. the definition
+doesn't single out a preferred one.
+
+what *is* unique is the size. every basis of a given finite-dimensional space has the
+same number of vectors. but that's the next note. first, let's understand why bases
+are useful at all.
+
+---
+
+### unique representation
+
+> **Theorem.** A list $v_1, \ldots, v_n$ is a basis of $V$ if and only if every vector
+> $v \in V$ can be written as
+>
+> $$v = a_1 v_1 + \cdots + a_n v_n$$
+>
+> for a **unique** choice of scalars $a_1, \ldots, a_n \in \mathbf{F}$.
+
+existence of such a representation is just spanning: if the list spans $V$, every vector
+is some linear combination. the interesting half is uniqueness, and that's where
+independence earns its place.
+
+suppose $v = a_1 v_1 + \cdots + a_n v_n$ and also $v = b_1 v_1 + \cdots + b_n v_n$.
+subtract the two expressions:
+
+$$\mathbf{0} = (a_1 - b_1) v_1 + \cdots + (a_n - b_n) v_n$$
+
+since the list is linearly independent, the only solution is $a_i - b_i = 0$ for all
+$i$, meaning $a_i = b_i$. the two representations were the same all along.
+
+pause here. this is what coordinates actually are. when you write a vector in
+$\mathbb{R}^3$ as $(2, -1, 5)$, you're recording the unique scalars in its expansion
+relative to the standard basis. the basis is what makes coordinates meaningful: without
+a basis, a vector has no natural "address." with one, every vector has exactly one.
+
+---
+
+### examples
+
+**the standard basis of $\mathbb{R}^n$.** the list $e_1, \ldots, e_n$ where $e_k$ has a
+$1$ in position $k$ and $0$s elsewhere. it spans $\mathbb{R}^n$ since any $(x_1, \ldots,
+x_n) = x_1 e_1 + \cdots + x_n e_n$, and it's independent since that representation is
+clearly unique. the scalars are just the coordinates themselves.
+
+**another basis of $\mathbb{R}^2$.** the list $(1, 1), (1, -1)$ is also a basis. to
+check: $(a+b, a-b) = (x, y)$ has the unique solution $a = (x+y)/2$, $b = (x-y)/2$ for
+any $(x,y)$. different basis, different coordinates, same space.
+
+**polynomials.** in $\mathcal{P}_m(\mathbf{F})$, the list $1, x, x^2, \ldots, x^m$ is a
+basis. any polynomial of degree at most $m$ is uniquely expressed as $a_0 + a_1 x + \cdots + a_m x^m$. the coefficients are exactly the coordinates relative to this basis.
+
+---
+
+### a non-example
+
+$(1,0), (0,1), (1,1)$ in $\mathbb{R}^2$ spans the space but is not a basis, because it's
+linearly dependent. the vector $(2, 2)$ has more than one representation:
+
+$$2(1,0) + 2(0,1) + 0(1,1) = (2,2)$$
+$$1(1,0) + 1(0,1) + 1(1,1) = (2,2)$$
+
+adding a redundant vector breaks uniqueness. independence isn't just a nicety. without
+it, the "address" a basis is supposed to provide stops being well-defined.
+
+---
+
+### every finite-dimensional space has a basis
+
+a **finite-dimensional** vector space is one that is spanned by some finite list of
+vectors. given any such spanning list, the linear dependence lemma from the previous note
+says you can remove vectors one at a time, without shrinking the span, until the list is
+independent. what remains is a basis.
+
+so any finite-dimensional space has at least one basis. this isn't obvious: the
+definition of basis is a conjunction of two conditions, and it takes an argument to show
+the conjunction is always satisfiable.
+
+---
+
+### what the definition leaves out
+
+a space can have many bases. what's not yet clear is whether they all have to be the same
+length. they do, and that common length is the **dimension** of $V$.
+
+proving this requires showing that no independent list can be longer than any spanning
+list, a consequence of the linear dependence lemma. once you have that, dimension is
+well-defined and everything else follows.
