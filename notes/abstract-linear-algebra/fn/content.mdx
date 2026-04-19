@@ -1,69 +1,98 @@
 ---
-title: "what axioms actually do"
-description: "why we assume commutativity here when you proved it in discrete math"
+title: "before we start: what discrete math gives you"
+description: "the proof toolkit you'll use constantly, and what to do when you're stuck"
 week: 0
 ---
 
-if you've taken a course that builds mathematics from the ground up, something about the
-vector space axioms might feel off. in that setting, commutativity of addition isn't
-assumed. it's proved. you define addition on $\mathbb{N}$ recursively using the Peano
-axioms, then prove $a + b = b + a$ by induction. same with associativity. these are
-theorems, not starting points.
+abstract linear algebra is a proof-based course. that means the goal isn't to compute
+answers but to explain why things are true. if you've taken discrete math or an intro
+proofs course, you already have most of what you need. this note is a quick map of
+what gets used most often.
 
-so why does linear algebra just write down "commutativity: $u + v = v + u$" and move on?
-
----
-
-### two different kinds of work
-
-the confusion comes from mixing up two different levels of mathematics.
-
-at the **foundational level**, you're constructing specific objects: the natural numbers,
-the integers, the reals. you start from almost nothing (the Peano axioms, or set theory)
-and build up. commutativity of addition on $\mathbb{N}$ is a fact you derive about a
-specific, concretely defined thing. it's a theorem because you had to earn it.
-
-at the **structural level**, you're doing something different. you're not constructing a
-specific object. you're defining a class of objects by listing the properties you want
-them to have. the vector space axioms don't make a claim about the world. they say: I'm
-interested in studying structures that satisfy these eight rules. commutativity is a
-requirement, not a theorem, because we're defining what counts as a vector space.
-
-the axioms are a filter, not a foundation.
+if you haven't seen formal proofs before, this is the hardest part of the adjustment.
+not the linear algebra itself, but the shift from "get the right number" to "write a
+convincing argument." that shift takes time. it took me a while.
 
 ---
 
-### what happens when you check an example
+### how proofs actually work
 
-when you verify that $\mathbb{R}^n$ is a vector space, you're back to proving. you have
-a specific construction: lists of real numbers with componentwise operations. you then
-check each axiom. for commutativity:
+a proof is an argument that leaves no gaps. you start from things you know are true
+and apply rules that preserve truth until you reach what you wanted to show. every step
+has to be justified, either by a definition, a previously proved theorem, or a basic
+logical rule.
 
-$$(x_1, \ldots, x_n) + (y_1, \ldots, y_n) = (x_1 + y_1, \ldots, x_n + y_n) = (y_1 + x_1, \ldots, y_n + x_n)$$
+in practice, most proofs in this course use one of four patterns.
 
-that last step uses commutativity of addition in $\mathbb{R}$, which was established
-at the foundational level. so the proof exists. it was done elsewhere, once, for $\mathbb{R}$, and now we're allowed to use it.
+**direct proof.** assume the hypothesis, then derive the conclusion. the default. use
+it unless you have a reason not to.
 
-the same happens for every example. polynomials, matrices, functions. for each one, you
-prove the axioms hold by reducing each check to something already known.
+**proof by contrapositive.** to show "if $P$ then $Q$," prove instead "if not $Q$ then
+not $P$." the two statements are logically equivalent, so this is not cheating. it
+helps when the contrapositive is easier to work with than the original.
+
+**proof by contradiction.** assume the thing you want to prove is false, then derive a
+contradiction. this tells you the assumption was wrong, so the original statement must
+be true. useful when you don't know how to construct the conclusion directly, but you
+know what goes wrong if it fails.
+
+**induction.** for statements about natural numbers. prove the base case, then prove
+that if the statement holds for $n$ it holds for $n+1$. the two together cover every
+natural number.
 
 ---
 
-### what this buys you
+### sets and functions
 
-once you've verified that some object is a vector space, every theorem you prove about
-abstract vector spaces applies to it automatically. you don't re-prove anything.
+these come up constantly, so the notation should feel automatic.
 
-I find this the most compelling reason for the abstraction. you prove a theorem once,
-in full generality, from just the eight axioms. that theorem is then simultaneously a
-fact about $\mathbb{R}^n$, about polynomials, about continuous functions, about every
-other vector space you'll ever meet. the filter is what gives you the leverage.
+$A \subseteq B$ means every element of $A$ is also in $B$. to prove this, take an
+arbitrary element of $A$ and show it's in $B$. to prove $A = B$, prove $A \subseteq B$
+and $B \subseteq A$.
+
+a **function** $f: A \to B$ assigns to each element of $A$ exactly one element of $B$.
+three properties matter in this course:
+
+- **injective** (one-to-one): $f(x) = f(y)$ implies $x = y$. different inputs give
+  different outputs.
+- **surjective** (onto): for every $b \in B$, there exists $a \in A$ with $f(a) = b$.
+  every output is achieved.
+- **bijective**: both. injective and surjective together. this is what you need for
+  a function to have an inverse.
+
+the standard proof that $f$ is injective: assume $f(x) = f(y)$, then derive $x = y$.
+for surjective: take an arbitrary $b \in B$, construct an $a$ with $f(a) = b$.
 
 ---
 
-### the short answer
+### quantifiers
 
-in discrete math, commutativity was a claim about a specific object that had to be
-proved. in linear algebra, it's a requirement on whatever you're calling a vector space.
-when you check that $\mathbb{R}^n$ qualifies, you do prove it, using the commutativity
-of $\mathbb{R}$ that was already established. the proof didn't disappear. it's upstream.
+"for all" and "there exists" are everywhere in definitions and theorems. mixing them
+up is the most common source of confusion.
+
+$\forall x \in S, P(x)$ means $P(x)$ is true for every element of $S$. to prove this,
+take an arbitrary $x$ and show $P(x)$ holds without assuming anything special about $x$.
+
+$\exists x \in S, P(x)$ means at least one element of $S$ satisfies $P$. to prove this,
+find one. exhibit it explicitly if you can, or argue it must exist.
+
+the negation of $\forall x, P(x)$ is $\exists x, \neg P(x)$. the negation of
+$\exists x, P(x)$ is $\forall x, \neg P(x)$. this matters when you're writing a proof
+by contradiction.
+
+---
+
+### when you're stuck
+
+most of the time, being stuck means you haven't looked carefully enough at the
+definitions. if you're trying to prove something about a vector space, write out every
+axiom. if you're trying to prove something about a linear map, write out the definition
+of linearity. the proof often falls out directly.
+
+if it doesn't, try a small example. pick specific vectors, specific scalars. see what
+the statement is actually saying in a case you can check by hand. then ask why it's
+true in that case, and whether that reason generalizes.
+
+the other thing: a proof doesn't have to be elegant on the first try. write the rough
+argument, make sure it's correct, then clean it up. the version you hand in and the
+version you first wrote are usually very different.
