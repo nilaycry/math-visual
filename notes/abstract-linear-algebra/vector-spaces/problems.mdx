@@ -9,7 +9,7 @@ week: 1
 
 <Solution>
 
-**the move.** these are non-standard operations, so check all eight axioms from scratch. the natural hint is that taking $\log$ of coordinates turns multiplication into addition and exponentiation into scaling — so this space is secretly isomorphic to $\mathbb{R}^2$ with standard operations.
+**the move.** these are non-standard operations, so check all eight axioms from scratch. the natural hint is that taking $\log$ of coordinates turns multiplication into addition and exponentiation into scaling, so this space is secretly isomorphic to $\mathbb{R}^2$ with standard operations.
 
 **the key observation.** the zero vector is $(1, 1)$, since $(x, y) \oplus (1, 1) = (x \cdot 1, y \cdot 1) = (x, y)$. the additive inverse of $(x, y)$ is $(1/x, 1/y)$, since their product is $(1, 1)$.
 
@@ -21,7 +21,7 @@ week: 1
 
 <Solution>
 
-**the move.** try the axiom $1 \cdot v = v$ immediately — this is a fast check for broken scalar multiplication.
+**the move.** try the axiom $1 \cdot v = v$ immediately. this is a fast check for broken scalar multiplication.
 
 $1 \cdot (0, 1) = (1 \cdot 0, 0) = (0, 0) \neq (0, 1)$. The multiplicative identity axiom fails. Not a vector space.
 
@@ -115,7 +115,7 @@ For each statement, say whether it is true or false and give a proof or countere
 
 <Solution>
 
-**false.** A vector space over $\mathbb{C}$ requires scalar multiplication $\mathbb{C} \times V \to V$. But $\mathbb{R}^2$ has only 2 real dimensions. As a $\mathbb{C}$-vector space, any nonzero space has even real dimension (since $\mathbb{C} \cong \mathbb{R}^2$ as real vector spaces). Specifically: $\mathbb{R}^2$ has real dimension 2, so if it were a $\mathbb{C}$-vector space, it would have complex dimension 1. But then $i \cdot (1, 0)$ must be some element of $\mathbb{R}^2$, say $(a, b)$. Then $i \cdot (a, b) = i \cdot (i \cdot (1, 0)) = i^2 \cdot (1, 0) = -(1, 0) = (-1, 0)$. But also $i \cdot (a, b)$ must be the $\mathbb{C}$-scalar-multiple of $(a,b)$ by $i$, which lands in the same complex line as $(1,0)$ — requiring $(a,b)$ and $(-1,0)$ to lie on that complex line, eventually forcing $a^2 + b^2 = 1$ and $b = 0$, so $(a,b) = (\pm 1, 0)$. But then $i \cdot (1,0) = (1, 0)$ or $(-1, 0)$, neither of which satisfies $i \cdot (i \cdot v) = -v$ consistently. The structure breaks down.
+**false.** A vector space over $\mathbb{C}$ requires scalar multiplication $\mathbb{C} \times V \to V$. But $\mathbb{R}^2$ has only 2 real dimensions. As a $\mathbb{C}$-vector space, any nonzero space has even real dimension (since $\mathbb{C} \cong \mathbb{R}^2$ as real vector spaces). Specifically: $\mathbb{R}^2$ has real dimension 2, so if it were a $\mathbb{C}$-vector space, it would have complex dimension 1. But then $i \cdot (1, 0)$ must be some element of $\mathbb{R}^2$, say $(a, b)$. Then $i \cdot (a, b) = i \cdot (i \cdot (1, 0)) = i^2 \cdot (1, 0) = -(1, 0) = (-1, 0)$. But also $i \cdot (a, b)$ must be the $\mathbb{C}$-scalar-multiple of $(a,b)$ by $i$, which lands in the same complex line as $(1,0)$, requiring $(a,b)$ and $(-1,0)$ to lie on that complex line, eventually forcing $a^2 + b^2 = 1$ and $b = 0$, so $(a,b) = (\pm 1, 0)$. But then $i \cdot (1,0) = (1, 0)$ or $(-1, 0)$, neither of which satisfies $i \cdot (i \cdot v) = -v$ consistently. The structure breaks down.
 
 (Concisely: $\mathbb{R}^2$ over $\mathbb{C}$ would require $i \cdot v$ to be defined for every $v$, but then $i^2 \cdot v = -v$ and $|i|^2 = 1$ force the norm to behave like a complex modulus, which is impossible on $\mathbb{R}^2$ without leaving $\mathbb{R}^2$. No consistent assignment works.)
 

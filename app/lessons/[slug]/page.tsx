@@ -15,6 +15,9 @@ const BackpropSketch = dynamic(() => import("@/components/sketches/BackpropSketc
 const BackpropTrainSketch = dynamic(() => import("@/components/sketches/BackpropTrainSketch"), { ssr: false });
 const NullSpaceSketch = dynamic(() => import("@/components/sketches/NullSpaceSketch"), { ssr: false });
 const GradientFlowSketch = dynamic(() => import("@/components/sketches/GradientFlowSketch"), { ssr: false });
+const LinearModelSketch = dynamic(() => import("@/components/sketches/LinearModelSketch"), { ssr: false });
+const NonLinearSketch = dynamic(() => import("@/components/sketches/NonLinearSketch"), { ssr: false });
+const ResNetSketch = dynamic(() => import("@/components/sketches/ResNetSketch"), { ssr: false });
 
 const components = {
   FourierSketch,
@@ -26,6 +29,9 @@ const components = {
   BackpropTrainSketch,
   NullSpaceSketch,
   GradientFlowSketch,
+  LinearModelSketch,
+  NonLinearSketch,
+  ResNetSketch,
 };
 
 export async function generateStaticParams() {
@@ -71,7 +77,7 @@ export default async function LessonPage({
   // Find prev/next — only within the same type (lessons don't link to connections and vice versa)
   const allLessons = getAllLessonSlugs()
     .map((s) => getLessonBySlug(s))
-    .filter((l): l is LessonMeta => l !== undefined && l.lessonType === lesson.lessonType);
+    .filter((l): l is LessonMeta => l !== undefined && l.lessonType === lesson.lessonType && l.subject === lesson.subject);
   const currentIndex = allLessons.findIndex((l) => l.slug === params.slug);
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;

@@ -2,10 +2,10 @@
 title: "which way is downhill"
 description: "the geometry behind how machines learn"
 tags: ["optimization", "calculus", "machine learning"]
-color: "from-emerald-500 to-cyan-500"
+color: "from-zinc-400 to-zinc-600"
 icon: "⛰️"
-accent: "#5DCAA5"
-displayTag: "optimization"
+accent: "#8c8c8c"
+displayTag: "PART 2: OPTIMIZATION"
 date: "2026-04-13"
 related:
   - slug: "backpropagation"
@@ -15,7 +15,7 @@ related:
 import GradientSketch from '@/components/sketches/GradientSketch'
 import NonConvexSketch from '@/components/sketches/NonConvexSketch'
 
-explanations usually start with the update rule. i think that's backwards. the geometry is simpler, and once you see it, the formula becomes obvious rather than arbitrary.
+explanations usually start with the update rule. I think that's backwards. the geometry is simpler, and once you see it, the formula becomes obvious rather than arbitrary.
 
 ---
 
@@ -40,15 +40,24 @@ it barely moves. at 0.35 it overshoots and oscillates.
 
 the gradient is the vector of partial derivatives:
 
-<div className="math-highlight">∇f(x, y) = [ ∂f/∂x, ∂f/∂y ]</div>
+<div className="math-highlight">∇f(x₀) = [ ∂f/∂x, ∂f/∂y ] &nbsp;&nbsp;&nbsp; (evaluated at x₀)</div>
 
-it points in the direction of steepest ascent. if you think about what vector would point uphill most steeply and ask what its components must be, you recover this formula. the update rule just goes the other way:
+it points in the direction of steepest ascent. but why does subtracting it guarantee we move downhill? 
 
-<div className="math-highlight">x_n+1 = x_n − α · ∇f(x_n)</div>
+stop and think about what a derivative actually is. it is a local linear approximation. if you are at a point x₀, the value of the function at a nearby point x can be approximated by a first-order Taylor expansion:
 
-α is the learning rate. it controls how far you step in the direction of −∇f each iteration. too small and convergence crawls; too large and you overshoot the valley entirely.
+<div className="math-highlight">f(x) ≈ f(x₀) + ∇f(x₀) · (x − x₀)</div>
 
-how large is "too large" depends on the curvature of f at that point. the upper bound on α is set by the largest [eigenvalue](/lessons/eigen) of the Hessian, the matrix of second derivatives (I think this connection to linear algebra is fascinating). high curvature means smaller steps. that's why the same learning rate that works on a gentle bowl breaks on a sharp one.
+we want to pick a new point x that makes f(x) strictly less than f(x₀). look at the equation. to guarantee the result is smaller, we must make the term `∇f(x₀) · (x − x₀)` strictly negative.
+
+how do you make a dot product as negative as possible? you force the two vectors to point in exactly opposite directions. so the step vector (x − x₀) must be exactly the negative of the gradient. 
+
+<div className="math-highlight">x − x₀ = −α ∇f(x₀)</div>
+<div className="math-highlight">x = x₀ − α ∇f(x₀)</div>
+
+this is the update rule for gradient descent. it is not just a heuristic; it is the mathematical consequence of locally approximating the space as flat, and taking the optimal step strictly within that approximation.
+
+this also completely justifies the learning rate, α. the Taylor expansion is only an approximation. it only holds very close to x₀. if you take a massive step (a huge α), you walk right off the edge of the approximation, and the math no longer guarantees you went down. the learning rate bounds your step strictly to the radius where the linear geometry is actually trustworthy.
 
 ---
 

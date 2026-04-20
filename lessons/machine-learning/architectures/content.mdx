@@ -1,0 +1,69 @@
+---
+title: "architectures for depth"
+description: "the engineering that made deep networks actually train"
+tags: ["machine learning", "deep learning"]
+displayTag: "PART 6: DEEP ARCHITECTURES"
+color: "from-zinc-400 to-zinc-600"
+accent: "#8c8c8c"
+icon: "🏗️"
+date: "2026-04-17"
+related:
+  - slug: "gradient-flow"
+    note: "the mechanics of vanishing gradients that these architectures solve"
+---
+
+import ResNetSketch from '@/components/sketches/ResNetSketch'
+
+shifting to ReLU solved the local derivative problem, guaranteeing that local gradients would not strictly vanish. but gradients can still explode, and successive layers can learn severely conflicting shifts. 
+
+training a network with hundreds of layers requires more than swapping the activation function. it requires explicit architectural pathways designed to keep the computation mathematically stable.
+
+---
+
+### batch normalization
+
+in a deep network, layer 50 depends strictly on the outputs of layer 49. but as layer 49 updates its weights during training, its output distribution shifts. layer 50 is constantly adjusting to a moving target. 
+
+furthermore, if a layer outputs extremely large values, they push subsequent non-linearities into saturation or force gradients to explode deeper in the chain. 
+
+**batch normalization** manually arrests this drift. after a linear layer, the batch norm operation collects the outputs for the current batch, computes their mean and variance, and forcibly standardizes them to a mean of zero and variance of one.
+
+<div className="math-highlight">x̂ = (x − μ) / √(σ² + ε)</div>
+
+it pins the activations so they remain centered in the regime where derivatives flow cleanly. the network is then provided two learned parameters (a multiplier γ and a shift β) to allow it to un-normalize the data later if the optimization requires it. this approach guarantees stability by default.
+
+---
+
+### residual connections (ResNets)
+
+even with stable activations, scaling depth introduced an unexpected failure: arbitrarily deep networks (e.g., 100 layers) strictly performed worse on training data than shallower networks (e.g., 20 layers). 
+
+mathematically, this is anomalous. the 100-layer network strictly contains the 20-layer network within it. the optimizer could theoretically set the first 20 layers to match the shallow network, and force the remaining 80 layers to act as an identity operation (f(x) = x). 
+
+but gradient descent routinely failed to find that solution. forcing 80 layers of matrices and non-linearities to precisely mimic a lossless pass-through is incredibly difficult to learn from random initializations.
+
+the structural fix is **residual connections**. instead of forcing the block to learn the complete transformation, a "skip path" is added that bypasses the block and carries the input directly into the output:
+
+<div className="math-highlight">y = f(x) + x</div>
+
+now, the internal block f(x) does not have to learn the full mapping. it solely learns the *residual*—the necessary adjustment to x. 
+
+if the optimal operation is to do nothing, the optimizer simply drives the weights of f(x) to zero. f(x) vanishes, and the equation collapses cleanly to y = 0 + x. the identity function operates as the default assumption rather than a complex target.
+
+skip connections additionally provide an unobstructed highway for the gradient to flow backward during backpropagation, bypassing blocks that might constrict it. this single architectural change permitted networks to scale to thousands of layers seamlessly.
+
+<div className="not-prose my-8">
+  <ResNetSketch />
+</div>
+
+---
+
+### bounded initialization
+
+if you initialize a network with weights that are too large, the first forward pass throws the activations into extreme ranges. if the weights are too small, the signal vanishes to zero before the first backward pass begins. 
+
+initialization cannot be uniformly random. the variance must be specifically bounded.
+
+formulas like **Kaiming Initialization** exist specifically to ensure the variance of a layer's outputs exactly matches the variance of its inputs. this keeps the scale of the arithmetic strictly level across an arbitrary number of layers. 
+
+these architectures are not mathematically inevitable. they are precise engineering constraints designed specifically to guard against the points where pure gradient descent collapses under high dimensionality.

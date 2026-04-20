@@ -1,52 +1,49 @@
 ---
-title: "Fourier Series"
-description: "Watch how simple sine waves combine to build any shape — from smooth curves to sharp square waves."
-tags: ["Signal Processing", "Trigonometry", "Series"]
-color: "from-purple-500 to-blue-500"
+title: "fourier series"
+description: "how simple sine waves combine to build any shape, from smooth curves to sharp corners"
+tags: ["signal processing", "machine learning"]
+displayTag: "PART 7: SIGNAL PROCESSING"
+color: "from-zinc-400 to-zinc-600"
+accent: "#8c8c8c"
 icon: "〰️"
-draft: true
+date: "2026-04-18"
+related: []
 ---
 
 import FourierSketch from '@/components/sketches/FourierSketch'
 
-## What is a Fourier Series?
+one of the most surprising ideas in mathematics is that any periodic function, no matter how jagged or wild, can be built by simply adding up sine and cosine waves. this is the core of the fourier series. 
 
-One of the most beautiful ideas in mathematics is that **any periodic function** — no matter how jagged or wild — can be built by simply *adding up sine and cosine waves*. This is the core insight of the **Fourier series**, named after the French mathematician Joseph Fourier.
+think of it like mixing audio frequencies. a pure tone is a single sine wave, but a complex sound like a human voice is a sum of many frequencies at different volumes. what's remarkable is that this principle works for any repeating pattern.
 
-Think of it like mixing audio frequencies: a pure tone is a single sine wave, but a complex sound (like a violin or a human voice) is a sum of many frequencies at different volumes. Fourier showed that the same principle works for *any* repeating pattern.
+---
 
-## Building a Square Wave
+### building a square wave
 
-A square wave alternates instantly between +1 and −1 — it has sharp, discontinuous corners that seem impossible to capture with smooth sine functions. Yet Fourier's formula says:
+a square wave alternates instantly between +1 and −1. it has sharp corners that seem impossible to capture with smooth curves. yet the formula says:
 
-<div className="math-highlight">f(t) = (4/π) · [ sin(t) + sin(3t)/3 + sin(5t)/5 + sin(7t)/7 + … ]</div>
+<div className="math-highlight">f(t) = (4/π) [ sin(t) + sin(3t)/3 + sin(5t)/5 + ... ]</div>
 
-Each term adds an **odd harmonic** — a sine wave whose frequency is an odd multiple of the fundamental. As you add more terms, the sum gets closer and closer to a perfect square wave.
+each term adds an odd harmonic, a sine wave whose frequency is an odd multiple of the fundamental. as you add more terms, the sum pulls tighter and tighter into a perfect square wave.
 
-### Try It: Interactive Fourier Visualizer
+---
 
-The visualization below shows epicycles (rotating circles) that trace the Fourier approximation. Drag the **Number of Terms** slider to see how adding more harmonics sharpens the wave.
+### the visualization
+
+the interactive below traces the approximation using epicycles. each rotating circle represents one term in the series. its radius is given by the coefficient, and it rotates at that harmonic frequency. the tip of the last circle traces out the sum.
+
+drag the slider to add more terms. watch how adding more harmonics sharpens the square wave.
 
 <div className="not-prose my-8">
-  {FourierSketch}
+  <FourierSketch />
 </div>
 
-## Why Epicycles?
+with 1 term, you get a pure sine wave. by 5 terms, the square shape is recognizable. crank it to 30 and you'll notice the gibbs phenomenon: the tiny overshoots near the corners never fully disappear, no matter how many terms you add. it is an unavoidable consequence of building jump discontinuities out of continuous waves.
 
-Each rotating circle represents one term in the Fourier series. The radius of each circle is `4/(nπ)` where *n* is the harmonic number (1, 3, 5, …), and it rotates at frequency *n*. The tip of the last circle traces out the sum, and the trail on the right shows the waveform being produced.
+---
 
-With just **1 term**, you get a pure sine wave. With **5 terms**, the square-ish shape is already recognizable. Crank it up to **30 terms** and you can see the Gibbs phenomenon — those tiny overshoots near the corners that never fully disappear, no matter how many terms you add.
+### why it matters
 
-## The Gibbs Phenomenon
+this isn't just a mathematical trick. frequency decomposition is the foundation of digital signal processing. audio compression like MP3 throws away inaudible frequencies. JPEG compression decomposes image blocks into 2D spatial frequencies.
 
-Even with infinitely many terms, the Fourier series overshoots by about **9%** at each discontinuity. This ripple is called the *Gibbs phenomenon*, discovered by J. Willard Gibbs in 1899. It's not a bug in the math — it's an unavoidable consequence of approximating a jump discontinuity with continuous sine waves.
-
-## Where Fourier Series Appear
-
-- **Audio compression** — MP3 and AAC use frequency decomposition (via the related FFT) to throw away inaudible frequencies
-- **Image processing** — JPEG compression works by decomposing image blocks into cosine frequencies
-- **Signal processing** — filtering noise, analyzing vibrations, radio transmission
-- **Quantum mechanics** — wave functions are expanded in Fourier bases
-- **Heat equation** — Fourier originally developed the series to solve heat conduction problems
-
-> "Mathematics, rightly viewed, possesses not only truth, but supreme beauty — a beauty cold and austere, like that of sculpture." — Bertrand Russell
+in the context of machine learning, fourier features are increasingly used to help neural networks learn high-frequency details that standard architectures struggle to capture.

@@ -92,19 +92,20 @@ export default function MachineLearningPage() {
 
           <div style={{ maxWidth: 560 }}>
             <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#666", margin: "0 0 18px 0" }}>
-              I spent a lot of time in my ML course confused about gradient descent.
-              not because the update rule was hard to implement, but because I wanted
-              to know what it was actually doing. where is it stepping? what does the
-              loss surface look like? why does the learning rate matter so much? the
-              lectures moved past it fast and I kept getting stuck.
+              the standard introduction to machine learning is heavily algebraic. you learn the
+              update rule for gradient descent. you memorize that backpropagation is just the chain rule.
             </p>
             <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#666", margin: "0 0 18px 0" }}>
-              same with backpropagation. everyone says it&apos;s just the chain rule.
-              that&apos;s true, but it didn&apos;t help me until I saw the computation graph
-              and watched the gradients flow backward through it.
+              all of that is easy enough to implement. the problem is that you can write the code
+              flawlessly without ever knowing what is actually happening. the algebra hides the geometry.
+            </p>
+            <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#666", margin: "0 0 18px 0" }}>
+              if you don&apos;t know what a loss surface physically looks like, or how a computation
+              graph channels a gradient backwards, the math feels arbitrary. and when the network breaks,
+              you have absolutely no intuition for how to fix it.
             </p>
             <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#555", margin: 0 }}>
-              these are the pictures I wish I&apos;d had earlier.
+              these notes are the geometric anchors I couldn&apos;t find when I was learning this natively.
             </p>
           </div>
         </section>
@@ -132,7 +133,6 @@ export default function MachineLearningPage() {
                   style={{
                     backgroundColor: "rgba(255,255,255,0.025)",
                     border: "0.5px solid #1e1e1e",
-                    borderTop: `2px solid ${lesson.accent}33`,
                     borderRadius: 12,
                     padding: "20px 24px",
                     cursor: "pointer",

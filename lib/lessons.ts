@@ -9,6 +9,7 @@ export interface RelatedEntry {
 
 export interface LessonMeta {
   slug: string;
+  subject: string;
   title: string;
   description: string;
   tags: string[];
@@ -49,6 +50,7 @@ export function getAllLessons(): LessonMeta[] {
 
       results.push({
         slug,
+        subject,
         title: data.title as string,
         description: data.description as string,
         tags,

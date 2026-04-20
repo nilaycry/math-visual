@@ -34,7 +34,7 @@ call the eigenvalues λ₁ and λ₂. the singular values are their square roots
 
 <div className="math-highlight">σ₁ = √λ₁ &nbsp;&nbsp;&nbsp; σ₂ = √λ₂ &nbsp;&nbsp;&nbsp; where AᵀA vᵢ = λᵢ vᵢ</div>
 
-the eigenvectors v₁ and v₂ of AᵀA are the right singular vectors — the special input directions A sends cleanly onto the ellipse's axes. once you have them, the output directions u₁ and u₂ follow directly:
+the eigenvectors v₁ and v₂ of AᵀA are the right singular vectors, the special input directions A sends cleanly onto the ellipse's axes. once you have them, the output directions u₁ and u₂ follow directly:
 
 <div className="math-highlight">u₁ = Av₁ / σ₁ &nbsp;&nbsp;&nbsp; u₂ = Av₂ / σ₂</div>
 
@@ -52,7 +52,7 @@ the gray circle is the input. the purple ellipse is A applied to every point on 
 
 the solid arrows v₁ and v₂ are the right singular vectors. A maps v₁ to σ₁u₁ and v₂ to σ₂u₂, where u₁ and u₂ are the left singular vectors shown as dashed arrows landing on the ellipse. the specific thing to look for: v₁ and σ₁u₁ point in different directions in general, but their lengths are related by exactly σ₁. that ratio is the whole story.
 
-turn on "Σ step" to see the intermediate shape — the axis-aligned ellipse after Vᵀ and Σ but before the final U rotation. the singular values become concrete here: σ₁ and σ₂ are literally the semi-axis lengths of that intermediate ellipse, before any output rotation is applied.
+turn on "Σ step" to see the intermediate shape, the axis-aligned ellipse after Vᵀ and Σ but before the final U rotation. the singular values become concrete here: σ₁ and σ₂ are literally the semi-axis lengths of that intermediate ellipse, before any output rotation is applied.
 
 click anywhere on the unit circle to drop a vector and watch where A sends it.
 

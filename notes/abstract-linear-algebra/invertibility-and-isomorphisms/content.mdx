@@ -1,0 +1,59 @@
+---
+title: "invertibility and isomorphisms"
+description: "when maps can be undone, and why dimension is all that matters"
+week: 9
+---
+
+linear maps combine through composition. the natural next question is when that process can be seamlessly undone. if a linear map $T: V \to W$ pushes vectors from $V$ into $W$, under what conditions can we perfectly pull them back? 
+
+this is the idea of invertibility.
+
+> **Definition.** A linear map $T: V \to W$ is **invertible** if there exists a linear map $S: W \to V$ such that $ST = I_V$ and $TS = I_W$. 
+
+here, $I_V$ and $I_W$ are the identity maps on $V$ and $W$. if such a map $S$ exists, it is unique and we call it $T^{-1}$.
+
+for a function to be strictly reversible, two things must happen. first, it cannot map two different inputs to the same output, or else we wouldn't know which one to go back to. this means it must be injective. second, it must actually produce every possible output in the target space, or else we would have vectors in $W$ with nowhere to return to. this means it must be surjective.
+
+so a linear map is invertible if and only if it is both injective and surjective.
+
+### isomorphic spaces
+
+when an invertible linear map exists between two spaces, we give that map a special name.
+
+> **Definition.** An **isomorphism** is an invertible linear map. Two vector spaces are **isomorphic** if there exists an isomorphism between them.
+
+the word "isomorphic" means "same shape." when two vector spaces are isomorphic, it means they are completely indistinguishable from the perspective of linear algebra. you can translate any question in $V$ over to $W$, solve it there, and translate the answer back, without losing any information.
+
+we actually saw an isomorphism in the previous note. by picking a basis $v_1, \ldots, v_n$ for $V$, we can map every abstract vector in $V$ to an $n$-tuple of coordinates in $\mathbf{F}^n$. this coordinate mapping is itself an isomorphism. it faithfully preserves vector addition and scalar multiplication. this means any $n$-dimensional space $V$ is functionally identical to $\mathbf{F}^n$.
+
+### an example and a non-example
+
+the mapping $T: \mathcal{P}_2(\mathbf{F}) \to \mathbf{F}^3$ defined by $T(a + bx + cx^2) = (a, b, c)$ is an isomorphism. it is injective because the only way the tuple $(a, b, c)$ can be the zero vector is if the polynomial was $0 + 0x + 0x^2$. it is surjective because any point $(a, b, c)$ in $\mathbf{F}^3$ plainly comes from the polynomial $a + bx + cx^2$. 
+
+as a non-example, the derivative operator $D: \mathcal{P}_2(\mathbf{F}) \to \mathcal{P}_2(\mathbf{F})$ given by $D(p) = p'$ is not an isomorphism. its null space contains all constant polynomials, so it is not injective. its range is only the space of linear polynomials, so it is not surjective. you cannot uniquely undo a derivative without more information, which is exactly why anti-derivatives always come with an unknown integration constant.
+
+### the classification theorem
+
+this leads to what I find to be one of the most remarkable classification theorems in algebra.
+
+> **Theorem.** Two finite-dimensional vector spaces over the same field are isomorphic if and only if they have the same dimension.
+
+this is a sweeping statement. dimension is exactly the amount of "linear algebraic information" a space holds. 
+
+our example mapping polynomials to $\mathbf{F}^3$ is just one instance of this. despite polynomials and tuples looking like completely different objects, linear algebra cannot tell them apart because they both have dimension $3$. there is really only one vector space of any given finite dimension, up to the names you give the vectors. 
+
+### a symmetry for square matrices
+
+returning to the fundamental theorem of linear maps, we know that $\dim V = \dim\,\text{null}\,T + \dim\,\text{range}\,T$. 
+
+suppose $T$ maps a finite-dimensional space $V$ to itself, or to another space of the exact same dimension $n$. if $T$ is injective, then its null space has dimension zero. the fundamental theorem then forces the range to have dimension $n$, meaning the map is also surjective.
+
+the argument runs backwards, too. if $T$ is surjective, its range has dimension $n$. the fundamental theorem forces the null space to have dimension zero, meaning it is injective.
+
+so for maps between spaces of the same dimension, injectivity and surjectivity are completely equivalent. you either have both, or neither. this gives a beautiful property for $n \times n$ square matrices: a square matrix is invertible if and only if its null space contains only the zero vector.
+
+### what this doesn't cover yet
+
+we now have a good understanding of maps between potentially different spaces. but the real structure of linear algebra comes alive when we restrict our attention to maps from a space completely back to itself, called operators.
+
+an operator $T: V \to V$ mixes a space with itself. within that mixing, there are often special directions that only stretch or shrink by a scalar factor. these directions and their scaling factors completely expose the geometry of the transformation. finding them is the central problem of the subject.

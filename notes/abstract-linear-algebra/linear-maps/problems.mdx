@@ -17,7 +17,7 @@ week: 6
 
 <Solution>
 
-**the move.** check additivity and homogeneity directly for (a) and (c). for (b) and (d), look for the fastest kill — checking $T(\mathbf{0})$ rules out (b) in one line.
+**the move.** check additivity and homogeneity directly for (a) and (c). for (b) and (d), look for the fastest kill: checking $T(\mathbf{0})$ rules out (b) in one line.
 
 **the key observation.** a linear map must send $\mathbf{0}$ to $\mathbf{0}$. this kills (b) immediately. for (d), absolute value strips sign, so homogeneity fails as soon as you try a negative scalar.
 
@@ -65,7 +65,7 @@ dimension 2.
 
 **the move.** three-condition subspace check on each.
 
-**the key observation.** both proofs use the same checklist. the only tool is linearity of $T$ — it's what lets you pull addition and scaling through.
+**the key observation.** both proofs use the same checklist. the only tool is linearity of $T$. it's what lets you pull addition and scaling through.
 
 **null space.** $T(\mathbf{0}) = \mathbf{0}$, so $\mathbf{0} \in \text{null}\,T$. if $T(u) = T(v) = \mathbf{0}$: $T(u+v) = T(u)+T(v) = \mathbf{0}$ and $T(av) = aT(v) = \mathbf{0}$. closed.
 
@@ -91,7 +91,7 @@ dimension 2.
 
 <Solution>
 
-**the move.** direct computation — unpack the composition and apply linearity of $S$ then $T$.
+**the move.** direct computation. unpack the composition and apply linearity of $S$ then $T$.
 
 **the key observation.** linearity chains: $S$ handles the first step (inputs into $V$), then $T$ handles the second (outputs into $W$). no tricks needed, just expand both conditions.
 
@@ -139,7 +139,7 @@ check: $T(1, 2) = (1 - 1, 0, 0) = (0,0,0)$. and $T(1, 0) = (1, 0, 0) \neq \mathb
 
 **the move.** apply rank-nullity: $\dim\,\text{null}\,T + \dim\,\text{range}\,T = \dim\,\mathbf{F}^4 = 4$. surjective means $\text{range}\,T = \mathbf{F}^2$, so $\dim\,\text{range}\,T = 2$.
 
-**the key observation.** surjectivity pins down $\dim\,\text{range}\,T$ exactly. rank-nullity then leaves no room for choice — the null space dimension is forced to exactly one value.
+**the key observation.** surjectivity pins down $\dim\,\text{range}\,T$ exactly. rank-nullity then leaves no room for choice. the null space dimension is forced to exactly one value.
 
 therefore $\dim\,\text{null}\,T = 4 - 2 = 2$. the dimension of the null space is exactly 2, with no other possibility.
 
@@ -159,7 +159,7 @@ For each statement, say whether it is true or false and give a proof or countere
 
 **the move.** suppose a linear combination of the $v_i$ is zero, apply $T$, then use linear independence of the images.
 
-**the key observation.** $T$ can collapse vectors — that's what injectivity is about. but if the outputs $T(v_i)$ are already independent, there's no room to collapse: any nontrivial combination of the $v_i$ maps to a nontrivial combination of the $T(v_i)$, which can't be zero.
+**the key observation.** $T$ can collapse vectors. that's what injectivity is about. but if the outputs $T(v_i)$ are already independent, there's no room to collapse: any nontrivial combination of the $v_i$ maps to a nontrivial combination of the $T(v_i)$, which can't be zero.
 
 **proof.** suppose $a_1 v_1 + \cdots + a_m v_m = \mathbf{0}$. applying $T$: $a_1 T(v_1) + \cdots + a_m T(v_m) = T(\mathbf{0}) = \mathbf{0}$. since $\{T(v_1), \ldots, T(v_m)\}$ is linearly independent, $a_1 = \cdots = a_m = 0$. so $\{v_1, \ldots, v_m\}$ is linearly independent.
 
@@ -173,7 +173,7 @@ For each statement, say whether it is true or false and give a proof or countere
 
 **the move.** show every $v$ decomposes as a sum of a null-space vector and a range vector, then show $\text{null}\,T \cap \text{range}\,T = \{\mathbf{0}\}$.
 
-**the key observation.** $T^2 = T$ gives an explicit decomposition formula: write $v = (v - T(v)) + T(v)$. the condition $T^2 = T$ is exactly what makes $v - T(v)$ land in null $T$ — it forces $T(v - T(v)) = T(v) - T^2(v) = 0$.
+**the key observation.** $T^2 = T$ gives an explicit decomposition formula: write $v = (v - T(v)) + T(v)$. the condition $T^2 = T$ is exactly what makes $v - T(v)$ land in null $T$. it forces $T(v - T(v)) = T(v) - T^2(v) = 0$.
 
 **existence of decomposition.** for any $v \in V$: write $v = (v - T(v)) + T(v)$. then $T(v - T(v)) = T(v) - T(T(v)) = T(v) - T(v) = \mathbf{0}$ (using $T^2 = T$). so $v - T(v) \in \text{null}\,T$ and $T(v) \in \text{range}\,T$.
 

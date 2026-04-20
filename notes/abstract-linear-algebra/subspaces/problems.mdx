@@ -33,9 +33,9 @@ week: 2
 
 <Solution>
 
-**the move.** the first condition is linear and homogeneous — it's a subspace by the same argument as problem 1. the second involves a product, which breaks linearity.
+**the move.** the first condition is linear and homogeneous. it's a subspace by the same argument as problem 1. the second involves a product, which breaks linearity.
 
-**the key observation.** the product condition $x_1 \cdots x_n = 0$ means "at least one coordinate is zero." this describes the union of the $n$ coordinate hyperplanes $\{x_i = 0\}$. a union of subspaces is almost never a subspace — you can add a vector from one hyperplane to a vector from another and land outside both.
+**the key observation.** the product condition $x_1 \cdots x_n = 0$ means "at least one coordinate is zero." this describes the union of the $n$ coordinate hyperplanes $\{x_i = 0\}$. a union of subspaces is almost never a subspace. you can add a vector from one hyperplane to a vector from another and land outside both.
 
 **first set.** $U = \{x_1 + \cdots + x_n = 0\}$: homogeneous linear equation, same argument as problem 1. it is a subspace.
 
@@ -69,7 +69,7 @@ closure under scaling: if $u \in S$ and $a \in \mathbf{F}$, then $u \in U_\alpha
 
 <Solution>
 
-**the move.** iff proof — both directions. the hard direction is ($\Rightarrow$): assuming neither contains the other and deriving a contradiction.
+**the move.** iff proof: both directions. the hard direction is ($\Rightarrow$): assuming neither contains the other and deriving a contradiction.
 
 **the key observation.** if $u \in U \setminus W$ and $w \in W \setminus U$, and $U \cup W$ were a subspace, then $u + w \in U \cup W$. but if $u + w \in U$, then $w = (u+w) - u \in U$, contradicting $w \notin U$. and if $u + w \in W$, then $u = (u+w) - w \in W$, contradicting $u \notin W$. so $u + w$ can be in neither, breaking closure.
 
@@ -91,7 +91,7 @@ so $U \subseteq W$ or $W \subseteq U$.
 
 <Solution>
 
-**the move.** prove the three parts in order. part (c) is the "smallest" claim and is the most important — it says $U + W$ doesn't contain anything unnecessary.
+**the move.** prove the three parts in order. part (c) is the "smallest" claim and is the most important. it says $U + W$ doesn't contain anything unnecessary.
 
 **the key observation.** $U + W$ is defined as exactly the set of all vectors you can form by adding one element of $U$ to one element of $W$. any subspace containing both $U$ and $W$ must be closed under addition, so it must contain all such sums. that's (c). parts (a) and (b) are direct checks.
 
@@ -169,7 +169,7 @@ For each statement, say whether it is true or false and give a proof or countere
 
 **true.**
 
-**the move.** the three subspace conditions only reference the operations of addition and scalar multiplication. those operations are the same throughout $V$, $U$, and $W$ — subspaces inherit operations, they don't redefine them.
+**the move.** the three subspace conditions only reference the operations of addition and scalar multiplication. those operations are the same throughout $V$, $U$, and $W$. subspaces inherit operations, they don't redefine them.
 
 **proof.** $W$ satisfies the three conditions relative to $U$'s operations. since $U$ inherits its operations from $V$ (the definition requires this), $W$'s conditions hold relative to $V$'s operations too. the zero vector is the same in all three, and every sum and scalar multiple in $W$ is the same element of $V$. so $W$ is a subspace of $V$.
 
@@ -199,7 +199,7 @@ but $U_1 = \text{span}\{(1,0)\} \neq \text{span}\{(1,1)\} = U_2$.
 
 **true.**
 
-**the move.** first confirm $\{\mathbf{0}\}$ is a subspace of every subspace. then show nothing else can be — any other candidate $S$ must be a subspace of $\{\mathbf{0}\}$ itself, which forces $S = \{\mathbf{0}\}$.
+**the move.** first confirm $\{\mathbf{0}\}$ is a subspace of every subspace. then show nothing else can be. any other candidate $S$ must be a subspace of $\{\mathbf{0}\}$ itself, which forces $S = \{\mathbf{0}\}$.
 
 **proof.**
 

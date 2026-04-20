@@ -1,0 +1,51 @@
+---
+title: "on empiricism"
+description: "the gap between proving a theorem and training a model"
+tags: ["machine learning"]
+displayTag: "PREFACE"
+color: "from-zinc-400 to-zinc-600"
+accent: "#8c8c8c"
+icon: "👁️"
+date: "2026-04-11"
+related: []
+---
+
+there is a specific friction when you transition from mathematics to machine learning. in a linear algebra course, every object is precise. if you construct a basis, it works. if you prove a theorem, it is true everywhere. 
+
+machine learning uses the same objects, but the feedback loop is completely different. you don't prove a model works mathematically. you run it, and you observe whether it works empirically. 
+
+this gap between mathematical exactness and empirical results is the central friction of the field. recognizing it's there is most of what you need to navigate it.
+
+---
+
+### the limit of the neat equation
+
+in calculus, the derivative tells you how a function slopes. in neural networks, the gradient tells you the same thing. the math is identical.
+
+but in early classes, the function is something like f(x) = x². you can evaluate it everywhere and see its underlying shape. in machine learning, the function has millions of parameters. you can't visualize the structure. you only get local information: the exact slope at your current coordinate. 
+
+when a network fails to learn, it almost never fails because the math is wrong. backpropagation calculates derivatives perfectly. the chain rule never breaks. 
+
+it fails because of the structure of the space. the local derivative might shrink to zero before reaching early layers. the updates might compound and explode. the math works perfectly to compute the local step, but the local step doesn't lead to a useful global solution.
+
+---
+
+### seeing the gap
+
+when you make a mistake in an algebraic proof, you can usually trace it line by line until you find the contradiction. you know exactly where the logic broke.
+
+when you design a poor neural network architecture, the code usually still runs without errors. the loss simply flatlines. 
+
+you can't inspect the millions of individual weights to figure out why. instead, you have to look at aggregate signals. you measure the variance of the activations. you check the norm of the gradients. you look at the ratio of dead neurons. 
+
+you notice the gradients are vanishing, so you add a skip connection. you notice the activations are drifting, so you normalize the batch. you alter the structure, and you check if the aggregate signals stabilize.
+
+---
+
+### the engineering 
+
+if you look at modern deep learning through the lens of pure math, it looks messy. it seems like a collection of arbitrary tricks—batch normalization, residual connections, learning rate schedules—piled up without rigorous justification.
+
+what they actually are are geometric constraints. they are architectural decisions made specifically to force the math to stay in regimes where optimization actually works. they prevent the space from collapsing or exploding.
+
+understanding machine learning isn't just knowing the chain rule. it's about developing an intuition for an invisible loss landscape, and learning what structures are required to actually navigate it.

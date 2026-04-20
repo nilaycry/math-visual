@@ -236,7 +236,7 @@ export default function HomePage() {
                 lessons
               </span>
               <p style={{ fontSize: 13, color: "#3a3a3a", margin: 0, lineHeight: 1.6 }}>
-                interactive explorations with p5.js sketches. geometry before algebra. good for seeing the math move.
+                interactive structural anchors. building the geometric intuition before trusting the algebra.
               </p>
             </div>
             <div

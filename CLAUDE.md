@@ -55,7 +55,7 @@ const YourSketch = dynamic(() => import("@/components/sketches/YourSketch"), { s
 - Machine learning lessons: `tags: ["machine learning"]`
 - Connection notes: also tagged by subject, plus `type: "connection"` in frontmatter
 
-The `displayTag` frontmatter field sets the small label shown on the lesson card (e.g. "eigenvalues", "decomposition"). If omitted, it falls back to `tags[0]`.
+The `LessonMeta` object extracts `subject` from the parent directory name (e.g. `linear-algebra`). This property strictly isolates pagination between lessons. The `displayTag` frontmatter field sets the small label shown on the lesson card (e.g. "eigenvalues"). If omitted, it falls back to `tags[0]`.
 
 The main page counts (`app/page.tsx`) are also computed from `getAllLessons()` — no manual updating needed.
 
@@ -141,6 +141,8 @@ Write like you are explaining something to a friend who is good at math but has 
 - **No em dashes.** Use a period or a comma instead.
 - **First person where natural.** "I find this cool" or "I stared at that for a while" — not "this is an important concept"
 - **Geometry first, formula second.** Describe the picture before you write the equation.
+- **Derivations over decrees.** Never present standard algorithms or functions (like MSE or Gradient Descent) as arbitrary facts. Explicitly derive the mathematical or statistical assumptions underneath them (e.g. Gaussian noise in MLE, Taylor expansions).
+- **No flowery pop-science metaphors.** Keep it structurally rigorous. Talk about geometric constraints, dimension stretching, and non-linear compression. Drop things like "magic black box" or "folding a rubber sheet."
 - **Define symbols before using them.** Introduce a name and what it means before you drop it into a formula.
 - **Short paragraphs.** 2-4 sentences. One idea per paragraph.
 - **No bold for random phrases.** Only use `**bold**` if something would be genuinely lost without it.
@@ -179,6 +181,8 @@ Use these sparingly — one or two per lesson, at the genuinely hard steps. Not 
 | "call them σ₁ and σ₂ — these are the singular values" | "The singular values σ₁ and σ₂ are defined as..." |
 | "the ellipse axes are the directions A stretches most and least" | "The principal axes of the transformed ellipse correspond to the directions of maximum and minimum stretching." |
 | "rotation has no real eigenvectors. you can check: the discriminant is negative." | "In the case of rotation matrices, the characteristic polynomial yields complex roots, indicating the absence of real eigenvectors." |
+| "assuming Gaussian noise, maximum likelihood estimation collapses cleanly into minimizing mean squared error." | "we square the error because it punishes large mistakes and forces negatives to become positive." |
+| "the network continuously warps the bounded space." | "imagine the network stretching the space like a rubber sheet." |
 
 ### what not to do
 
