@@ -1,0 +1,106 @@
+---
+title: "matrices as linear maps in coordinates"
+description: "a matrix is not a new object. it's a way of writing down a linear map once you've chosen bases"
+week: 8
+---
+
+so far, every result about linear maps has been basis-free. we proved rank-nullity without ever writing down coordinates. but to compute anything, to actually evaluate $T$ on a vector or find the null space explicitly, you need to pick bases and write things out.
+
+a **matrix** is how you do that. it records everything about a linear map, relative to a choice of bases.
+
+---
+
+### the matrix of a linear map
+
+fix a linear map $T: V \to W$, a basis $v_1, \ldots, v_n$ of $V$, and a basis $w_1, \ldots, w_m$ of $W$.
+
+each $T(v_k)$ is a vector in $W$, so it has a unique representation in the $w$ basis:
+
+$$T(v_k) = A_{1,k}\, w_1 + A_{2,k}\, w_2 + \cdots + A_{m,k}\, w_m$$
+
+before reading the definition, try writing it yourself: you want to record where $T$ sends each basis vector of $V$. you have $n$ basis vectors, each mapping to a vector in $W$ that needs $m$ coordinates. what structure does that suggest?
+
+> **Definition.** Let $T: V \to W$ be a linear map, $v_1, \ldots, v_n$ a basis of $V$, and $w_1, \ldots, w_m$ a basis of $W$. The **matrix of $T$** with respect to these bases, denoted $\mathcal{M}(T)$, is the $m \times n$ matrix whose entry in row $j$, column $k$ is $A_{j,k}$, where
+> $$T(v_k) = A_{1,k}\, w_1 + \cdots + A_{m,k}\, w_m$$
+
+column $k$ of $\mathcal{M}(T)$ is the coordinate vector of $T(v_k)$ in the $w$ basis. the columns are the outputs.
+
+this is the thing I wish someone had told me at the start: **a matrix is always a matrix of something, with respect to something.** the same linear map has different matrices in different bases. the matrix isn't the map. it's a description of the map in a language that depends on your choice of coordinates.
+
+---
+
+### a worked example
+
+let $T: \mathbf{F}^3 \to \mathbf{F}^2$ be defined by $T(x, y, z) = (x - y,\, 2z)$.
+
+use the standard bases: $e_1 = (1,0,0)$, $e_2 = (0,1,0)$, $e_3 = (0,0,1)$ for $\mathbf{F}^3$, and $f_1 = (1,0)$, $f_2 = (0,1)$ for $\mathbf{F}^2$.
+
+compute $T$ on each basis vector:
+
+$$T(e_1) = (1, 0) = 1 \cdot f_1 + 0 \cdot f_2$$
+
+$$T(e_2) = (-1, 0) = -1 \cdot f_1 + 0 \cdot f_2$$
+
+$$T(e_3) = (0, 2) = 0 \cdot f_1 + 2 \cdot f_2$$
+
+write these as columns:
+
+$$\mathcal{M}(T) = \begin{pmatrix} 1 & -1 & 0 \\ 0 & 0 & 2 \end{pmatrix}$$
+
+to verify: take $v = (3, 1, 4)$, so $T(v) = (3 - 1, 8) = (2, 8)$. multiplying:
+
+$$\begin{pmatrix} 1 & -1 & 0 \\ 0 & 0 & 2 \end{pmatrix} \begin{pmatrix} 3 \\ 1 \\ 4 \end{pmatrix} = \begin{pmatrix} 3 - 1 + 0 \\ 0 + 0 + 8 \end{pmatrix} = \begin{pmatrix} 2 \\ 8 \end{pmatrix}$$
+
+the matrix-vector product recovers $T(v)$ in coordinates. I want to linger here, because this is the thing that confused me for longer than I'd like to admit.
+
+the row-column dot product formula is usually taught as a rule. multiply rows by columns and sum. it feels arbitrary. why not some other operation?
+
+here's the real answer: once you decide that the $k$-th column of $\mathcal{M}(T)$ should record $T(v_k)$, the formula for applying $T$ to any vector is forced by linearity. you don't get to choose it.
+
+any $v \in V$ writes uniquely as $v = x_1 v_1 + \cdots + x_n v_n$. because $T$ is linear:
+
+$$T(v) = x_1 T(v_1) + \cdots + x_n T(v_n)$$
+
+so $T(v)$ is a linear combination of the columns of $\mathcal{M}(T)$, with weights $x_1, \ldots, x_n$ given by the coordinates of $v$. the $j$-th coordinate of $T(v)$ is $\sum_k A_{j,k}\, x_k$, which is row $j$ of $A$ dotted with the input.
+
+that's all the formula is. it isn't a convention someone invented. it's the only formula consistent with $T$ being linear and the columns recording what $T$ does to basis vectors.
+
+pause here if this felt fast. the row-column dot product isn't arbitrary. it's a consequence. two things force it: the columns encode $T$ on the basis, and $T$ is linear. if you accept those, the formula writes itself. this same logic is what makes the next result feel inevitable.
+
+---
+
+### matrix multiplication is composition
+
+this is the point of the whole note.
+
+suppose $S: U \to V$ and $T: V \to W$ are linear, with bases chosen for each space. the composition $T \circ S: U \to W$ is also linear, so it also has a matrix. what is it?
+
+$$\mathcal{M}(T \circ S) = \mathcal{M}(T) \cdot \mathcal{M}(S)$$
+
+the formula for matrix multiplication is not an arbitrary rule. it's what you're forced to write down if you want matrix products to correspond to composition.
+
+here's the argument. the $k$-th column of $\mathcal{M}(S)$ records where $S$ sends the $k$-th basis vector of $U$, expressed in the $v$ basis. to find $(T \circ S)(u_k) = T(S(u_k))$, you apply $T$ to that coordinate vector. that application is exactly the matrix-vector product $\mathcal{M}(T) \cdot (\text{column } k \text{ of } \mathcal{M}(S))$. do that for every column of $\mathcal{M}(S)$, and you get all the columns of $\mathcal{M}(T \circ S)$.
+
+the entry formula follows. if $A = \mathcal{M}(T)$ is $m \times n$ and $B = \mathcal{M}(S)$ is $n \times p$, then
+
+$$(AB)_{j,k} = \sum_{r=1}^{n} A_{j,r}\, B_{r,k}$$
+
+this is the dot product of row $j$ of $A$ with column $k$ of $B$. row $j$ of $A$ encodes the $j$-th output coordinate of $T$; column $k$ of $B$ encodes where $S$ sends the $k$-th input. their dot product gives the $j$-th output coordinate of $T \circ S$ on the $k$-th input.
+
+---
+
+### composition does not commute, and neither does multiplication
+
+since $ST$ means "apply $S$ then $T$" and $TS$ means "apply $T$ then $S$," swapping the order gives a different map whenever $S$ and $T$ don't commute. matrix multiplication inherits this: $AB \neq BA$ in general.
+
+often both products aren't even defined at the same time. if $A$ is $m \times n$ and $B$ is $n \times p$, then $AB$ is $m \times p$, but $BA$ requires $B$ to be $p \times m$, which need not hold.
+
+even when both products are defined and the same size, they usually differ. this is one of the places matrix algebra breaks from ordinary algebra. if you find yourself writing $AB = BA$, check whether that's actually true for the specific matrices at hand.
+
+---
+
+### what this doesn't cover yet
+
+the matrix $\mathcal{M}(T)$ depends on the choice of bases. the same linear map looks completely different with different bases for $V$ and $W$. understanding when two matrices represent the same map, and how to convert between representations, is the next topic.
+
+also: we've been describing maps between two different spaces. when $T: V \to V$ is an operator on a single space, you use one basis for both input and output. the theory of those operators, especially when they're diagonalizable, is where the most interesting structure appears.

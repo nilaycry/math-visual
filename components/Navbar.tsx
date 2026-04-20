@@ -7,7 +7,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   // These pages have their own built-in navbars
-  if (pathname === "/" || pathname === "/linear-algebra" || pathname === "/machine-learning" || pathname === "/graph" || pathname.startsWith("/abstract-linear-algebra")) return null;
+  if (pathname === "/" || pathname === "/linear-algebra" || pathname === "/machine-learning" || pathname === "/graph" || pathname.startsWith("/abstract-linear-algebra") || pathname.startsWith("/combinatorics")) return null;
 
   const isNote = false;
 

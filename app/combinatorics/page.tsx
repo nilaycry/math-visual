@@ -1,28 +1,30 @@
 import Link from "next/link";
 import { getAllNotes } from "@/lib/notes";
 
+const COURSE = "combinatorics";
+
 const BG = "#f7f4ef";
 const FG = "#1c1917";
 const MUTED = "#78716c";
 const FAINT = "#a8a29e";
 const BORDER = "#e8e5df";
-const ACCENT = "#6d4fc2";
+const ACCENT = "#b85c1a";
 
-export default function AbstractAlgebraPage() {
-  const allNotes = getAllNotes();
+export default function CombinatoricsPage() {
+  const allNotes = getAllNotes(COURSE);
   const companions = allNotes.filter((n) => n.week < 1);
   const sequence = allNotes.filter((n) => n.week >= 1);
 
   return (
     <>
       <style>{`
-        .aa-note-row { transition: background 0.15s ease; }
-        .aa-note-row:hover { background: rgba(0,0,0,0.03) !important; }
-        .aa-companion-card { transition: background 0.15s ease; }
-        .aa-companion-card:hover { background: rgba(0,0,0,0.04) !important; }
+        .co-note-row { transition: background 0.15s ease; }
+        .co-note-row:hover { background: rgba(0,0,0,0.03) !important; }
+        .co-companion-card { transition: background 0.15s ease; }
+        .co-companion-card:hover { background: rgba(0,0,0,0.04) !important; }
 
         @media (max-width: 768px) {
-          .aa-page-nav, .aa-hero, .aa-content {
+          .co-page-nav, .co-hero, .co-content {
             padding-left: 20px !important;
             padding-right: 20px !important;
           }
@@ -39,7 +41,7 @@ export default function AbstractAlgebraPage() {
       >
         {/* ── NAVBAR ── */}
         <nav
-          className="aa-page-nav"
+          className="co-page-nav"
           style={{
             display: "flex",
             justifyContent: "space-between",
@@ -67,7 +69,7 @@ export default function AbstractAlgebraPage() {
 
         {/* ── HERO ── */}
         <section
-          className="aa-hero"
+          className="co-hero"
           style={{
             maxWidth: 1200,
             margin: "0 auto",
@@ -85,7 +87,7 @@ export default function AbstractAlgebraPage() {
               marginBottom: 20,
             }}
           >
-            abstract linear algebra · math 416
+            intro to combinatorics · math 413
           </span>
 
           <h1
@@ -99,7 +101,7 @@ export default function AbstractAlgebraPage() {
               letterSpacing: "-0.01em",
             }}
           >
-            the same ideas, built from scratch
+            counting, but the kind that tells you something
           </h1>
 
           <div style={{ maxWidth: 580 }}>
@@ -112,9 +114,10 @@ export default function AbstractAlgebraPage() {
                 margin: "0 0 18px 0",
               }}
             >
-              concrete linear algebra tells you how to compute. abstract linear
-              algebra asks why those computations work, and what the bare minimum
-              structure you need for them to work is.
+              combinatorics starts with counting. but the interesting part is never
+              really the count itself. it&apos;s that the count reveals structure:
+              a bijection you didn&apos;t expect, a recurrence hiding in a tiling
+              problem, a generating function that makes an impossible sum routine.
             </p>
             <p
               style={{
@@ -125,9 +128,10 @@ export default function AbstractAlgebraPage() {
                 margin: 0,
               }}
             >
-              the notes run one definition at a time, from vector spaces to the
-              spectral theorem. the definitions are rigorous, but I try to be honest
-              about what&apos;s hard. some of this took me a while to actually believe.
+              the notes run through the main ideas: counting principles, binomial
+              coefficients, inclusion-exclusion, generating functions, recurrences,
+              graph theory. the arguments are rigorous, but I try to be honest about
+              when something was surprising.
             </p>
           </div>
         </section>
@@ -135,7 +139,7 @@ export default function AbstractAlgebraPage() {
         {/* ── COMPANIONS ── */}
         {companions.length > 0 && (
           <div
-            className="aa-content"
+            className="co-content"
             style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 56px" }}
           >
             <div
@@ -161,11 +165,11 @@ export default function AbstractAlgebraPage() {
               {companions.map((note) => (
                 <Link
                   key={note.slug}
-                  href={`/abstract-linear-algebra/${note.slug}`}
+                  href={`/combinatorics/${note.slug}`}
                   style={{ textDecoration: "none", color: "inherit", flex: "1 1 260px", maxWidth: 360 }}
                 >
                   <div
-                    className="aa-companion-card"
+                    className="co-companion-card"
                     style={{
                       border: `1px solid ${BORDER}`,
                       borderRadius: 8,
@@ -196,7 +200,7 @@ export default function AbstractAlgebraPage() {
 
         {/* ── SEQUENCE NOTES ── */}
         <div
-          className="aa-content"
+          className="co-content"
           style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 120px" }}
         >
           <div
@@ -226,11 +230,11 @@ export default function AbstractAlgebraPage() {
               {sequence.map((note) => (
                 <Link
                   key={note.slug}
-                  href={`/abstract-linear-algebra/${note.slug}`}
+                  href={`/combinatorics/${note.slug}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <div
-                    className="aa-note-row"
+                    className="co-note-row"
                     style={{
                       display: "flex",
                       alignItems: "baseline",
@@ -252,9 +256,7 @@ export default function AbstractAlgebraPage() {
                       >
                         {note.title}
                       </span>
-                      <span
-                        style={{ fontSize: 13, color: FAINT, lineHeight: 1.5 }}
-                      >
+                      <span style={{ fontSize: 13, color: FAINT, lineHeight: 1.5 }}>
                         {note.description}
                       </span>
                     </div>

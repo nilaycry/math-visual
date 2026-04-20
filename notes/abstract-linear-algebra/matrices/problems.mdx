@@ -1,0 +1,212 @@
+---
+title: "matrices as linear maps in coordinates"
+week: 8
+---
+
+### find the matrix
+
+**1.** Let $T: \mathbf{F}^2 \to \mathbf{F}^3$ be defined by $T(x, y) = (2x + y,\; x - 3y,\; 4y)$. Find $\mathcal{M}(T)$ with respect to the standard bases.
+
+<Solution>
+
+**the move.** apply $T$ to each standard basis vector and write the outputs as columns.
+
+**the key observation.** with standard bases, this is purely mechanical: column $k$ of $\mathcal{M}(T)$ is just $T(e_k)$ read off directly as a coordinate vector. no change-of-basis needed.
+
+$T(e_1) = T(1,0) = (2, 1, 0)$. $T(e_2) = T(0,1) = (1, -3, 4)$.
+
+$$\mathcal{M}(T) = \begin{pmatrix} 2 & 1 \\ 1 & -3 \\ 0 & 4 \end{pmatrix}$$
+
+</Solution>
+
+**2.** Let $D: \mathcal{P}_3(\mathbf{F}) \to \mathcal{P}_2(\mathbf{F})$ be the differentiation map $Dp = p'$. Using the bases $1, x, x^2, x^3$ for $\mathcal{P}_3(\mathbf{F})$ and $1, x, x^2$ for $\mathcal{P}_2(\mathbf{F})$, find $\mathcal{M}(D)$.
+
+<Solution>
+
+**the move.** differentiate each basis polynomial, express the result in the $1, x, x^2$ basis, and write as a column.
+
+**the key observation.** $D(x^k) = k x^{k-1}$, which is already a basis polynomial in the output. the matrix just records the coefficients. the first column is all zeros because the derivative of a constant is zero.
+
+$$D(1) = 0 \quad D(x) = 1 \quad D(x^2) = 2x \quad D(x^3) = 3x^2$$
+
+writing as coordinate vectors in the $1, x, x^2$ basis and placing as columns:
+
+$$\mathcal{M}(D) = \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 2 & 0 \\ 0 & 0 & 0 & 3 \end{pmatrix}$$
+
+the shift pattern (nonzero entries one step above the diagonal) is not a coincidence. differentiation lowers degree by one, so the $k$-th basis vector always maps to a scalar multiple of the $(k-1)$-th output basis vector.
+
+</Solution>
+
+**3.** Let $T: \mathbf{F}^2 \to \mathbf{F}^2$ be defined by $T(x, y) = (2x,\; y)$.
+
+(a) Find $\mathcal{M}(T)$ with respect to the standard basis $e_1, e_2$.
+
+(b) Find $\mathcal{M}(T)$ with respect to the basis $v_1 = (1, 0),\; v_2 = (1, 1)$.
+
+<Solution>
+
+**the move.** in each part, apply $T$ to the basis vectors and express each output in that same basis to get the columns.
+
+**the key observation.** this is the same map in both parts. the different matrices reflect the different languages (coordinate systems), not a different map. part (b) has a messier matrix because the basis vectors don't align with what $T$ does cleanly.
+
+**(a)** $T(e_1) = (2,0) = 2e_1 + 0e_2$ and $T(e_2) = (0,1) = 0e_1 + 1e_2$.
+
+$$\mathcal{M}(T) = \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}$$
+
+**(b)** compute $T$ on each basis vector, then express the output as a linear combination of $v_1 = (1,0)$ and $v_2 = (1,1)$.
+
+$T(v_1) = T(1,0) = (2,0)$. solve $a(1,0) + b(1,1) = (2,0)$: the second equation gives $b = 0$, then $a = 2$. so $T(v_1) = 2v_1 + 0v_2$.
+
+$T(v_2) = T(1,1) = (2,1)$. solve $a(1,0) + b(1,1) = (2,1)$: the second equation gives $b = 1$, then $a + 1 = 2$ so $a = 1$. so $T(v_2) = 1v_1 + 1v_2$.
+
+$$\mathcal{M}(T) = \begin{pmatrix} 2 & 1 \\ 0 & 1 \end{pmatrix}$$
+
+the standard-basis matrix is diagonal and clean. the non-standard matrix hides that structure — $T$ is still just scaling $x$ by 2 and leaving $y$ alone, but the basis $v_2 = (1,1)$ mixes the two coordinates, so the matrix reflects that mixing.
+
+</Solution>
+
+---
+
+### matrix multiplication as composition
+
+**4.** Let $S: \mathbf{F}^3 \to \mathbf{F}^2$ and $T: \mathbf{F}^2 \to \mathbf{F}^2$ be defined by
+
+$$S(x, y, z) = (x + z,\; y) \qquad T(x, y) = (2x,\; x + y)$$
+
+Find $\mathcal{M}(T \circ S)$ in two ways: directly from the composite map, and by computing $\mathcal{M}(T)\mathcal{M}(S)$. Verify they agree.
+
+<Solution>
+
+**the move.** find each matrix separately, multiply them, then verify against the matrix computed directly from $T \circ S$.
+
+**the key observation.** the two computations must agree because $\mathcal{M}(T \circ S) = \mathcal{M}(T)\mathcal{M}(S)$. if they don't, there's an arithmetic error, not a conceptual one. this problem is practice making that theorem feel concrete rather than formal.
+
+**finding $\mathcal{M}(S)$ and $\mathcal{M}(T)$.** using standard bases throughout:
+
+$S(e_1) = (1,0)$, $S(e_2) = (0,1)$, $S(e_3) = (1,0)$, so
+
+$$\mathcal{M}(S) = \begin{pmatrix} 1 & 0 & 1 \\ 0 & 1 & 0 \end{pmatrix}$$
+
+$T(f_1) = (2,1)$, $T(f_2) = (0,1)$, so
+
+$$\mathcal{M}(T) = \begin{pmatrix} 2 & 0 \\ 1 & 1 \end{pmatrix}$$
+
+**via multiplication.**
+
+$$\mathcal{M}(T)\mathcal{M}(S) = \begin{pmatrix} 2 & 0 \\ 1 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0 & 1 \\ 0 & 1 & 0 \end{pmatrix} = \begin{pmatrix} 2 & 0 & 2 \\ 1 & 1 & 1 \end{pmatrix}$$
+
+**directly from $T \circ S$.** $(T \circ S)(x,y,z) = T(x+z, y) = (2(x+z),\; (x+z)+y) = (2x+2z,\; x+y+z)$.
+
+$(T \circ S)(e_1) = (2,1)$, $(T \circ S)(e_2) = (0,1)$, $(T \circ S)(e_3) = (2,1)$.
+
+$$\mathcal{M}(T \circ S) = \begin{pmatrix} 2 & 0 & 2 \\ 1 & 1 & 1 \end{pmatrix}$$
+
+they agree.
+
+</Solution>
+
+**5.** Let $I: V \to V$ be the identity map on a finite-dimensional space with basis $v_1, \ldots, v_n$. Prove that $\mathcal{M}(I)$ is the $n \times n$ identity matrix $I_n$. Then explain in one sentence why $\mathcal{M}(T \circ I) = \mathcal{M}(T)$ follows immediately.
+
+<Solution>
+
+**the move.** compute column $k$ of $\mathcal{M}(I)$ from the definition. then use $\mathcal{M}(T \circ I) = \mathcal{M}(T)\mathcal{M}(I)$.
+
+**the key observation.** column $k$ of $\mathcal{M}(I)$ records the coordinates of $I(v_k) = v_k$ in the $v$ basis. a basis vector has coordinate 1 in its own slot and 0 everywhere else, so column $k$ is the $k$-th standard coordinate vector $e_k$. that's exactly the $k$-th column of $I_n$.
+
+**proof.** column $k$ of $\mathcal{M}(I)$ is the coordinate vector of $I(v_k) = v_k$ in the $v_1, \ldots, v_n$ basis. since $v_k = 0 \cdot v_1 + \cdots + 1 \cdot v_k + \cdots + 0 \cdot v_n$, the coordinates are $(0, \ldots, 1, \ldots, 0)$ with the 1 in position $k$. so $\mathcal{M}(I) = I_n$.
+
+$\mathcal{M}(T \circ I) = \mathcal{M}(T)\mathcal{M}(I) = \mathcal{M}(T) I_n = \mathcal{M}(T)$.
+
+</Solution>
+
+---
+
+### non-commutativity
+
+**6.** Let
+
+$$A = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix} \qquad B = \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}$$
+
+Compute $AB$ and $BA$ and verify they differ. Then interpret: $A$ and $B$ represent linear maps $S, T: \mathbf{F}^2 \to \mathbf{F}^2$ via the standard basis. What does $S \circ T$ do to a vector? What does $T \circ S$ do? Why should you expect the results to differ?
+
+<Solution>
+
+**the move.** compute both products by rows-times-columns, then describe the maps geometrically to see why order matters.
+
+**the key observation.** $A$ is a horizontal shear (adds the $y$-component to $x$, leaves $y$ alone) and $B$ is a vertical shear (adds the $x$-component to $y$, leaves $x$ alone). applying them in different orders shears the already-sheared result, producing different outcomes.
+
+**computation.**
+
+$$AB = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix} = \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix}$$
+
+$$BA = \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \end{pmatrix}$$
+
+$AB \neq BA$.
+
+**interpretation.** $S$ (matrix $A$) maps $(x, y) \mapsto (x+y, y)$. $T$ (matrix $B$) maps $(x, y) \mapsto (x, x+y)$.
+
+$S \circ T$: first apply $T$ to get $(x, x+y)$, then apply $S$ to get $(x + (x+y),\; x+y) = (2x+y,\; x+y)$.
+
+$T \circ S$: first apply $S$ to get $(x+y, y)$, then apply $T$ to get $(x+y,\; (x+y)+y) = (x+y,\; x+2y)$.
+
+these are different maps, and the matrices $AB$ and $BA$ encode exactly that difference.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**7.** If $AB = AC$ and $A \neq 0$, then $B = C$.
+
+<Solution>
+
+**false.**
+
+**the move.** find a matrix $A$ that collapses some direction to zero. then any two matrices that agree on the non-collapsed directions will produce the same product with $A$, even if they differ on the collapsed direction.
+
+**the key observation.** left cancellation fails for matrices for the same reason injectivity can fail for linear maps: if $A$ sends some nonzero vector to $\mathbf{0}$, then $B$ and $C$ can differ on that vector without $AB$ and $AC$ noticing. the null space of $A$ is the blind spot.
+
+**counterexample.** let
+
+$$A = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} \qquad B = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} \qquad C = \begin{pmatrix} 1 & 0 \\ 1 & 0 \end{pmatrix}$$
+
+then $AB = \begin{pmatrix}1&0\\0&0\end{pmatrix}$ and $AC = \begin{pmatrix}1&0\\0&0\end{pmatrix}$. so $AB = AC$, but $B \neq C$, and $A \neq 0$.
+
+$A$ projects onto the $x$-axis and kills the $y$-component. $B$ and $C$ differ only in their second row, which $A$ ignores entirely.
+
+</Solution>
+
+**8.** The $k$-th column of $AB$ equals $A$ times the $k$-th column of $B$.
+
+<Solution>
+
+**true.**
+
+**the move.** unpack the definition of matrix multiplication and look at a single column.
+
+**the key observation.** this is the column interpretation of matrix multiplication. $AB$ is built column by column: each column of $AB$ is $A$ applied to the corresponding column of $B$. the row-column dot product formula computes exactly this, one entry at a time.
+
+**proof.** let $b_k$ denote the $k$-th column of $B$, viewed as a vector. the $(j,k)$ entry of $AB$ is $\sum_r A_{j,r} B_{r,k}$, which is the $j$-th entry of $Ab_k$. since this holds for every row $j$, the $k$-th column of $AB$ is $Ab_k$.
+
+</Solution>
+
+**9.** There exist nonzero matrices $A$ and $B$ such that $AB = 0$.
+
+<Solution>
+
+**true.**
+
+**the move.** find a map $S$ whose range lands entirely in the null space of $T$. then $T \circ S$ sends everything to zero.
+
+**the key observation.** for linear maps: if $\text{range}(S) \subseteq \text{null}(T)$, then $T(S(v)) = \mathbf{0}$ for all $v$, so $T \circ S = 0$. the corresponding matrix product $\mathcal{M}(T)\mathcal{M}(S)$ must also be zero. this is how you construct the counterexample, rather than guessing.
+
+**example.** let $A$ project onto the $y$-axis and $B$ project onto the $x$-axis:
+
+$$A = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix} \qquad B = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$$
+
+then $AB = \begin{pmatrix}0&0\\0&0\end{pmatrix} = 0$. $B$ sends everything to the $x$-axis, which $A$ then kills. neither $A$ nor $B$ is zero.
+
+</Solution>

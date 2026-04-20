@@ -9,18 +9,21 @@ export interface NoteMeta {
   week: number;
 }
 
-const notesDirectory = path.join(process.cwd(), "notes", "abstract-linear-algebra");
+function notesDir(course: string) {
+  return path.join(process.cwd(), "notes", course);
+}
 
-export function getAllNotes(): NoteMeta[] {
-  if (!fs.existsSync(notesDirectory)) return [];
+export function getAllNotes(course = "abstract-linear-algebra"): NoteMeta[] {
+  const dir = notesDir(course);
+  if (!fs.existsSync(dir)) return [];
 
   const dirs = fs
-    .readdirSync(notesDirectory)
-    .filter((dir) => fs.statSync(path.join(notesDirectory, dir)).isDirectory());
+    .readdirSync(dir)
+    .filter((d) => fs.statSync(path.join(dir, d)).isDirectory());
 
   return dirs
     .map((slug) => {
-      const filePath = path.join(notesDirectory, slug, "content.mdx");
+      const filePath = path.join(dir, slug, "content.mdx");
       if (!fs.existsSync(filePath)) return null;
 
       const { data } = matter(fs.readFileSync(filePath, "utf-8"));
@@ -36,32 +39,33 @@ export function getAllNotes(): NoteMeta[] {
     .sort((a, b) => a.week - b.week);
 }
 
-export function getNoteBySlug(slug: string): NoteMeta | undefined {
-  return getAllNotes().find((n) => n.slug === slug);
+export function getNoteBySlug(slug: string, course = "abstract-linear-algebra"): NoteMeta | undefined {
+  return getAllNotes(course).find((n) => n.slug === slug);
 }
 
-export function getNoteContent(slug: string): string | null {
-  const filePath = path.join(notesDirectory, slug, "content.mdx");
+export function getNoteContent(slug: string, course = "abstract-linear-algebra"): string | null {
+  const filePath = path.join(notesDir(course), slug, "content.mdx");
   if (!fs.existsSync(filePath)) return null;
   return fs.readFileSync(filePath, "utf-8");
 }
 
-export function getProblemsContent(slug: string): string | null {
-  const filePath = path.join(notesDirectory, slug, "problems.mdx");
+export function getProblemsContent(slug: string, course = "abstract-linear-algebra"): string | null {
+  const filePath = path.join(notesDir(course), slug, "problems.mdx");
   if (!fs.existsSync(filePath)) return null;
   return fs.readFileSync(filePath, "utf-8");
 }
 
-export function hasProblems(slug: string): boolean {
-  return fs.existsSync(path.join(notesDirectory, slug, "problems.mdx"));
+export function hasProblems(slug: string, course = "abstract-linear-algebra"): boolean {
+  return fs.existsSync(path.join(notesDir(course), slug, "problems.mdx"));
 }
 
-export function getAllNoteSlugs(): string[] {
-  if (!fs.existsSync(notesDirectory)) return [];
+export function getAllNoteSlugs(course = "abstract-linear-algebra"): string[] {
+  const dir = notesDir(course);
+  if (!fs.existsSync(dir)) return [];
   return fs
-    .readdirSync(notesDirectory)
-    .filter((dir) => {
-      if (!fs.statSync(path.join(notesDirectory, dir)).isDirectory()) return false;
-      return fs.existsSync(path.join(notesDirectory, dir, "content.mdx"));
+    .readdirSync(dir)
+    .filter((d) => {
+      if (!fs.statSync(path.join(dir, d)).isDirectory()) return false;
+      return fs.existsSync(path.join(dir, d, "content.mdx"));
     });
 }

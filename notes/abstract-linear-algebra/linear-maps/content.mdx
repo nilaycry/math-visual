@@ -17,8 +17,7 @@ what that means. the definition below is what you'd get.
 
 ### the definition
 
-> **Definition.** A **linear map** from $V$ to $W$ is a function $T: V \to W$
-> satisfying two conditions for all $u, v \in V$ and all $a \in \mathbf{F}$:
+> **Definition.** Let $V$ and $W$ be vector spaces over $\mathbf{F}$. A **linear map** from $V$ to $W$ is a function $T: V \to W$ satisfying two conditions for all $u, v \in V$ and all $a \in \mathbf{F}$:
 >
 > $$T(u + v) = T(u) + T(v)$$
 >
@@ -31,9 +30,11 @@ these two conditions can be combined into one: $T(au + bv) = aT(u) + bT(v)$ for
 all $a, b \in \mathbf{F}$ and $u, v \in V$. I find it easier to check them
 separately, though.
 
-one immediate consequence: $T(\mathbf{0}) = \mathbf{0}$. proof: $T(\mathbf{0}) =
-T(0 \cdot \mathbf{0}) = 0 \cdot T(\mathbf{0}) = \mathbf{0}$. so any linear map
-must send the zero vector to the zero vector. this is a fast non-example test.
+one immediate consequence: $T(\mathbf{0}) = \mathbf{0}$.
+
+$$T(\mathbf{0}) = T(0 \cdot \mathbf{0}) = 0 \cdot T(\mathbf{0}) = \mathbf{0}$$
+
+so any linear map must send the zero vector to the zero vector. this is a fast non-example test.
 
 ---
 
@@ -95,20 +96,17 @@ two subspaces are naturally attached to any linear map $T: V \to W$.
 >
 > $$\text{range}\,T = \{T(v) : v \in V\} = \{w \in W : w = T(v) \text{ for some } v \in V\}$$
 
-both are subspaces. for the null space: $T(\mathbf{0}) = \mathbf{0}$, so
-$\mathbf{0} \in \text{null}\,T$; if $T(u) = T(v) = \mathbf{0}$ then $T(u+v) =
-\mathbf{0}$ and $T(av) = \mathbf{0}$. for the range: $T(\mathbf{0}) = \mathbf{0}$,
-and $T(u) + T(v) = T(u+v)$ and $aT(v) = T(av)$, so sums and scalar multiples stay
-in the range.
+the null space is a subspace of $V$. we have $T(\mathbf{0}) = \mathbf{0}$, so $\mathbf{0} \in \text{null}\,T$. if $T(u) = T(v) = \mathbf{0}$, then $T(u + v) = \mathbf{0}$ and $T(av) = \mathbf{0}$, so sums and scalar multiples stay.
 
-the null space tells you what $T$ collapses to zero. the range tells you what $T$
-can actually reach.
+the range is a subspace of $W$. we have $T(\mathbf{0}) = \mathbf{0}$, so $\mathbf{0} \in \text{range}\,T$. and $T(u) + T(v) = T(u + v)$ while $aT(v) = T(av)$, so sums and scalar multiples stay.
+
+the null space tells you what $T$ collapses to zero. the range tells you what $T$ can actually reach.
 
 pause here. injectivity of $T$ is equivalent to $\text{null}\,T = \{\mathbf{0}\}$.
-proof: if $T(u) = T(v)$, then $T(u - v) = \mathbf{0}$, so $u - v \in
-\text{null}\,T$. if the null space is trivial, then $u - v = \mathbf{0}$, so
-$u = v$. conversely, if $T$ is injective and $T(v) = \mathbf{0} = T(\mathbf{0})$,
-then $v = \mathbf{0}$.
+
+one direction: if $\text{null}\,T = \{\mathbf{0}\}$ and $T(u) = T(v)$, then $T(u - v) = \mathbf{0}$, so $u - v = \mathbf{0}$, so $u = v$.
+
+the other: if $T$ is injective and $T(v) = \mathbf{0} = T(\mathbf{0})$, then $v = \mathbf{0}$.
 
 ---
 
@@ -120,7 +118,11 @@ this is the fact I find most striking about linear maps.
 > $w_1, \ldots, w_n$ are any vectors in $W$. then there exists a unique linear map
 > $T: V \to W$ such that $T(v_k) = w_k$ for each $k$.
 
-why? because every $v \in V$ can be written uniquely as $v = a_1 v_1 + \cdots + a_n v_n$, and linearity forces $T(v) = a_1 T(v_1) + \cdots + a_n T(v_n) = a_1 w_1 + \cdots + a_n w_n$. there's only one possibility for each output, so there's only one possible $T$.
+why? every $v \in V$ writes uniquely as $v = a_1 v_1 + \cdots + a_n v_n$, and linearity forces
+
+$$T(v) = a_1 T(v_1) + \cdots + a_n T(v_n) = a_1 w_1 + \cdots + a_n w_n$$
+
+there's only one possibility for each output, so there's only one possible $T$.
 
 the consequence: once you know what a linear map does to a basis, you know what it
 does to everything. this is why matrices and linear maps are interchangeable. a

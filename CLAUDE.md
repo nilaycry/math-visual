@@ -410,28 +410,41 @@ const arrowScreenY = gy * scaleY; // no negation
 
 The abstract algebra section (`/abstract-linear-algebra/*`) uses a cream background (`#f7f4ef`) with the `.notes-prose` class for article body text. This class uses **hardcoded hex colors** rather than CSS variables, specifically to bypass the dark-mode variable resolution. Do not use `text-foreground`, `bg-background`, or any Tailwind color variable inside the abstract algebra pages — they will resolve to dark-theme values and look wrong on the light background. Use explicit hex values instead.
 
-### abstract algebra section
+### course note sections (abstract algebra + combinatorics)
+
+Both `/abstract-linear-algebra/*` and `/combinatorics/*` share the same structure. The pattern is identical — only the `COURSE` constant and accent color differ.
 
 - Light/cream theme (`#f7f4ef` background, `#1c1917` text) — intentional contrast with the dark main site
 - Serif article body (Georgia) via `.notes-prose` in `globals.css`
-- KaTeX math rendering via `remark-math` + `rehype-katex` — CSS loaded in `app/abstract-linear-algebra/layout.tsx`
-- Notes at `notes/abstract-linear-algebra/<slug>/content.mdx`, ordered by `week:` frontmatter field
-- Global Navbar suppressed on all `/abstract-linear-algebra/*` paths — each page handles its own nav
-- Use `$$...$$` for display math and `$...$` for inline math. **Never split `$...$` across a line break in MDX source** — KaTeX fails silently and renders raw LaTeX as text. For computation chains that would wrap, use `$$...$$` display math instead.
+- KaTeX math rendering via `remark-math` + `rehype-katex` — CSS loaded in each course's `layout.tsx`
+- Notes at `notes/<course>/<slug>/content.mdx`, ordered by `week:` frontmatter field
+- Global Navbar suppressed on all `/<course>/*` paths — each page handles its own nav
+- Use `$$...$$` for display math and `$...$` for inline math. **Never split `$...$` across a line break in MDX source** — KaTeX fails silently and renders raw LaTeX as text.
 
-**Index page two-section layout** (`app/abstract-linear-algebra/page.tsx`):
-- `week < 1` → "before you start" card grid (companions: orientation notes, proof toolkit, conceptual essays). Auto-discovered; no registration needed.
+**`lib/notes.ts` is generic** — all functions accept an optional `course` parameter (default: `"abstract-linear-algebra"`). Pass `"combinatorics"` to use the combinatorics notes directory. The abstract algebra pages call the functions without a parameter; the combinatorics pages pass `COURSE = "combinatorics"` defined at the top of each file.
+
+**Index page two-section layout** (same for both courses):
+- `week < 1` → "before you start" card grid (companions/orientation notes). Auto-discovered; no registration needed.
 - `week >= 1` → sequence list. Fractional week values (e.g. `5.5`) are checkpoint notes; they appear in the list at the correct position but show no week label (`Number.isInteger(note.week)` controls the label).
+
+**Accent colors:** abstract-linear-algebra uses `#6d4fc2` (purple); combinatorics uses `#b85c1a` (amber).
+
+### adding a new course
+
+To add another course (e.g. `real-analysis`):
+1. Create `notes/real-analysis/<slug>/content.mdx` files
+2. Copy `app/combinatorics/` to `app/real-analysis/` and update the `COURSE` constant and accent color
+3. Add `pathname.startsWith("/real-analysis")` to the suppression check in `components/Navbar.tsx`
+4. Add an entry to `subjectAreas` in `app/page.tsx` calling `getAllNotes("real-analysis")`
 
 ### problems system
 
-Each note can have a companion problem set at `notes/abstract-linear-algebra/<slug>/problems.mdx`. No routing registration needed — the note renderer checks for it automatically.
+Each note (in any course) can have a companion problem set at `notes/<course>/<slug>/problems.mdx`. No routing registration needed.
 
-- **To add problems for a note:** create `notes/abstract-linear-algebra/<slug>/problems.mdx`
-- **Effect:** a `problems →` link appears in the note header (accent color, below the description)
-- **Route:** `/abstract-linear-algebra/<slug>/problems` — rendered by `app/abstract-linear-algebra/[slug]/problems/page.tsx`
-- **Detection:** `hasProblems(slug)` and `getProblemsContent(slug)` in `lib/notes.ts`
-- **Format:** plain MDX with KaTeX. Use `###` for section headings (e.g. "verify or refute", "prove it", "true or false"). Number problems with `**1.**` bold prefix. Separate sections with `---`.
+- **To add problems:** create `notes/<course>/<slug>/problems.mdx`
+- **Effect:** a `problems →` link appears in the note header
+- **Detection:** `hasProblems(slug, course)` in `lib/notes.ts`
+- **Format:** plain MDX with KaTeX. Use `###` for section headings. Number problems with `**1.**` bold prefix. Separate sections with `---`.
 - **Frontmatter:** `title` and `week` matching the parent note — no other fields needed.
 
 ---
@@ -451,6 +464,11 @@ app/
     page.tsx                    — server component; reads getAllNotes()
     [slug]/page.tsx             — note renderer; shows "problems →" link if problems.mdx exists
     [slug]/problems/page.tsx    — problem set renderer; auto-discovered, no registration needed
+  combinatorics/
+    layout.tsx                  — loads KaTeX CSS for this section only
+    page.tsx                    — server component; reads getAllNotes("combinatorics")
+    [slug]/page.tsx             — note renderer; COURSE = "combinatorics"
+    [slug]/problems/page.tsx    — problem set renderer; COURSE = "combinatorics"
   lessons/[slug]/
     page.tsx                    — lesson renderer (register new sketches here)
 components/
@@ -473,7 +491,10 @@ notes/
   abstract-linear-algebra/
     <slug>/content.mdx          — one directory per note; week: N controls ordering
     <slug>/problems.mdx         — optional companion problem set; creates /[slug]/problems route
+  combinatorics/
+    <slug>/content.mdx          — same structure; week: N controls ordering
+    <slug>/problems.mdx         — optional companion problem set
 lib/
   lessons.ts                    — lesson metadata + content loader; sorted by date
-  notes.ts                      — note metadata + content loader; sorted by week; hasProblems/getProblemsContent helpers
+  notes.ts                      — generic note loader; all functions accept optional course param (default: "abstract-linear-algebra")
 ```

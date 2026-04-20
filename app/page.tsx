@@ -12,14 +12,15 @@ const HeroSketch = dynamic(
 export default function HomePage() {
   const allLessons = getAllLessons();
   const allNotes = getAllNotes();
+  const allComboNotes = getAllNotes("combinatorics");
 
-  const subjectAreas = [
+  const lessons = [
     {
       href: "/linear-algebra",
       tag: "linear algebra",
       title: "the structure of space",
       description:
-        "vectors, matrices, and transformations — and the connections between them that most courses never get to",
+        "vectors, matrices, and transformations, and the connections between them that most courses never get to",
       accent: "#5B8DD9",
       count: allLessons.filter((l) => l.tags.includes("linear algebra")).length,
       unit: "lesson",
@@ -34,14 +35,27 @@ export default function HomePage() {
       count: allLessons.filter((l) => l.tags.includes("machine learning")).length,
       unit: "lesson",
     },
+  ];
+
+  const courseNotes = [
     {
       href: "/abstract-linear-algebra",
       tag: "abstract linear algebra",
       title: "the same ideas, built from scratch",
       description:
-        "math 416 course notes — rigorous definitions, but written the way the intuition came, not the way the proof reads",
+        "rigorous definitions, but written the way the intuition came.",
       accent: "#9B7FDD",
       count: allNotes.length,
+      unit: "note",
+    },
+    {
+      href: "/combinatorics",
+      tag: "combinatorics",
+      title: "counting, but the kind that tells you something",
+      description:
+        "bijections, generating functions, graph theory, and the structure hiding inside counting problems.",
+      accent: "#b85c1a",
+      count: allComboNotes.filter((n) => n.week >= 1).length,
       unit: "note",
     },
   ];
@@ -174,6 +188,7 @@ export default function HomePage() {
               won&apos;t cover everything. might change how you see some of it.
             </p>
 
+
             <SmoothScrollLink
               targetId="explore"
               style={{
@@ -204,104 +219,125 @@ export default function HomePage() {
             padding: "80px 48px 120px",
           }}
         >
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 400,
-              color: "#555",
-              textTransform: "uppercase" as const,
-              letterSpacing: "0.14em",
-              display: "block",
-              marginBottom: 32,
-            }}
-          >
-            topics
-          </span>
-
-          <div
-            className="subjects-grid"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: 20,
-            }}
-          >
-            {subjectAreas.map((subject) => (
-              <Link
-                key={subject.href}
-                href={subject.href}
-                style={{ textDecoration: "none", color: "inherit" }}
+          {/* ── LESSONS ── */}
+          <div style={{ marginBottom: 72 }}>
+            <div style={{ marginBottom: 28 }}>
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 400,
+                  color: "#555",
+                  textTransform: "uppercase" as const,
+                  letterSpacing: "0.14em",
+                  display: "block",
+                  marginBottom: 8,
+                }}
               >
-                <div
-                  className="scard"
-                  style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.025)",
-                    border: "0.5px solid #1e1e1e",
-                    borderTop: `2px solid ${subject.accent}33`,
-                    borderRadius: 12,
-                    padding: "28px 28px 24px",
-                    cursor: "pointer",
-                    height: "100%",
-                    boxSizing: "border-box" as const,
-                  }}
-                >
+                lessons
+              </span>
+              <p style={{ fontSize: 13, color: "#3a3a3a", margin: 0, lineHeight: 1.6 }}>
+                interactive explorations with p5.js sketches. geometry before algebra. good for seeing the math move.
+              </p>
+            </div>
+            <div
+              className="subjects-grid"
+              style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}
+            >
+              {lessons.map((subject) => (
+                <Link key={subject.href} href={subject.href} style={{ textDecoration: "none", color: "inherit" }}>
                   <div
+                    className="scard"
                     style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                      marginBottom: 14,
+                      backgroundColor: "rgba(255,255,255,0.025)",
+                      border: "0.5px solid #1e1e1e",
+                      borderTop: `2px solid ${subject.accent}33`,
+                      borderRadius: 12,
+                      padding: "28px 28px 24px",
+                      cursor: "pointer",
+                      height: "100%",
+                      boxSizing: "border-box" as const,
                     }}
                   >
-                    <span
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 400,
-                        color: subject.accent,
-                        opacity: 0.7,
-                        textTransform: "uppercase" as const,
-                        letterSpacing: "0.1em",
-                      }}
-                    >
-                      {subject.tag}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                      <span style={{ fontSize: 11, fontWeight: 400, color: subject.accent, opacity: 0.7, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
+                        {subject.tag}
+                      </span>
+                      <span style={{ fontSize: 11, color: "#333", letterSpacing: "0.05em" }}>
+                        {subject.count} {subject.count === 1 ? "lesson" : "lessons"}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: 17, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 10, lineHeight: 1.3 }}>
+                      {subject.title}
                     </span>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        color: "#333",
-                        letterSpacing: "0.05em",
-                      }}
-                    >
-                      {subject.count} {subject.count === 1 ? (subject.unit ?? "lesson") : `${subject.unit ?? "lesson"}s`}
+                    <span style={{ fontSize: 13, fontWeight: 400, color: "#555", lineHeight: 1.6, display: "block" }}>
+                      {subject.description}
                     </span>
                   </div>
+                </Link>
+              ))}
+            </div>
+          </div>
 
-                  <span
+          {/* ── DIVIDER ── */}
+          <div style={{ borderTop: "1px solid #161616", marginBottom: 72 }} />
+
+          {/* ── COURSE NOTES ── */}
+          <div>
+            <div style={{ marginBottom: 28 }}>
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 400,
+                  color: "#555",
+                  textTransform: "uppercase" as const,
+                  letterSpacing: "0.14em",
+                  display: "block",
+                  marginBottom: 8,
+                }}
+              >
+                notebooks
+              </span>
+              <p style={{ fontSize: 13, color: "#3a3a3a", margin: 0, lineHeight: 1.6 }}>
+                written in real time, one definition at a time. sequential, honest about what&apos;s hard.
+              </p>
+            </div>
+            <div
+              className="subjects-grid"
+              style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}
+            >
+              {courseNotes.map((subject) => (
+                <Link key={subject.href} href={subject.href} style={{ textDecoration: "none", color: "inherit" }}>
+                  <div
+                    className="scard"
                     style={{
-                      fontSize: 17,
-                      fontWeight: 500,
-                      color: "#e8e8e8",
-                      display: "block",
-                      marginBottom: 10,
-                      lineHeight: 1.3,
+                      backgroundColor: "rgba(255,255,255,0.018)",
+                      border: "0.5px solid #1a1a1a",
+                      borderLeft: `2px solid ${subject.accent}44`,
+                      borderRadius: 12,
+                      padding: "28px 28px 24px",
+                      cursor: "pointer",
+                      height: "100%",
+                      boxSizing: "border-box" as const,
                     }}
                   >
-                    {subject.title}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 400,
-                      color: "#555",
-                      lineHeight: 1.6,
-                      display: "block",
-                    }}
-                  >
-                    {subject.description}
-                  </span>
-                </div>
-              </Link>
-            ))}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                      <span style={{ fontSize: 11, fontWeight: 400, color: subject.accent, opacity: 0.7, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
+                        {subject.tag}
+                      </span>
+                      <span style={{ fontSize: 11, color: "#333", letterSpacing: "0.05em" }}>
+                        {subject.count} {subject.count === 1 ? "note" : "notes"}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: 17, fontWeight: 500, color: "#d8d8d8", display: "block", marginBottom: 10, lineHeight: 1.3 }}>
+                      {subject.title}
+                    </span>
+                    <span style={{ fontSize: 13, fontWeight: 400, color: "#555", lineHeight: 1.6, display: "block" }}>
+                      {subject.description}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
       </div>

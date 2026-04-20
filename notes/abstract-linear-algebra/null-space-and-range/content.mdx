@@ -1,0 +1,88 @@
+---
+title: "the rank-nullity theorem"
+description: "the dimension of V splits exactly between what T collapses and what T can reach"
+week: 7
+---
+
+the last note left a question open: the null space and range are both subspaces, but how do
+their sizes relate? the answer is the rank-nullity theorem, and it's one of the results I keep
+coming back to.
+
+for a linear map $T: V \to W$ with $V$ finite-dimensional:
+
+$$\dim V = \dim\,\text{null}\,T + \dim\,\text{range}\,T$$
+
+before proving it, the statement is worth sitting with. $T$ does two things: it collapses some
+of $V$ to zero, and it produces some subset of $W$. the theorem says those two quantities
+together account for all of $V$, exactly. every dimension of $V$ goes one of two places:
+into the null space, or into the range. none is lost, none is double-counted.
+
+---
+
+### the proof
+
+the key step is extending a basis, and I want to flag it because it's not obvious on first
+contact.
+
+let $m = \dim\,\text{null}\,T$ and choose a basis $u_1, \ldots, u_m$ of $\text{null}\,T$.
+since $\text{null}\,T$ is a subspace of $V$, this basis extends to a basis of all of $V$:
+
+$$u_1, \ldots, u_m, v_1, \ldots, v_n$$
+
+where $\dim V = m + n$. the claim is that $T(v_1), \ldots, T(v_n)$ is a basis of
+$\text{range}\,T$, which gives $\dim\,\text{range}\,T = n$ and finishes the proof.
+
+**spanning.** take any $w \in \text{range}\,T$. then $w = T(v)$ for some $v \in V$. write $v$
+in the basis: $v = a_1 u_1 + \cdots + a_m u_m + b_1 v_1 + \cdots + b_n v_n$. applying $T$
+and using $T(u_i) = \mathbf{0}$:
+
+$$w = T(v) = b_1 T(v_1) + \cdots + b_n T(v_n)$$
+
+so every element of $\text{range}\,T$ is a linear combination of $T(v_1), \ldots, T(v_n)$.
+
+**linear independence.** suppose $b_1 T(v_1) + \cdots + b_n T(v_n) = \mathbf{0}$. then
+$T(b_1 v_1 + \cdots + b_n v_n) = \mathbf{0}$, so $b_1 v_1 + \cdots + b_n v_n \in
+\text{null}\,T$. since $u_1, \ldots, u_m$ spans $\text{null}\,T$, we can write
+$b_1 v_1 + \cdots + b_n v_n = c_1 u_1 + \cdots + c_m u_m$, which rearranges to
+
+$$c_1 u_1 + \cdots + c_m u_m - b_1 v_1 - \cdots - b_n v_n = \mathbf{0}$$
+
+but $u_1, \ldots, u_m, v_1, \ldots, v_n$ is a basis of $V$, so all coefficients are zero.
+in particular, $b_1 = \cdots = b_n = 0$.
+
+so $T(v_1), \ldots, T(v_n)$ is a basis of $\text{range}\,T$, giving $\dim\,\text{range}\,T = n$
+and $\dim\,\text{null}\,T + \dim\,\text{range}\,T = m + n = \dim V$.
+
+---
+
+### what it tells you
+
+the theorem is most useful when you know two of the three quantities and want the third.
+
+**injectivity and surjectivity.** we know $T$ is injective exactly when $\dim\,\text{null}\,T = 0$.
+rank-nullity then gives $\dim\,\text{range}\,T = \dim V$. if $T: V \to W$ with $\dim W = \dim V$,
+that forces $\text{range}\,T = W$, so $T$ is also surjective.
+
+the argument runs the other way too: surjectivity forces $\dim\,\text{range}\,T = \dim W = \dim V$,
+which forces $\dim\,\text{null}\,T = 0$, which forces injectivity.
+
+pause here. for maps between spaces of equal dimension, injective and surjective are equivalent.
+you can't have one without the other.
+
+**maps from a larger space.** if $\dim V > \dim W$, then $T: V \to W$ cannot be injective.
+$\dim\,\text{range}\,T \leq \dim W < \dim V$, so rank-nullity forces $\dim\,\text{null}\,T > 0$.
+some nonzero vector must be sent to zero.
+
+**maps to a larger space.** if $\dim V < \dim W$, then $T: V \to W$ cannot be surjective.
+the range has dimension at most $\dim V$, which isn't enough to fill $W$.
+
+---
+
+### what this doesn't cover yet
+
+we've been talking about $T$ entirely in terms of dimensions, without coordinates. when
+$T: \mathbf{F}^n \to \mathbf{F}^m$ is multiplication by a matrix $A$, the dimension of
+$\text{range}\,T$ is called the **rank** of $A$ and the dimension of $\text{null}\,T$ is
+called the **nullity**. rank-nullity becomes: rank + nullity = $n$, the number of columns.
+
+that connection between linear maps and matrices is next.

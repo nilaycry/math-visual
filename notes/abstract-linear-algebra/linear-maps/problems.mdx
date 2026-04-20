@@ -17,13 +17,17 @@ week: 6
 
 <Solution>
 
-**(a) Linear.** $T(u + v) = 3(x_1 + x_2) - 2(y_1+y_2) = T(u) + T(v)$. $T(av) = 3(ax) - 2(ay) = a(3x - 2y) = aT(v)$.
+**the move.** check additivity and homogeneity directly for (a) and (c). for (b) and (d), look for the fastest kill — checking $T(\mathbf{0})$ rules out (b) in one line.
 
-**(b) Not linear.** $T(\mathbf{0}) = T(0,0) = (1, 0) \neq \mathbf{0}$. A linear map must send zero to zero.
+**the key observation.** a linear map must send $\mathbf{0}$ to $\mathbf{0}$. this kills (b) immediately. for (d), absolute value strips sign, so homogeneity fails as soon as you try a negative scalar.
 
-**(c) Linear.** $(T(p+q))(x) = x(p(x)+q(x)) = xp(x)+xq(x) = (Tp)(x)+(Tq)(x)$. $(T(ap))(x) = x \cdot ap(x) = a \cdot xp(x) = a(Tp)(x)$.
+**(a) linear.** $T(u + v) = 3(x_1 + x_2) - 2(y_1+y_2) = T(u) + T(v)$. $T(av) = 3(ax) - 2(ay) = a(3x - 2y) = aT(v)$.
 
-**(d) Not linear.** $T(-1 \cdot 1) = T(-1) = 1$, but $-1 \cdot T(1) = -1$. Homogeneity fails.
+**(b) not linear.** $T(\mathbf{0}) = T(0,0) = (1, 0) \neq \mathbf{0}$. a linear map must send zero to zero.
+
+**(c) linear.** $(T(p+q))(x) = x(p(x)+q(x)) = xp(x)+xq(x) = (Tp)(x)+(Tq)(x)$. $(T(ap))(x) = x \cdot ap(x) = a \cdot xp(x) = a(Tp)(x)$.
+
+**(d) not linear.** $T(-1 \cdot 1) = T(-1) = 1$, but $-1 \cdot T(1) = -1$. homogeneity fails.
 
 </Solution>
 
@@ -31,19 +35,23 @@ week: 6
 
 <Solution>
 
-**null space.** Solve $T(x,y,z) = (0,0)$: we need $x - y = 0$ and $2z = 0$, so $x = y$ and $z = 0$.
+**the move.** set $T(x,y,z) = (0,0)$ and solve the system to find null $T$. for range $T$, exhibit a preimage for any $(a, b) \in \mathbf{F}^2$ to show surjectivity.
+
+**the key observation.** the null space equations $x - y = 0$ and $2z = 0$ leave one free variable, so null $T$ is one-dimensional. rank-nullity then forces the range to be two-dimensional, which matches $\mathbf{F}^2$.
+
+**null space.** solve $T(x,y,z) = (0,0)$: we need $x - y = 0$ and $2z = 0$, so $x = y$ and $z = 0$.
 
 $$\text{null}\,T = \{(t, t, 0) : t \in \mathbf{F}\} = \text{span}((1, 1, 0))$$
 
-Dimension 1.
+dimension 1.
 
-**range.** For any $(a, b) \in \mathbf{F}^2$, take $(a, 0, b/2)$: then $T(a, 0, b/2) = (a - 0, 2 \cdot b/2) = (a, b)$. Every output is achieved.
+**range.** for any $(a, b) \in \mathbf{F}^2$, take $(a, 0, b/2)$: then $T(a, 0, b/2) = (a - 0, 2 \cdot b/2) = (a, b)$. every output is achieved.
 
 $$\text{range}\,T = \mathbf{F}^2$$
 
-Dimension 2.
+dimension 2.
 
-**sanity check.** $\dim\,\text{null}\,T + \dim\,\text{range}\,T = 1 + 2 = 3 = \dim\,\mathbf{F}^3$. This matches the rank-nullity theorem.
+**sanity check.** $\dim\,\text{null}\,T + \dim\,\text{range}\,T = 1 + 2 = 3 = \dim\,\mathbf{F}^3$. matches rank-nullity.
 
 </Solution>
 
@@ -57,9 +65,11 @@ Dimension 2.
 
 **the move.** three-condition subspace check on each.
 
-**null space.** $T(\mathbf{0}) = \mathbf{0}$, so $\mathbf{0} \in \text{null}\,T$. If $T(u) = T(v) = \mathbf{0}$: $T(u+v) = T(u)+T(v) = \mathbf{0}$ and $T(av) = aT(v) = \mathbf{0}$. Closed.
+**the key observation.** both proofs use the same checklist. the only tool is linearity of $T$ — it's what lets you pull addition and scaling through.
 
-**range.** $T(\mathbf{0}) = \mathbf{0} \in \text{range}\,T$. If $w_1 = T(v_1)$ and $w_2 = T(v_2)$: $w_1 + w_2 = T(v_1+v_2) \in \text{range}\,T$ and $aw_1 = T(av_1) \in \text{range}\,T$. Closed.
+**null space.** $T(\mathbf{0}) = \mathbf{0}$, so $\mathbf{0} \in \text{null}\,T$. if $T(u) = T(v) = \mathbf{0}$: $T(u+v) = T(u)+T(v) = \mathbf{0}$ and $T(av) = aT(v) = \mathbf{0}$. closed.
+
+**range.** $T(\mathbf{0}) = \mathbf{0} \in \text{range}\,T$. if $w_1 = T(v_1)$ and $w_2 = T(v_2)$: $w_1 + w_2 = T(v_1+v_2) \in \text{range}\,T$ and $aw_1 = T(av_1) \in \text{range}\,T$. closed.
 
 </Solution>
 
@@ -67,15 +77,23 @@ Dimension 2.
 
 <Solution>
 
-**($\Rightarrow$)** Suppose $T$ is injective. If $T(v) = \mathbf{0} = T(\mathbf{0})$, then $v = \mathbf{0}$ by injectivity. So $\text{null}\,T \subseteq \{\mathbf{0}\}$, and $\mathbf{0}$ is always in the null space.
+**the move.** iff proof. one direction uses the definition of injectivity directly. for the other, rewrite $T(u) = T(v)$ as $T(u - v) = \mathbf{0}$ using linearity.
 
-**($\Leftarrow$)** Suppose $\text{null}\,T = \{\mathbf{0}\}$. If $T(u) = T(v)$, then $T(u-v) = \mathbf{0}$, so $u - v \in \text{null}\,T = \{\mathbf{0}\}$, giving $u = v$.
+**the key observation.** the rewrite $T(u) = T(v) \Rightarrow T(u-v) = \mathbf{0}$ is the key step. it converts a statement about two inputs into a statement about one element of the null space, which is exactly what we want to control.
+
+**($\Rightarrow$)** suppose $T$ is injective. if $T(v) = \mathbf{0} = T(\mathbf{0})$, then $v = \mathbf{0}$ by injectivity. so $\text{null}\,T \subseteq \{\mathbf{0}\}$, and $\mathbf{0}$ is always in the null space.
+
+**($\Leftarrow$)** suppose $\text{null}\,T = \{\mathbf{0}\}$. if $T(u) = T(v)$, then $T(u-v) = \mathbf{0}$, so $u - v \in \text{null}\,T = \{\mathbf{0}\}$, giving $u = v$.
 
 </Solution>
 
 **5.** Let $S: U \to V$ and $T: V \to W$ be linear. Prove that $T \circ S: U \to W$ is linear.
 
 <Solution>
+
+**the move.** direct computation — unpack the composition and apply linearity of $S$ then $T$.
+
+**the key observation.** linearity chains: $S$ handles the first step (inputs into $V$), then $T$ handles the second (outputs into $W$). no tricks needed, just expand both conditions.
 
 $(T \circ S)(u + v) = T(S(u+v)) = T(S(u)+S(v)) = T(S(u)) + T(S(v)) = (T\circ S)(u) + (T\circ S)(v)$.
 
@@ -87,7 +105,11 @@ $(T \circ S)(av) = T(S(av)) = T(aS(v)) = aT(S(v)) = a(T \circ S)(v)$.
 
 <Solution>
 
-$T(\mathbf{0}) = \mathbf{0} \in T(U)$. If $T(u_1), T(u_2) \in T(U)$: $T(u_1) + T(u_2) = T(u_1+u_2)$ and $u_1 + u_2 \in U$, so the sum is in $T(U)$. Similarly $aT(u_1) = T(au_1) \in T(U)$.
+**the move.** three-condition subspace check on $T(U)$. use closure of $U$ to stay inside $U$ on the input side, then use linearity of $T$ on the output side.
+
+**the key observation.** $U$ being a subspace handles "inputs stay inside $U$." linearity of $T$ then guarantees the outputs combine correctly. the two conditions work together in every step.
+
+$T(\mathbf{0}) = \mathbf{0} \in T(U)$. if $T(u_1), T(u_2) \in T(U)$: $T(u_1) + T(u_2) = T(u_1+u_2)$ and $u_1 + u_2 \in U$, so the sum is in $T(U)$. similarly $aT(u_1) = T(au_1) \in T(U)$.
 
 </Solution>
 
@@ -99,13 +121,15 @@ $T(\mathbf{0}) = \mathbf{0} \in T(U)$. If $T(u_1), T(u_2) \in T(U)$: $T(u_1) + T
 
 <Solution>
 
-**the move.** I need $T(1, 2) = \mathbf{0}$ and $T$ nonzero on something not in the null space. I'll use the proposition that a linear map is determined by where it sends a basis.
+**the move.** I need $T(1, 2) = \mathbf{0}$ and $T$ nonzero on something outside the null space. use the fact that a linear map is determined by where it sends a basis.
 
-Choose basis $\{(1, 2), (1, 0)\}$ for $\mathbb{R}^2$. Define $T(1, 2) = (0,0,0)$ and $T(1, 0) = (1, 0, 0)$.
+**the key observation.** a linear map is completely determined by its values on a basis. so the construction is: pick a basis that makes the null condition explicit, define $T$ to be zero on the null direction and nonzero on the complement.
 
-For any $(x, y) = a(1, 2) + b(1, 0)$: solving gives $b = x - y/2$ and $a = y/2$. So $T(x, y) = b \cdot (1, 0, 0) = (x - y/2, 0, 0)$.
+choose basis $\{(1, 2), (1, 0)\}$ for $\mathbb{R}^2$. define $T(1, 2) = (0,0,0)$ and $T(1, 0) = (1, 0, 0)$.
 
-Check: $T(1, 2) = (1 - 1, 0, 0) = (0,0,0)$. And $T(1, 0) = (1, 0, 0) \neq \mathbf{0}$. So $\text{null}\,T = \{(x,y) : x = y/2\} = \{(t, 2t)\}$. Correct.
+for any $(x, y) = a(1, 2) + b(1, 0)$: solving gives $b = x - y/2$ and $a = y/2$. so $T(x, y) = b \cdot (1, 0, 0) = (x - y/2, 0, 0)$.
+
+check: $T(1, 2) = (1 - 1, 0, 0) = (0,0,0)$. and $T(1, 0) = (1, 0, 0) \neq \mathbf{0}$. so $\text{null}\,T = \{(x,y) : x = y/2\} = \{(t, 2t)\}$. correct.
 
 </Solution>
 
@@ -113,9 +137,11 @@ Check: $T(1, 2) = (1 - 1, 0, 0) = (0,0,0)$. And $T(1, 0) = (1, 0, 0) \neq \mathb
 
 <Solution>
 
-**the move.** apply rank-nullity: $\dim\,\text{null}\,T + \dim\,\text{range}\,T = \dim\,\mathbf{F}^4 = 4$. Surjective means $\text{range}\,T = \mathbf{F}^2$, so $\dim\,\text{range}\,T = 2$.
+**the move.** apply rank-nullity: $\dim\,\text{null}\,T + \dim\,\text{range}\,T = \dim\,\mathbf{F}^4 = 4$. surjective means $\text{range}\,T = \mathbf{F}^2$, so $\dim\,\text{range}\,T = 2$.
 
-Therefore $\dim\,\text{null}\,T = 4 - 2 = 2$. The dimension of the null space is exactly 2, with no other possibility.
+**the key observation.** surjectivity pins down $\dim\,\text{range}\,T$ exactly. rank-nullity then leaves no room for choice — the null space dimension is forced to exactly one value.
+
+therefore $\dim\,\text{null}\,T = 4 - 2 = 2$. the dimension of the null space is exactly 2, with no other possibility.
 
 </Solution>
 
@@ -131,7 +157,11 @@ For each statement, say whether it is true or false and give a proof or countere
 
 **true.**
 
-Suppose $a_1 v_1 + \cdots + a_m v_m = \mathbf{0}$. Applying $T$: $a_1 T(v_1) + \cdots + a_m T(v_m) = T(\mathbf{0}) = \mathbf{0}$. Since $\{T(v_1), \ldots, T(v_m)\}$ is linearly independent, $a_1 = \cdots = a_m = 0$. So $\{v_1, \ldots, v_m\}$ is linearly independent.
+**the move.** suppose a linear combination of the $v_i$ is zero, apply $T$, then use linear independence of the images.
+
+**the key observation.** $T$ can collapse vectors — that's what injectivity is about. but if the outputs $T(v_i)$ are already independent, there's no room to collapse: any nontrivial combination of the $v_i$ maps to a nontrivial combination of the $T(v_i)$, which can't be zero.
+
+**proof.** suppose $a_1 v_1 + \cdots + a_m v_m = \mathbf{0}$. applying $T$: $a_1 T(v_1) + \cdots + a_m T(v_m) = T(\mathbf{0}) = \mathbf{0}$. since $\{T(v_1), \ldots, T(v_m)\}$ is linearly independent, $a_1 = \cdots = a_m = 0$. so $\{v_1, \ldots, v_m\}$ is linearly independent.
 
 </Solution>
 
@@ -139,10 +169,14 @@ Suppose $a_1 v_1 + \cdots + a_m v_m = \mathbf{0}$. Applying $T$: $a_1 T(v_1) + \
 
 <Solution>
 
-**true.** (Such a map is called a *projection*.)
+**true.** (such a map is called a *projection*.)
 
-**existence of decomposition.** For any $v \in V$: write $v = (v - T(v)) + T(v)$. Then $T(v - T(v)) = T(v) - T(T(v)) = T(v) - T(v) = \mathbf{0}$ (using $T^2 = T$). So $v - T(v) \in \text{null}\,T$ and $T(v) \in \text{range}\,T$.
+**the move.** show every $v$ decomposes as a sum of a null-space vector and a range vector, then show $\text{null}\,T \cap \text{range}\,T = \{\mathbf{0}\}$.
 
-**uniqueness (direct sum condition).** Suppose $w \in \text{null}\,T \cap \text{range}\,T$. Then $w = T(u)$ for some $u$, and $T(w) = \mathbf{0}$. So $\mathbf{0} = T(w) = T(T(u)) = T^2(u) = T(u) = w$. Thus $\text{null}\,T \cap \text{range}\,T = \{\mathbf{0}\}$.
+**the key observation.** $T^2 = T$ gives an explicit decomposition formula: write $v = (v - T(v)) + T(v)$. the condition $T^2 = T$ is exactly what makes $v - T(v)$ land in null $T$ — it forces $T(v - T(v)) = T(v) - T^2(v) = 0$.
+
+**existence of decomposition.** for any $v \in V$: write $v = (v - T(v)) + T(v)$. then $T(v - T(v)) = T(v) - T(T(v)) = T(v) - T(v) = \mathbf{0}$ (using $T^2 = T$). so $v - T(v) \in \text{null}\,T$ and $T(v) \in \text{range}\,T$.
+
+**uniqueness (direct sum condition).** suppose $w \in \text{null}\,T \cap \text{range}\,T$. then $w = T(u)$ for some $u$, and $T(w) = \mathbf{0}$. so $\mathbf{0} = T(w) = T(T(u)) = T^2(u) = T(u) = w$. thus $\text{null}\,T \cap \text{range}\,T = \{\mathbf{0}\}$.
 
 </Solution>
