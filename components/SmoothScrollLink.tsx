@@ -5,10 +5,12 @@ import type { CSSProperties, ReactNode } from "react";
 export default function SmoothScrollLink({
   targetId,
   style,
+  className,
   children,
 }: {
   targetId: string;
   style?: CSSProperties;
+  className?: string;
   children: ReactNode;
 }) {
   return (
@@ -19,6 +21,7 @@ export default function SmoothScrollLink({
         document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
       }}
       style={style}
+      className={className}
     >
       {children}
     </a>
