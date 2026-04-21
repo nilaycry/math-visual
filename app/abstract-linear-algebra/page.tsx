@@ -34,6 +34,7 @@ export default function AbstractAlgebraPage() {
           minHeight: "100vh",
           backgroundColor: BG,
           color: FG,
+          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         }}
       >
         {/* ── NAVBAR ── */}

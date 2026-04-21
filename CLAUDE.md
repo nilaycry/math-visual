@@ -418,7 +418,7 @@ The abstract algebra section (`/abstract-linear-algebra/*`) uses a cream backgro
 Both `/abstract-linear-algebra/*` and `/combinatorics/*` share the same structure. The pattern is identical — only the `COURSE` constant and accent color differ.
 
 - Light/cream theme (`#f7f4ef` background, `#1c1917` text) — intentional contrast with the dark main site
-- Serif article body (Georgia) via `.notes-prose` in `globals.css`
+- Layout uses Inter (via inline styles on the page wrappers) to differentiate from lessons, while the article body uses a Serif font (Georgia) via inline styles on the `<article>` tag. Typography details are handled by `.notes-prose` in `globals.css`.
 - KaTeX math rendering via `remark-math` + `rehype-katex` — CSS loaded in each course's `layout.tsx`
 - Notes at `notes/<course>/<slug>/content.mdx`, ordered by `week:` frontmatter field
 - Global Navbar suppressed on all `/<course>/*` paths — each page handles its own nav

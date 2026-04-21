@@ -10,22 +10,17 @@ export default function MachineLearningPage() {
   return (
     <>
       <style>{`
-        .ml-card { 
-          transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-        }
-        .ml-card:hover { 
-          border-color: rgba(255,255,255,0.15) !important; 
-          transform: translateY(-4px);
-          box-shadow: 0 20px 40px -15px var(--hover-glow, rgba(255,255,255,0.05));
-          background-color: rgba(255,255,255,0.035) !important;
-        }
-
         @media (max-width: 768px) {
           .ml-page-nav, .ml-hero, .ml-content {
             padding-left: 20px !important;
             padding-right: 20px !important;
+          }
+          .ml-hero {
+            padding-top: 48px !important;
+            padding-bottom: 48px !important;
+          }
+          .ml-content {
+            padding-bottom: 64px !important;
           }
           .ml-lessons-grid {
             grid-template-columns: 1fr !important;
@@ -38,8 +33,19 @@ export default function MachineLearningPage() {
           minHeight: "100vh",
           backgroundColor: "#0a0a0a",
           color: "#e8e8e8",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
+        {/* ── BACKGROUND GLOW ── */}
+        <div 
+          style={{
+            position: "fixed", top: "10%", left: "50%", transform: "translateX(-50%)",
+            width: "80vw", height: "80vw", maxWidth: 800, maxHeight: 800,
+            background: "radial-gradient(circle, rgba(93, 202, 165, 0.05) 0%, rgba(10, 10, 10, 0) 65%)",
+            pointerEvents: "none", zIndex: 0 
+          }} 
+        />
         {/* ── NAVBAR ── */}
         <div 
           style={{
@@ -132,10 +138,10 @@ export default function MachineLearningPage() {
 
         {/* ── LESSONS ── */}
         <div className="ml-content" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 120px" }}>
-          <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 48, marginBottom: 32 }}>
-            <span style={{ fontSize: 11, fontWeight: 500, color: "#888", textTransform: "uppercase", letterSpacing: "0.14em" }}>
+          <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 48, marginBottom: 32, position: "relative", zIndex: 10 }}>
+            <h2 style={{ fontSize: 11, fontWeight: 500, color: "#888", textTransform: "uppercase", letterSpacing: "0.14em", margin: 0 }}>
               lessons
-            </span>
+            </h2>
           </div>
 
           <div
@@ -149,7 +155,7 @@ export default function MachineLearningPage() {
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <div
-                  className="ml-card"
+                  className="lesson-card"
                   style={{
                     backgroundColor: "rgba(255,255,255,0.02)",
                     border: "0.5px solid rgba(255,255,255,0.08)",
@@ -174,9 +180,9 @@ export default function MachineLearningPage() {
                   >
                     {lesson.displayTag}
                   </span>
-                  <span style={{ fontSize: 15, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 8, lineHeight: 1.3 }}>
+                  <h3 style={{ fontSize: 15, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 8, lineHeight: 1.3, marginTop: 0 }}>
                     {lesson.title}
-                  </span>
+                  </h3>
                   <span style={{ fontSize: 13, color: "#999", lineHeight: 1.5, display: "block" }}>
                     {lesson.description}
                   </span>

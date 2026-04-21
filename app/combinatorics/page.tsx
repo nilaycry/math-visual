@@ -36,6 +36,7 @@ export default function CombinatoricsPage() {
           minHeight: "100vh",
           backgroundColor: BG,
           color: FG,
+          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         }}
       >
         {/* ── NAVBAR ── */}

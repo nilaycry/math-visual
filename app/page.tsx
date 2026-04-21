@@ -63,22 +63,11 @@ export default function HomePage() {
   return (
     <>
       <style>{`
-        .scard { 
-          transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-        }
-        .scard:hover { 
-          border-color: rgba(255,255,255,0.15) !important; 
-          transform: translateY(-4px);
-          box-shadow: 0 20px 40px -15px var(--hover-glow, rgba(255,255,255,0.05));
-          background-color: rgba(255,255,255,0.035) !important;
-        }
-
         @media (max-width: 768px) {
           .hero-section {
             flex-direction: column !important;
             padding-top: 48px !important;
+            padding-bottom: 48px !important;
             gap: 40px !important;
           }
           .hero-canvas-col { display: none !important; }
@@ -89,6 +78,10 @@ export default function HomePage() {
             padding-left: 20px !important;
             padding-right: 20px !important;
           }
+          .subjects-section {
+            padding-top: 64px !important;
+            padding-bottom: 64px !important;
+          }
         }
       `}</style>
 
@@ -97,8 +90,19 @@ export default function HomePage() {
           minHeight: "100vh",
           backgroundColor: "#0a0a0a",
           color: "#e8e8e8",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
+        {/* ── BACKGROUND GLOW ── */}
+        <div 
+          style={{
+            position: "fixed", top: "10%", left: "50%", transform: "translateX(-50%)",
+            width: "80vw", height: "80vw", maxWidth: 800, maxHeight: 800,
+            background: "radial-gradient(circle, rgba(232, 160, 32, 0.05) 0%, rgba(10, 10, 10, 0) 65%)",
+            pointerEvents: "none", zIndex: 0 
+          }} 
+        />
         {/* ── NAVBAR ── */}
         <div 
           style={{
@@ -249,20 +253,19 @@ export default function HomePage() {
         >
           {/* ── LESSONS ── */}
           <div style={{ marginBottom: 72 }}>
-            <div style={{ marginBottom: 28 }}>
-              <span
+            <div style={{ marginBottom: 28, position: "relative", zIndex: 10 }}>
+              <h2
                 style={{
                   fontSize: 11,
                   fontWeight: 500,
                   color: "#888",
                   textTransform: "uppercase" as const,
                   letterSpacing: "0.14em",
-                  display: "block",
-                  marginBottom: 8,
+                  margin: "0 0 8px 0",
                 }}
               >
                 lessons
-              </span>
+              </h2>
               <p style={{ fontSize: 13, color: "#999", margin: 0, lineHeight: 1.6 }}>
                 interactive structural anchors. building the geometric intuition before trusting the algebra.
               </p>
@@ -274,7 +277,7 @@ export default function HomePage() {
               {lessons.map((subject) => (
                 <Link key={subject.href} href={subject.href} style={{ textDecoration: "none", color: "inherit" }}>
                   <div
-                    className="scard"
+                    className="lesson-card"
                     style={{
                       backgroundColor: "rgba(255,255,255,0.02)",
                       border: "0.5px solid rgba(255,255,255,0.08)",
@@ -295,9 +298,9 @@ export default function HomePage() {
                         {subject.count} {subject.count === 1 ? "lesson" : "lessons"}
                       </span>
                     </div>
-                    <span style={{ fontSize: 17, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 10, lineHeight: 1.3 }}>
+                    <h3 style={{ fontSize: 17, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 10, lineHeight: 1.3, marginTop: 0 }}>
                       {subject.title}
-                    </span>
+                    </h3>
                     <span style={{ fontSize: 13, fontWeight: 400, color: "#999", lineHeight: 1.6, display: "block" }}>
                       {subject.description}
                     </span>
@@ -312,20 +315,19 @@ export default function HomePage() {
 
           {/* ── COURSE NOTES ── */}
           <div>
-            <div style={{ marginBottom: 28 }}>
-              <span
+            <div style={{ marginBottom: 28, position: "relative", zIndex: 10 }}>
+              <h2
                 style={{
                   fontSize: 11,
                   fontWeight: 500,
                   color: "#888",
                   textTransform: "uppercase" as const,
                   letterSpacing: "0.14em",
-                  display: "block",
-                  marginBottom: 8,
+                  margin: "0 0 8px 0",
                 }}
               >
                 notebooks
-              </span>
+              </h2>
               <p style={{ fontSize: 13, color: "#999", margin: 0, lineHeight: 1.6 }}>
                 written in real time, one definition at a time. sequential, honest about what&apos;s hard.
               </p>
@@ -337,7 +339,7 @@ export default function HomePage() {
               {courseNotes.map((subject) => (
                 <Link key={subject.href} href={subject.href} style={{ textDecoration: "none", color: "inherit" }}>
                   <div
-                    className="scard"
+                    className="lesson-card"
                     style={{
                       backgroundColor: "rgba(255,255,255,0.015)",
                       border: "0.5px solid rgba(255,255,255,0.06)",
@@ -358,9 +360,9 @@ export default function HomePage() {
                         {subject.count} {subject.count === 1 ? "note" : "notes"}
                       </span>
                     </div>
-                    <span style={{ fontSize: 17, fontWeight: 500, color: "#d8d8d8", display: "block", marginBottom: 10, lineHeight: 1.3 }}>
+                    <h3 style={{ fontSize: 17, fontWeight: 500, color: "#d8d8d8", display: "block", marginBottom: 10, lineHeight: 1.3, marginTop: 0 }}>
                       {subject.title}
-                    </span>
+                    </h3>
                     <span style={{ fontSize: 13, fontWeight: 400, color: "#999", lineHeight: 1.6, display: "block" }}>
                       {subject.description}
                     </span>
