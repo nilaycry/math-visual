@@ -3,9 +3,6 @@ title: "the necessity of bends"
 description: "why stacking matrices isn't enough to build deep learning"
 tags: ["machine learning", "neural networks"]
 displayTag: "PART 3: BENDING SPACE"
-color: "from-zinc-400 to-zinc-600"
-accent: "#8c8c8c"
-icon: "〰️"
 date: "2026-04-14"
 related:
   - slug: "backpropagation"
@@ -30,7 +27,7 @@ to build a stronger model, the intuitive step is feeding the output of one matri
 
 this resembles a deep network, executing three layers of computation. it appears capable of representing something much more complex than a single matrix. 
 
-it cannot. matrix multiplication is associative. A(BC)x is strictly equivalent to (ABC)x. the product of three matrices is identically another single matrix. the entire three-layer chain collapses immediately into a single transformation y = Mx.
+it cannot. matrix multiplication is associative. `A(BC)x` is strictly equivalent to `(ABC)x`. the product of three matrices is identically another single matrix. the entire three-layer chain collapses immediately into a single transformation `y = Mx`.
 
 stacking linear maps only produces another linear map. infinite layers of matrices still represent nothing more than a flat hyper-plane. the model gains no expressivity. it remains entirely linear.
 
@@ -42,7 +39,7 @@ to prevent the chain from collapsing, a structural barrier must be injected betw
 
 that barrier is a non-linear function, standardly known as an **activation function**.
 
-instead of directly feeding the output of matrix W₁ into W₂, the intermediate output passes through a non-linear operation, such as tanh:
+instead of directly feeding the output of matrix `W₁` into `W₂`, the intermediate output passes through a non-linear operation, such as `tanh`:
 
 <div className="math-highlight">y = W₂ · tanh(W₁x + b₁) + b₂</div>
 
@@ -54,7 +51,7 @@ because tanh warps the space non-linearly, the equation can no longer be factore
 
 if a matrix transformation scales and rotates space, a non-linearity is what allows the space to bend.
 
-tanh(z) forces extreme positive values toward 1, and extreme negative values toward −1. geometrically, this operation takes an infinite unbounded space and compresses it into a finite box. points that were distant are compressed near the boundaries, introducing severe curvature.
+`tanh(z)` forces extreme positive values toward `1`, and extreme negative values toward `−1`. geometrically, this operation takes an infinite unbounded space and compresses it into a finite box. points that were distant are compressed near the boundaries, introducing severe curvature.
 
 by chaining alternating matrix multiplications and non-linearities, the network rotates the input space, compresses it, stretches it, and curves it repeatedly. this continuous warping allows structures that are impossible to separate linearly (like points inside a sphere from points outside) to be functionally unfolded until a flat plane can slice them cleanly at the final layer.
 

@@ -10,7 +10,7 @@ that is exactly what quotient spaces do.
 
 ---
 
-### cosets
+### collapsing vectors to the same point
 
 let $U$ be a subspace of $V$. for any $v \in V$, the **coset** of $v$ with respect to $U$ is
 
@@ -52,13 +52,13 @@ applied to the null space of a linear map $T: V \to W$:
 
 $$\dim(V / \operatorname{null}\, T) = \dim V - \dim \operatorname{null}\, T = \dim \operatorname{range}\, T$$
 
-this is not merely a dimensional coincidence. the map $\tilde{T}: V/\operatorname{null}\, T \to \operatorname{range}\, T$ defined by $\tilde{T}(v + \operatorname{null}\, T) = Tv$ is well-defined (any two representatives of the same coset differ by something in $\operatorname{null}\, T$, so $T$ sends them to the same place), injective (if $Tv = 0$ then $v \in \operatorname{null}\, T$, the zero coset), and surjective (every element of the range is $Tv$ for some $v$). so $V / \operatorname{null}\, T$ is isomorphic to $\operatorname{range}\, T$.
+I want to pause on why this isn't just a lucky dimension count. the map $\tilde{T}: V/\operatorname{null}\, T \to \operatorname{range}\, T$ defined by $\tilde{T}(v + \operatorname{null}\, T) = Tv$ is well-defined (any two representatives of the same coset differ by something in $\operatorname{null}\, T$, so $T$ sends them to the same place), injective (if $Tv = 0$ then $v \in \operatorname{null}\, T$, the zero coset), and surjective (every element of the range is $Tv$ for some $v$). so $V / \operatorname{null}\, T$ is isomorphic to $\operatorname{range}\, T$.
 
 the fundamental theorem was always a statement about quotient spaces in disguise.
 
 ---
 
-### linear functionals and the dual space
+### measuring a space from the outside
 
 quotient spaces look at $V$ by collapsing part of it. duality looks at $V$ by mapping it into scalars.
 
@@ -74,9 +74,11 @@ since a linear functional is a linear map from $V$ to a one-dimensional space, a
 
 ---
 
-### the dual basis
+### the basis that measures the original
 
-pick a basis $v_1, \ldots, v_n$ for $V$. for each $j$, define $\varphi_j \in V'$ by
+if $V$ has a basis $v_1, \ldots, v_n$, you might ask whether $V'$ has a natural one too. it does, but I want to name what's strange about it before writing it down: the dual basis depends on your choice of basis for $V$. there's no canonical way to pick it. $V$ and $V'$ are isomorphic spaces — same dimension — but there is no natural, basis-independent way to match vectors in one with functionals in the other. you always have to choose first.
+
+for each $j$, define $\varphi_j \in V'$ by
 
 $$\varphi_j(v_k) = \begin{cases} 1 & \text{if } k = j \\ 0 & \text{if } k \neq j \end{cases}$$
 
@@ -88,7 +90,7 @@ the dual basis exists and has the same size as the original. but it lives in a d
 
 ---
 
-### the dual map
+### when arrows reverse
 
 before reading the definition, think about what data you need to turn a linear functional on $W$ into one on $V$. you have $T: V \to W$ and $\varphi: W \to \mathbf{F}$. the composition $\varphi \circ T: V \to \mathbf{F}$ is already a linear functional on $V$.
 
@@ -100,9 +102,9 @@ when $T$ is represented by a matrix $A$ in chosen bases, $T'$ is represented by 
 
 ---
 
-### the annihilator
+### what a subspace is invisible to
 
-both constructions connect through the idea of a subspace being "invisible" to certain measurements.
+here's a question the quotient construction doesn't quite answer: which measurements in $V'$ are completely insensitive to $U$? a functional $\varphi$ that vanishes on every vector in $U$ can't distinguish $U$ from zero — it can't see $U$ at all. collecting all such functionals gives you a subspace of $V'$ that measures exactly the part of $V$ that $U$ doesn't occupy.
 
 > **Definition.** The **annihilator** of a subspace $U \subseteq V$ is the set
 

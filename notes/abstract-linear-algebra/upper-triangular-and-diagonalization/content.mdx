@@ -4,9 +4,9 @@ description: "when operators have diagonal matrices, and what to settle for when
 week: 12
 ---
 
-the eigenvalues note ended with a question: does an operator have enough eigenvectors to form a basis? if it does, the matrix of the operator in that basis is the most transparent form possible. on the diagonal sit the eigenvalues $\lambda_1, \ldots, \lambda_n$. off the diagonal: all zeros. the operator acts on each basis direction independently, just scaling it. computing $T^{100}$ or checking invertibility becomes trivial.
+the eigenvalues note ended with a question: does an operator have enough eigenvectors to form a basis? if it does, the matrix of the operator in that basis is the most transparent form possible. on the diagonal sit the eigenvalues $\lambda_1, \ldots, \lambda_n$. off the diagonal: all zeros. the operator acts on each basis direction independently, just scaling it. computing $T^{100}$ or checking invertibility becomes immediate.
 
-not every operator achieves this. the question is what structure we can always guarantee, and when the diagonal form is actually reachable.
+not every operator achieves this. the question is what structure we can always guarantee, and when the diagonal form is actually reachable. I find this the right question to ask because the answer splits cleanly into two cases: when you're lucky, and what you settle for when you aren't.
 
 ---
 
@@ -22,7 +22,9 @@ $$\mathcal{M}(T) = \begin{pmatrix} \lambda_1 & & 0 \\ & \ddots & \\ 0 & & \lambd
 
 the $j$-th column records where $v_j$ goes: entirely to $\lambda_j v_j$, so only the $j$-th entry is nonzero.
 
-consider $T: \mathbf{R}^2 \to \mathbf{R}^2$ defined by $T(x, y) = (2x, 3y)$. the standard basis vectors $e_1 = (1, 0)$ and $e_2 = (0, 1)$ satisfy $Te_1 = 2e_1$ and $Te_2 = 3e_2$. they are eigenvectors, and they form a basis. $T$ is diagonalizable, with matrix $\begin{pmatrix} 2 & 0 \\ 0 & 3 \end{pmatrix}$.
+consider $T: \mathbf{R}^2 \to \mathbf{R}^2$ defined by $T(x, y) = (2x, 3y)$. the standard basis vectors $e_1 = (1, 0)$ and $e_2 = (0, 1)$ satisfy $Te_1 = 2e_1$ and $Te_2 = 3e_2$. they are eigenvectors, and they form a basis. $T$ is diagonalizable, with matrix
+
+$$\begin{pmatrix} 2 & 0 \\ 0 & 3 \end{pmatrix}$$
 
 for a non-example, let $N: \mathcal{P}_2(\mathbf{F}) \to \mathcal{P}_2(\mathbf{F})$ be the differentiation operator $N(p) = p'$. any eigenvector would satisfy $p' = \lambda p$ for some scalar $\lambda$. differentiating a nonzero polynomial strictly lowers its degree. the only polynomial satisfying $p' = 0$ is a constant, and it satisfies $p' = 0 \cdot p$, so $\lambda = 0$ is an eigenvalue. but for $\lambda \neq 0$, no polynomial satisfies $p' = \lambda p$. the eigenspace for $\lambda = 0$ is one-dimensional (the constants), which gives us only one linearly independent eigenvector in a three-dimensional space. $N$ is not diagonalizable.
 
@@ -30,11 +32,13 @@ for a non-example, let $N: \mathcal{P}_2(\mathbf{F}) \to \mathcal{P}_2(\mathbf{F
 
 ### distinct eigenvalues force independence
 
-the most useful sufficient condition for diagonalizability is also one of the cleanest results in the subject.
+I keep coming back to this result as one of the cleanest in the whole subject.
 
 > **Theorem.** Eigenvectors of $T$ corresponding to distinct eigenvalues are linearly independent.
 
-the proof is by induction on the number of distinct eigenvalues. with one eigenvalue and one nonzero eigenvector, linear independence is immediate.
+the argument is by contradiction on the shortest possible dependence relation. I want to name that choice upfront: it's the kind of move that looks unmotivated until you see why starting at the minimum is exactly what makes the subtraction step work.
+
+the proof proceeds by induction on the number of distinct eigenvalues. with one eigenvalue and one nonzero eigenvector, linear independence is immediate.
 
 suppose $v_1, \ldots, v_m$ are eigenvectors with distinct eigenvalues $\lambda_1, \ldots, \lambda_m$ and suppose they are linearly dependent. take the shortest dependence relation. since the eigenvectors are nonzero, the relation must involve at least two terms. write it as:
 
@@ -49,6 +53,8 @@ subtract $\lambda_m$ times the original relation:
 $$a_1(\lambda_1 - \lambda_m) v_1 + \cdots + a_{m-1}(\lambda_{m-1} - \lambda_m) v_{m-1} = 0$$
 
 since the eigenvalues are distinct, $\lambda_j - \lambda_m \neq 0$ for $j < m$, and all $a_j \neq 0$. this is a shorter dependence relation, contradicting minimality.
+
+pause here. the trick worth noticing is "take the shortest dependence relation." it isn't obvious to start there, but it's what makes the contradiction land: if we assumed a shorter relation existed, we'd already have a contradiction. choosing the minimal one puts us in a position where the subtraction step actually terminates the argument. I missed this the first time I read the proof and had to go back.
 
 the practical consequence: if $T$ has $n$ distinct eigenvalues on an $n$-dimensional space, those eigenvectors form a basis, and $T$ is diagonalizable. not every diagonalizable operator has distinct eigenvalues, but distinct eigenvalues always guarantee diagonalizability.
 
@@ -70,7 +76,7 @@ the stars represent entries that may or may not be zero.
 
 the proof is inductive on dimension. in dimension one, any $1 \times 1$ matrix is upper triangular. for dimension $n > 1$: every operator on a finite-dimensional complex vector space has an eigenvalue (we proved this in the previous note). call it $\lambda$, with eigenvector $v_1$.
 
-extend $v_1$ to a basis of $V$, and let $U$ be the span of the remaining $n-1$ vectors. define the operator $\tilde{T}$ on $V / \operatorname{span}(v_1)$: by induction, $\tilde{T}$ has an upper triangular matrix. pull that structure back to choose basis vectors $v_2, \ldots, v_n$ such that $T$ maps the span of $v_1, \ldots, v_k$ into itself for each $k$. in that basis, $T$ is upper triangular.
+extend $v_1$ to a basis of $V$. the operator $T$ descends to an operator $\tilde{T}$ on $V / \operatorname{span}(v_1)$, an $(n-1)$-dimensional space. by induction, $\tilde{T}$ has an upper triangular matrix with respect to some basis of that quotient space. lift those basis cosets to actual vectors $v_2, \ldots, v_n$ in $V$. because $v_1$ is an eigenvector, $Tv_1$ stays in $\operatorname{span}(v_1)$, and the lifting is done so that $T$ maps $\operatorname{span}(v_1, \ldots, v_k)$ into itself for each $k$. that's the invariance condition, and the matrix in this basis is upper triangular.
 
 the diagonal entries of the upper triangular matrix are the eigenvalues of $T$. the matrix doesn't tell us everything, but the diagonal already tells us the eigenvalue data.
 

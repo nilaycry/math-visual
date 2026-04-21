@@ -4,21 +4,19 @@ description: "when maps can be undone, and why dimension is all that matters"
 week: 9
 ---
 
-linear maps combine through composition. the natural next question is when that process can be seamlessly undone. if a linear map $T: V \to W$ pushes vectors from $V$ into $W$, under what conditions can we perfectly pull them back? 
+linear maps combine through composition. the natural next question is when that process can be undone. if $T$ sends $v$ to $Tv$, is there always a way to get back?
 
-this is the idea of invertibility.
+think about what would have to be true. if two different vectors both map to the same output, you can't recover the input from the output — you wouldn't know which one you started with. and if some vector in $W$ is never reached by $T$, there's nothing to pull it back to. so any reversible map must be injective and surjective. both.
 
-> **Definition.** A linear map $T: V \to W$ is **invertible** if there exists a linear map $S: W \to V$ such that $ST = I_V$ and $TS = I_W$. 
+before reading the definition, try writing it yourself: an inverse of $T$ is a map that undoes it. what two equations would capture that?
+
+> **Definition.** A linear map $T: V \to W$ is **invertible** if there exists a linear map $S: W \to V$ such that $ST = I_V$ and $TS = I_W$.
 
 here, $I_V$ and $I_W$ are the identity maps on $V$ and $W$. if such a map $S$ exists, it is unique and we call it $T^{-1}$.
 
-for a function to be strictly reversible, two things must happen. first, it cannot map two different inputs to the same output, or else we wouldn't know which one to go back to. this means it must be injective. second, it must actually produce every possible output in the target space, or else we would have vectors in $W$ with nowhere to return to. this means it must be surjective.
-
-so a linear map is invertible if and only if it is both injective and surjective.
-
 ---
 
-### isomorphic spaces
+### when two spaces are the same thing
 
 when an invertible linear map exists between two spaces, we give that map a special name.
 
@@ -46,7 +44,7 @@ this leads to what I find to be one of the most remarkable classification theore
 
 pause here. run through the spaces you've seen so far: $\mathbf{F}^n$, polynomials of fixed degree, functions satisfying a linear condition. the theorem says every one of them is just $\mathbf{F}^n$ in different clothing. the fact that they look completely different — tuples versus polynomials versus function spaces — is completely invisible to linear algebra. the only thing that matters is the dimension.
 
-this is a sweeping statement. dimension is exactly the amount of "linear algebraic information" a space holds. 
+I keep coming back to this. dimension is exactly the amount of "linear algebraic information" a space holds.
 
 our example mapping polynomials to $\mathbf{F}^3$ is just one instance of this. despite polynomials and tuples looking like completely different objects, linear algebra cannot tell them apart because they both have dimension $3$. there is really only one vector space of any given finite dimension, up to the names you give the vectors.
 
@@ -60,7 +58,7 @@ suppose $T$ maps a finite-dimensional space $V$ to itself, or to another space o
 
 the argument runs backwards, too. if $T$ is surjective, its range has dimension $n$. the fundamental theorem forces the null space to have dimension zero, meaning it is injective.
 
-so for maps between spaces of the same dimension, injectivity and surjectivity are completely equivalent. you either have both, or neither. this gives a beautiful property for $n \times n$ square matrices: a square matrix is invertible if and only if its null space contains only the zero vector.
+so for maps between spaces of the same dimension, injectivity and surjectivity are completely equivalent. you either have both, or neither. this gives a clean test for $n \times n$ square matrices: a square matrix is invertible if and only if its null space contains only the zero vector. I find this the most useful form of the result for actual computation — no determinant needed, just check the null space.
 
 ---
 

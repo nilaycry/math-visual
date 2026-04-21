@@ -34,10 +34,19 @@ export default function LinearAlgebraPage() {
   return (
     <>
       <style>{`
-        .la-card { transition: border-color 0.2s ease; }
-        .la-card:hover { border-color: #2a2a2a !important; }
-        .la-conn-card { transition: background 0.15s ease; }
-        .la-conn-card:hover { background: rgba(255,255,255,0.04) !important; }
+        .la-card { 
+          transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+        }
+        .la-card:hover { 
+          border-color: rgba(255,255,255,0.15) !important; 
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px -15px var(--hover-glow, rgba(255,255,255,0.05));
+          background-color: rgba(255,255,255,0.035) !important;
+        }
+        .la-conn-card { transition: all 0.2s ease; border-radius: 8px; margin: 0 -12px; padding: 14px 12px; }
+        .la-conn-card:hover { background: rgba(255,255,255,0.04) !important; transform: translateX(4px); }
 
         @media (max-width: 768px) {
           .la-page-nav, .la-hero, .la-content {
@@ -55,33 +64,44 @@ export default function LinearAlgebraPage() {
           minHeight: "100vh",
           backgroundColor: "#0a0a0a",
           color: "#e8e8e8",
-          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         }}
       >
         {/* ── NAVBAR ── */}
-        <nav
-          className="la-page-nav"
+        <div 
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "20px 48px",
-            maxWidth: 1200,
-            margin: "0 auto",
+            position: "sticky",
+            top: 0,
+            zIndex: 50,
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            backgroundColor: "rgba(10, 10, 10, 0.65)",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
           }}
         >
-          <Link href="/" style={{ color: "#555", textDecoration: "none", fontSize: 14 }}>
-            ← back
-          </Link>
-          <a
-            href="https://github.com/nilaycry"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "#555", textDecoration: "none", fontSize: 14 }}
+          <nav
+            className="la-page-nav"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "20px 48px",
+              maxWidth: 1200,
+              margin: "0 auto",
+            }}
           >
-            github
-          </a>
-        </nav>
+            <Link href="/" className="text-[#777] hover:text-[#ccc] transition-colors duration-200 no-underline text-sm font-medium">
+              ← back
+            </Link>
+            <a
+              href="https://github.com/nilaycry"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#777] hover:text-[#ccc] transition-colors duration-200 no-underline text-sm font-medium"
+            >
+              github
+            </a>
+          </nav>
+        </div>
 
         {/* ── HERO ── */}
         <section
@@ -142,7 +162,7 @@ export default function LinearAlgebraPage() {
           {/* ── LESSONS ── */}
           <section style={{ marginBottom: 80 }}>
             <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 48, marginBottom: 32 }}>
-              <span style={{ fontSize: 11, fontWeight: 400, color: "#555", textTransform: "uppercase", letterSpacing: "0.14em" }}>
+              <span style={{ fontSize: 11, fontWeight: 500, color: "#888", textTransform: "uppercase", letterSpacing: "0.14em" }}>
                 lessons
               </span>
             </div>
@@ -160,20 +180,21 @@ export default function LinearAlgebraPage() {
                   <div
                     className="la-card"
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.025)",
-                      border: "0.5px solid #1e1e1e",
-                      borderTop: `2px solid ${lesson.accent}33`,
+                      backgroundColor: "rgba(255,255,255,0.02)",
+                      border: "0.5px solid rgba(255,255,255,0.08)",
+                      borderTop: `2px solid ${lesson.accent}40`,
                       borderRadius: 12,
                       padding: "20px 24px",
                       cursor: "pointer",
-                    }}
+                      "--hover-glow": `${lesson.accent}33`,
+                    } as React.CSSProperties}
                   >
                     <span
                       style={{
                         fontSize: 11,
-                        fontWeight: 400,
+                        fontWeight: 500,
                         color: lesson.accent,
-                        opacity: 0.7,
+                        opacity: 0.8,
                         textTransform: "uppercase",
                         letterSpacing: "0.1em",
                         display: "block",
@@ -185,7 +206,7 @@ export default function LinearAlgebraPage() {
                     <span style={{ fontSize: 15, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 8, lineHeight: 1.3 }}>
                       {lesson.title}
                     </span>
-                    <span style={{ fontSize: 13, color: "#666", lineHeight: 1.5, display: "block" }}>
+                    <span style={{ fontSize: 13, color: "#999", lineHeight: 1.5, display: "block" }}>
                       {lesson.description}
                     </span>
                   </div>
@@ -197,10 +218,10 @@ export default function LinearAlgebraPage() {
           {/* ── CONNECTIONS ── */}
           <section>
             <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 48, marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 400, color: "#555", textTransform: "uppercase", letterSpacing: "0.14em", display: "block", marginBottom: 12 }}>
+              <span style={{ fontSize: 11, fontWeight: 500, color: "#888", textTransform: "uppercase", letterSpacing: "0.14em", display: "block", marginBottom: 12 }}>
                 connections
               </span>
-              <p style={{ fontSize: 13, color: "#444", lineHeight: 1.6, margin: "0 0 32px 0", maxWidth: 480 }}>
+              <p style={{ fontSize: 13, color: "#999", lineHeight: 1.6, margin: "0 0 32px 0", maxWidth: 480 }}>
                 shorter notes on why two things that look different are secretly the same,
                 or why something that seemed obvious is actually subtle.
               </p>
@@ -211,13 +232,13 @@ export default function LinearAlgebraPage() {
                 <Link key={conn.slug} href={`/lessons/${conn.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
                   <div
                     className="la-conn-card"
-                    style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", padding: "14px 0", borderBottom: "1px solid #141414", cursor: "pointer" }}
+                    style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", borderBottom: "1px solid #141414", cursor: "pointer" }}
                   >
                     <div>
-                      <span style={{ fontSize: 14, fontWeight: 400, color: "#c8c8c8", display: "block", marginBottom: 3 }}>
+                      <span style={{ fontSize: 14, fontWeight: 400, color: "#e8e8e8", display: "block", marginBottom: 3 }}>
                         {conn.title}
                       </span>
-                      <span style={{ fontSize: 12, color: "#3a3a3a", lineHeight: 1.5 }}>
+                      <span style={{ fontSize: 12, color: "#888", lineHeight: 1.5 }}>
                         {conn.description}
                       </span>
                     </div>
@@ -232,14 +253,14 @@ export default function LinearAlgebraPage() {
                   style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", padding: "14px 0", borderBottom: "1px solid #141414" }}
                 >
                   <div>
-                    <span style={{ fontSize: 14, fontWeight: 400, color: "#444", display: "block", marginBottom: 3 }}>
+                    <span style={{ fontSize: 14, fontWeight: 400, color: "#777", display: "block", marginBottom: 3 }}>
                       {conn.title}
                     </span>
-                    <span style={{ fontSize: 12, color: "#3a3a3a", lineHeight: 1.5 }}>
+                    <span style={{ fontSize: 12, color: "#555", lineHeight: 1.5 }}>
                       {conn.description}
                     </span>
                   </div>
-                  <span style={{ fontSize: 11, color: "#333", textTransform: "uppercase", letterSpacing: "0.08em", flexShrink: 0, marginLeft: 24 }}>
+                  <span style={{ fontSize: 11, color: "#444", textTransform: "uppercase", letterSpacing: "0.08em", flexShrink: 0, marginLeft: 24 }}>
                     soon
                   </span>
                 </div>

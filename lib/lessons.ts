@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { getThemeAccent } from "./theme";
 
 export interface RelatedEntry {
   slug: string;
@@ -14,8 +15,6 @@ export interface LessonMeta {
   description: string;
   tags: string[];
   displayTag: string;
-  color: string;
-  icon: string;
   accent: string;
   date: string;
   lessonType: "lesson" | "connection";
@@ -56,9 +55,7 @@ export function getAllLessons(): LessonMeta[] {
         description: data.description as string,
         tags,
         displayTag: (data.displayTag as string) ?? tags[0] ?? "",
-        color: data.color as string,
-        icon: data.icon as string,
-        accent: (data.accent as string) ?? "#7F77DD",
+        accent: getThemeAccent((data.displayTag as string) ?? tags[0] ?? ""),
         date: (data.date as string) ?? "",
         lessonType: (data.type === "connection" ? "connection" : "lesson") as "lesson" | "connection",
         related: (data.related as RelatedEntry[] | undefined) ?? [],

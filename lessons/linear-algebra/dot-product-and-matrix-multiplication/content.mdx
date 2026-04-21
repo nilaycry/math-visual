@@ -2,9 +2,6 @@
 title: "dot product is matrix multiplication"
 description: "or is it the other way round"
 tags: ["linear algebra"]
-color: "from-blue-500 to-violet-500"
-icon: "·"
-accent: "#7F77DD"
 displayTag: "connection"
 date: "2026-04-15"
 related:
@@ -15,7 +12,7 @@ related:
 type: "connection"
 ---
 
-the first time most people see the dot product, it comes with a rule: to take a · b,
+the first time most people see the dot product, it comes with a rule: to take `a · b`,
 you write them as vectors, flip one sideways, multiply component by component, then add.
 the transposing feels arbitrary. it isn't.
 
@@ -23,8 +20,8 @@ the transposing feels arbitrary. it isn't.
 
 ### what the dot product is actually measuring
 
-you probably know the projection picture: a · b measures how much a points in the
-direction of b, scaled by |b|. perpendicular gives zero, parallel gives the maximum.
+you probably know the projection picture: `a · b` measures how much `a` points in the
+direction of `b`, scaled by `|b|`. perpendicular gives zero, parallel gives the maximum.
 
 what's less obvious is that the component-wise formula produces exactly that geometric
 quantity. the two descriptions look completely different. one is about shadows and angles.
@@ -34,30 +31,30 @@ the other is bookkeeping. they agree, and the reason they agree runs through the
 
 ### now the transpose
 
-back to why you flip one sideways. if a and b are both column vectors in Rⁿ,
-then aᵀb is a 1×n matrix times an n×1 matrix. the result is a 1×1 matrix,
+back to why you flip one sideways. if `a` and `b` are both column vectors in `Rⁿ`,
+then `aᵀb` is a 1×n matrix times an n×1 matrix. the result is a 1×1 matrix,
 which is just a number. that's the dot product.
 
 <div className="math-highlight">aᵀb &nbsp;=&nbsp; a₁b₁ + a₂b₂ + ··· + aₙbₙ</div>
 
-writing ab without the transpose would be n×1 times n×1, which isn't defined.
+writing `ab` without the transpose would be n×1 times n×1, which isn't defined.
 you could in principle invent some operation on two column vectors and call it
 multiplication, but it wouldn't be matrix multiplication anymore. it would be a
 new thing with its own rules, disconnected from everything else. the transpose
-keeps you inside the existing framework: aᵀb is just matrix multiplication,
+keeps you inside the existing framework: `aᵀb` is just matrix multiplication,
 no special cases, all the same rules apply. that consistency is the reason.
 
-pause here. what this is really saying is that aᵀ is a different kind of object
-than a. a is a vector in Rⁿ. aᵀ is a function that eats a column vector and spits
-out a number, specifically how much that vector projects onto a. every dot product is
+pause here. what this is really saying is that `aᵀ` is a different kind of object
+than `a`. `a` is a vector in `Rⁿ`. `aᵀ` is a function that eats a column vector and spits
+out a number, specifically how much that vector projects onto `a`. every dot product is
 secretly a row vector acting on a column vector. the transpose is what makes that visible.
 
 this means the dot product is itself a matrix-vector multiplication.
-aᵀ is a 1×n matrix. b is an n×1 vector. aᵀb applies the transformation aᵀ to b.
+`aᵀ` is a 1×n matrix. `b` is an n×1 vector. `aᵀb` applies the transformation `aᵀ` to `b`.
 the dot product is not some separate primitive operation sitting beside linear algebra.
 it is linear algebra, just with a one-dimensional output.
 
-and bᵀa gives the same scalar. bᵀ measures projection onto b rather than onto a,
+and `bᵀa` gives the same scalar. `bᵀ` measures projection onto `b` rather than onto `a`,
 so it's a genuinely different function. but when you feed each one the other's vector
 you get the same number. that's the symmetry of the dot product, now visible as a
 fact about two different transformations agreeing on a specific pair of inputs.
@@ -66,8 +63,8 @@ fact about two different transformations agreeing on a specific pair of inputs.
 
 ### the other way to multiply two vectors
 
-aᵀb puts the row first: 1×n times n×1, result is a scalar. now flip the order.
-abᵀ puts the column first: n×1 times 1×n, result is an n×n matrix.
+`aᵀb` puts the row first: 1×n times n×1, result is a scalar. now flip the order.
+`abᵀ` puts the column first: n×1 times 1×n, result is an n×n matrix.
 
 sit with that for a second. same two vectors, one operation swapped, and you go
 from a single number to a full n×n matrix. the order of multiplication isn't
@@ -75,8 +72,8 @@ a bookkeeping detail. it completely changes what kind of object you get.
 
 <div className="math-highlight">(abᵀ)ᵢⱼ &nbsp;=&nbsp; aᵢ · bⱼ</div>
 
-every entry (i,j) is aᵢbⱼ. every row is a scaled copy of bᵀ. every column is a
-scaled copy of a. the whole matrix points in one direction: a. it can only stretch
+every entry (i,j) is `aᵢbⱼ`. every row is a scaled copy of `bᵀ`. every column is a
+scaled copy of `a`. the whole matrix points in one direction: `a`. it can only stretch
 or shrink things along that line. this is what a rank-1 matrix looks like, the
 simplest possible matrix, one direction of action.
 
@@ -91,14 +88,14 @@ the dot product view and the outer product view aren't just curiosities about ve
 they're two different ways to read any matrix multiplication, and switching between
 them is genuinely useful.
 
-the dot product view: the (i,j) entry of AB is the dot product of row i of A with
-column j of B. every output entry is a projection. this is the standard definition
+the dot product view: the (i,j) entry of `AB` is the dot product of row i of `A` with
+column j of `B`. every output entry is a projection. this is the standard definition
 most courses give, and it tells you how to compute any entry in isolation.
 
 <div className="math-highlight">(AB)ᵢⱼ = (row i of A) · (col j of B)</div>
 
-the outer product view: AB is also equal to a sum of rank-1 matrices. take column k
-of A and row k of B, form their outer product, and sum over all k. this isn't obvious
+the outer product view: `AB` is also equal to a sum of rank-1 matrices. take column k
+of `A` and row k of `B`, form their outer product, and sum over all k. this isn't obvious
 and is worth verifying yourself for a small example. each term is the simplest possible
 matrix, one direction of action. SVD does exactly this decomposition, with the
 directions chosen to be as efficient as possible, largest contribution first.
@@ -107,15 +104,15 @@ directions chosen to be as efficient as possible, largest contribution first.
 
 ### two ways to read Ax
 
-the same split applies to matrix-vector multiplication. given Ax, there are two
+the same split applies to matrix-vector multiplication. given `Ax`, there are two
 equally valid ways to see what's happening.
 
-the row view: the i-th output entry is row i of A dotted with x. each component
-of Ax is a projection. the matrix is measuring x against each of its rows and
+the row view: the i-th output entry is row i of `A` dotted with `x`. each component
+of `Ax` is a projection. the matrix is measuring `x` against each of its rows and
 reporting the results.
 
-the column view: Ax is a linear combination of the columns of A, with the entries
-of x as weights.
+the column view: `Ax` is a linear combination of the columns of `A`, with the entries
+of `x` as weights.
 
 <div className="math-highlight">Ax = x₁(col₁) + x₂(col₂) + ··· + xₙ(colₙ)</div>
 
@@ -124,21 +121,21 @@ measurements. the column view is natural for thinking about what vectors Ax can
 possibly be, which is the column space.
 
 I found the column view genuinely surprising the first time I saw it stated carefully,
-even though I had been computing Ax for months. it reframes the question from
+even though I had been computing `Ax` for months. it reframes the question from
 "how do I compute this output" to "what combination of directions am I building."
 
 ---
 
 ### things worth knowing that nobody mentions
 
-every linear function from Rⁿ to R can be written as a dot product with something.
+every linear function from `Rⁿ` to `R` can be written as a dot product with something.
 that something is always a row vector. so row vectors aren't just column vectors
 written sideways. they're a different kind of object: functions that eat vectors
 and return numbers. the row vectors note goes into this properly.
 
 there is also a deeper way to define the transpose that has nothing to do with
-flipping indices. for any matrix A, the transpose is the unique matrix satisfying
-(Ax)·y = x·(Aᵀy) for all vectors x and y. in words: applying A then dotting with y
-gives the same result as dotting with Aᵀy directly. this identity is worth verifying
+flipping indices. for any matrix `A`, the transpose is the unique matrix satisfying
+`(Ax)·y = x·(Aᵀy)` for all vectors `x` and `y`. in words: applying `A` then dotting with `y`
+gives the same result as dotting with `Aᵀy` directly. this identity is worth verifying
 on a small example. it's how the transpose is actually defined in more advanced settings,
 and it's a more honest description of what transposing is than "swap rows and columns."

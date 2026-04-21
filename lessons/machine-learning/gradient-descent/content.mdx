@@ -2,9 +2,6 @@
 title: "which way is downhill"
 description: "the geometry behind how machines learn"
 tags: ["optimization", "calculus", "machine learning"]
-color: "from-zinc-400 to-zinc-600"
-icon: "⛰️"
-accent: "#8c8c8c"
 displayTag: "PART 2: OPTIMIZATION"
 date: "2026-04-13"
 related:
@@ -44,20 +41,20 @@ the gradient is the vector of partial derivatives:
 
 it points in the direction of steepest ascent. but why does subtracting it guarantee we move downhill? 
 
-stop and think about what a derivative actually is. it is a local linear approximation. if you are at a point x₀, the value of the function at a nearby point x can be approximated by a first-order Taylor expansion:
+stop and think about what a derivative actually is. it is a local linear approximation. if you are at a point `x₀`, the value of the function at a nearby point `x` can be approximated by a first-order Taylor expansion:
 
 <div className="math-highlight">f(x) ≈ f(x₀) + ∇f(x₀) · (x − x₀)</div>
 
-we want to pick a new point x that makes f(x) strictly less than f(x₀). look at the equation. to guarantee the result is smaller, we must make the term `∇f(x₀) · (x − x₀)` strictly negative.
+we want to pick a new point `x` that makes `f(x)` strictly less than `f(x₀)`. look at the equation. to guarantee the result is smaller, we must make the term `∇f(x₀) · (x − x₀)` strictly negative.
 
-how do you make a dot product as negative as possible? you force the two vectors to point in exactly opposite directions. so the step vector (x − x₀) must be exactly the negative of the gradient. 
+how do you make a dot product as negative as possible? you force the two vectors to point in exactly opposite directions. so the step vector `(x − x₀)` must be exactly the negative of the gradient. 
 
 <div className="math-highlight">x − x₀ = −α ∇f(x₀)</div>
 <div className="math-highlight">x = x₀ − α ∇f(x₀)</div>
 
 this is the update rule for gradient descent. it is not just a heuristic; it is the mathematical consequence of locally approximating the space as flat, and taking the optimal step strictly within that approximation.
 
-this also completely justifies the learning rate, α. the Taylor expansion is only an approximation. it only holds very close to x₀. if you take a massive step (a huge α), you walk right off the edge of the approximation, and the math no longer guarantees you went down. the learning rate bounds your step strictly to the radius where the linear geometry is actually trustworthy.
+this also completely justifies the learning rate, `α`. the Taylor expansion is only an approximation. it only holds very close to `x₀`. if you take a massive step (a huge `α`), you walk right off the edge of the approximation, and the math no longer guarantees you went down. the learning rate bounds your step strictly to the radius where the linear geometry is actually trustworthy.
 
 ---
 
@@ -84,7 +81,7 @@ exponential moving average of past gradients to the update:
 <div className="math-highlight">v_t = β · v_{t-1} + ∇f(x_t)</div>
 <div className="math-highlight">x_{t+1} = x_t − α · v_t</div>
 
-β = 0.95 means 95% of the step comes from where you were going, 5% from the
+`β = 0.95` means 95% of the step comes from where you were going, 5% from the
 current gradient. the ball has inertia and can punch through shallow minima that
 would trap basic gradient descent.
 
@@ -92,7 +89,7 @@ try the **noisy** mode. the random kick on each step is what stochastic gradient
 descent does in practice: computing gradients on random data subsets adds noise
 that helps escape shallow traps.
 
-neither of these is a clean fix. you can still get stuck, and the right β or noise scale depends on the problem.
+neither of these is a clean fix. you can still get stuck, and the right `β` or noise scale depends on the problem.
 but that's often how it goes. you use the thing that fails less often and debug when it doesn't.
 
 ---

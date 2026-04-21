@@ -36,36 +36,47 @@ export default function CombinatoricsPage() {
           minHeight: "100vh",
           backgroundColor: BG,
           color: FG,
-          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         }}
       >
         {/* ── NAVBAR ── */}
-        <nav
-          className="co-page-nav"
+        <div
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "20px 48px",
-            maxWidth: 1200,
-            margin: "0 auto",
+            position: "sticky",
+            top: 0,
+            zIndex: 50,
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            backgroundColor: "rgba(247, 244, 239, 0.85)",
+            borderBottom: "1px solid rgba(0, 0, 0, 0.06)",
           }}
         >
-          <Link
-            href="/"
-            style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
+          <nav
+            className="co-page-nav"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "20px 48px",
+              maxWidth: 1200,
+              margin: "0 auto",
+            }}
           >
-            ← back
-          </Link>
-          <a
-            href="https://github.com/nilaycry"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
-          >
-            github
-          </a>
-        </nav>
+            <Link
+              href="/"
+              style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
+            >
+              ← back
+            </Link>
+            <a
+              href="https://github.com/nilaycry"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
+            >
+              github
+            </a>
+          </nav>
+        </div>
 
         {/* ── HERO ── */}
         <section

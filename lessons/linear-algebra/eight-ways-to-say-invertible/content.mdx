@@ -2,9 +2,6 @@
 title: "eight ways to say the same thing"
 description: "the invertible matrix theorem, all at once"
 tags: ["linear algebra"]
-color: "from-emerald-500 to-teal-500"
-icon: "≡"
-accent: "#7F77DD"
 displayTag: "connection"
 date: "2026-04-16"
 type: "connection"
@@ -15,7 +12,7 @@ related:
     note: "the trivial null space condition is one of the eight. that lesson covers why it's a subspace and how to find it"
 ---
 
-the invertible matrix theorem says that for a square n×n matrix A, a long list of
+the invertible matrix theorem says that for a square n×n matrix `A`, a long list of
 conditions are all equivalent. if any one is true, all are true. if any one is false,
 all are false. most courses present this as a list to memorize. it isn't. each
 equivalence has a reason, and the reasons all point to the same picture.
@@ -24,19 +21,19 @@ equivalence has a reason, and the reasons all point to the same picture.
 
 ### the eight statements
 
-let A be an n×n matrix. the following are equivalent:
+let `A` be an n×n matrix. the following are equivalent:
 
-1. A is invertible
-2. Ax = 0 has only the trivial solution x = 0
-3. the columns of A are linearly independent
-4. the columns of A span Rⁿ
-5. det(A) ≠ 0
-6. 0 is not an eigenvalue of A
-7. the rank of A is n
-8. the null space of A is just {0}
+1. `A` is invertible
+2. `Ax = 0` has only the trivial solution `x = 0`
+3. the columns of `A` are linearly independent
+4. the columns of `A` span `Rⁿ`
+5. `det(A) ≠ 0`
+6. `0` is not an eigenvalue of `A`
+7. the rank of `A` is n
+8. the null space of `A` is just `{0}`
 
 this is not a complete list. there are others: the rows are linearly independent,
-Aᵀ is invertible, Ax = b has a unique solution for every b. but these eight capture
+`Aᵀ` is invertible, `Ax = b` has a unique solution for every `b`. but these eight capture
 most of what comes up in a first course.
 
 ---
@@ -47,34 +44,34 @@ a matrix transforms space. it takes the unit cube, stretches and rotates and she
 and produces a parallelotope. the determinant measures the volume of that result,
 signed by orientation.
 
-if det(A) = 0, the parallelotope has zero volume. it's flat. some dimension of the
+if `det(A) = 0`, the parallelotope has zero volume. it's flat. some dimension of the
 input collapsed. a full n-dimensional space got sent into something lower-dimensional.
 one direction got erased.
 
 every condition on the list is a different way of noticing that collapse.
 
-condition 2 (Ax = 0 has only the trivial solution): if some nonzero x maps to zero,
+condition 2 (`Ax = 0` has only the trivial solution): if some nonzero `x` maps to zero,
 that direction got erased. the map destroys something and can't be undone.
 
 condition 3 (columns linearly independent): if one column is a linear combination of
 the others, the span of the columns is lower-dimensional than it needs to be. the
-output can't fill Rⁿ.
+output can't fill `Rⁿ`.
 
-condition 4 (columns span Rⁿ): even if no column is redundant, they still need to
+condition 4 (columns span `Rⁿ`): even if no column is redundant, they still need to
 cover all outputs. a matrix can fail invertibility by not reaching some targets.
 
-condition 5 (det ≠ 0): the volume scaling factor is nonzero. the parallelotope didn't
+condition 5 (`det ≠ 0`): the volume scaling factor is nonzero. the parallelotope didn't
 get flattened.
 
-condition 6 (no zero eigenvalue): if 0 is an eigenvalue, there's a vector x with
-Ax = 0, which is exactly condition 2 again. a zero eigenvalue is the null space
+condition 6 (no zero eigenvalue): if 0 is an eigenvalue, there's a vector `x` with
+`Ax = 0`, which is exactly condition 2 again. a zero eigenvalue is the null space
 condition in disguise.
 
 condition 7 (rank n): rank is the dimension of the output. for an n×n matrix,
-rank n means the output fills all of Rⁿ. rank less than n means the output is stuck
+rank n means the output fills all of `Rⁿ`. rank less than n means the output is stuck
 in a proper subspace and the map can't be inverted.
 
-condition 8 (null space is {0}): this is condition 2 restated. the only vector that
+condition 8 (null space is `{0}`): this is condition 2 restated. the only vector that
 maps to zero is zero itself.
 
 ---
@@ -85,11 +82,11 @@ this looks redundant. for a square matrix, independent columns and spanning colu
 turn out to be the same thing, though proving it takes a moment.
 
 for non-square matrices the conditions genuinely differ. a 3×2 matrix can have
-independent columns but they can't span R³ (not enough columns). a 2×3 matrix can
-span R² but the three columns must be dependent (more columns than dimensions).
+independent columns but they can't span `R³` (not enough columns). a 2×3 matrix can
+span `R²` but the three columns must be dependent (more columns than dimensions).
 
 for a square n×n matrix, they're forced to coincide. rank-nullity ties it together:
-rank(A) + nullity(A) = n. if rank equals n, nullity is zero, which is condition 8.
+`rank(A) + nullity(A) = n`. if rank equals n, nullity is zero, which is condition 8.
 so conditions 3, 4, 7, and 8 are all the same condition expressed at different levels:
 column independence, column span, rank, and null space size all give the same yes-or-no
 answer for square matrices.

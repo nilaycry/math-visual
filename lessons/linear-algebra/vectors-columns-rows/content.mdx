@@ -2,9 +2,6 @@
 title: "a vector, a column, a row"
 description: "what's the same object and what isn't"
 tags: ["linear algebra"]
-color: "from-slate-500 to-zinc-500"
-icon: "→"
-accent: "#7F77DD"
 displayTag: "connection"
 date: "2026-04-16"
 type: "connection"
@@ -38,13 +35,13 @@ structured space. there is no list of numbers attached until you make a choice.
 
 ### choosing a basis
 
-a basis for V is a minimal spanning set: every vector in V can be written as exactly
-one linear combination of the basis vectors. once you pick a basis b₁, b₂, ..., bₙ,
-every vector v has a unique list of coefficients (c₁, c₂, ..., cₙ) such that
-v = c₁b₁ + c₂b₂ + ··· + cₙbₙ.
+a basis for `V` is a minimal spanning set: every vector in `V` can be written as exactly
+one linear combination of the basis vectors. once you pick a basis `b₁, b₂, ..., bₙ`,
+every vector `v` has a unique list of coefficients `(c₁, c₂, ..., cₙ)` such that
+`v = c₁b₁ + c₂b₂ + ··· + cₙbₙ`.
 
-that list of coefficients is the column vector. it is not the vector v. it is a
-description of v relative to the chosen basis.
+that list of coefficients is the column vector. it is not the vector `v`. it is a
+description of `v` relative to the chosen basis.
 
 <div className="math-highlight">v &nbsp;↔&nbsp; [c₁, c₂, ..., cₙ]ᵀ &nbsp;&nbsp; (in the basis b₁, ..., bₙ)</div>
 
@@ -52,7 +49,7 @@ change the basis, and the column changes. the vector does not. the arrow in spac
 exactly where it is. its representation shifts.
 
 this distinction is invisible in most first courses because everyone uses the standard
-basis e₁ = [1,0,...,0], e₂ = [0,1,...,0], and so on. in the standard basis, the
+basis `e₁ = [1,0,...,0]`, `e₂ = [0,1,...,0]`, and so on. in the standard basis, the
 coefficients coincide with the coordinates. so it's easy to believe the vector just is
 its column representation. it isn't. the column is a description, and descriptions
 are relative.
@@ -64,12 +61,12 @@ are relative.
 a column vector is a list of coefficients for a vector in V. a row vector is a
 different kind of object entirely.
 
-a row vector is a linear function from V to R. it takes a vector as input and returns
+a row vector is a linear function from `V` to `R`. it takes a vector as input and returns
 a single number. in coordinates, it multiplies each component by a weight and sums:
-f(x) = a₁x₁ + ··· + aₙxₙ. the row [a₁ &nbsp; a₂ &nbsp; ··· &nbsp; aₙ] encodes those weights.
+`f(x) = a₁x₁ + ··· + aₙxₙ`. the row `[a₁  a₂  ···  aₙ]` encodes those weights.
 
-the row lives in the dual space V*. column vectors live in V. these are different
-vector spaces that happen to have the same dimension and, in Rⁿ, look identical
+the row lives in the dual space `V*`. column vectors live in `V`. these are different
+vector spaces that happen to have the same dimension and, in `Rⁿ`, look identical
 (both are n-tuples of numbers). that's why the difference is so easy to miss.
 
 I found this genuinely confusing for a while. the row vector and the column vector
@@ -83,7 +80,7 @@ spaces.
 
 this is where the distinction becomes unavoidable.
 
-suppose you rescale your basis: instead of the unit vector e₁, you use a basis vector
+suppose you rescale your basis: instead of the unit vector `e₁`, you use a basis vector
 that is twice as long. the coordinate of a fixed point halves, because the unit of
 measurement doubled. column vector coordinates scale inversely with the basis.
 
@@ -94,7 +91,7 @@ new coordinates, its coefficient needs to double: 6 times the new unit equals 3 
 the old unit times 2. row vector coefficients scale the same way as the basis.
 
 column coordinates and row coordinates transform in opposite directions. this isn't
-a quirk. it's the reason you can form the product aᵀx and get a basis-independent
+a quirk. it's the reason you can form the product `aᵀx` and get a basis-independent
 number: the contravariant and covariant pieces cancel exactly. the dot product is
 invariant under a change of basis precisely because one factor transforms one way
 and the other transforms the opposite way.
@@ -108,5 +105,5 @@ you can no longer ignore which kind of object you're working with.
 ### what this connects to
 
 the row-vectors-are-functions note covers the dual space properly and explains why
-the gradient is a row vector. the dot product note shows how aᵀb is a row vector
+the gradient is a row vector. the dot product note shows how `aᵀb` is a row vector
 evaluating on a column vector and what that means for matrix multiplication.

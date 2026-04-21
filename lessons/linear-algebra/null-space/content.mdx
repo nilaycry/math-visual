@@ -2,9 +2,6 @@
 title: "the directions a matrix destroys"
 description: "what the null space is and why it matters"
 tags: ["linear algebra"]
-color: "from-rose-500 to-pink-500"
-icon: "∅"
-accent: "#E05A7A"
 displayTag: "structure"
 date: "2026-04-16"
 related:
@@ -30,13 +27,13 @@ tells you something fundamental about what the matrix actually does.
 
 ### what it is
 
-the null space of A, written N(A), is the set of all vectors x satisfying Ax = 0.
+the null space of `A`, written `N(A)`, is the set of all vectors `x` satisfying `Ax = 0`.
 
-it always contains the zero vector. that's trivial since A times zero is always zero.
+it always contains the zero vector. that's trivial since `A` times zero is always zero.
 the question is whether it contains anything else.
 
-it's always a subspace. if Ax = 0 and Ay = 0, then A(x+y) = Ax + Ay = 0 + 0 = 0.
-if Ax = 0, then A(cx) = c(Ax) = 0. linearity guarantees it's closed under the
+it's always a subspace. if `Ax = 0` and `Ay = 0`, then `A(x+y) = Ax + Ay = 0 + 0 = 0`.
+if `Ax = 0`, then `A(cx) = c(Ax) = 0`. linearity guarantees it's closed under the
 operations that make a subspace a subspace. this is one of those facts worth
 checking once by hand so it stops feeling like something you have to take on faith.
 
@@ -63,13 +60,13 @@ in 2D, a 2×2 matrix has exactly two options: the null space is either just the 
 vector (the matrix is invertible, nothing gets destroyed) or an entire line through
 the origin (the matrix is singular, one whole direction collapses). there's no middle
 ground. this is connected to the eigen lesson: a zero eigenvalue means its eigenvector
-lies in the null space. the null space is the eigenspace for λ = 0.
+lies in the null space. the null space is the eigenspace for `λ = 0`.
 
 ---
 
 ### finding it
 
-to find the null space you solve Ax = 0. the method is row reduction, which is
+to find the null space you solve `Ax = 0`. the method is row reduction, which is
 mechanical once you know it, but the output (a list of free variables and their
 null vectors) has a direct geometric meaning: each null vector is a specific
 direction the matrix destroys.
@@ -77,23 +74,23 @@ direction the matrix destroys.
 row reduce A to row echelon form and read off the free variables. each free
 variable contributes one vector to a basis for the null space.
 
-take a concrete case. let A = [[1, 2], [2, 4]]. the second row is twice the first, so
-det(A) = 0 and the matrix is singular.
+take a concrete case. let `A = [[1, 2], [2, 4]]`. the second row is twice the first, so
+`det(A) = 0` and the matrix is singular.
 
 <div className="math-highlight">[ 1  2 ] → row reduce → [ 1  2 ]
 [ 2  4 ]               [ 0  0 ]</div>
 
-the single equation x₁ + 2x₂ = 0 gives x₁ = -2x₂. setting x₂ = 1 gives the null
-vector [-2, 1]. the null space is the line spanned by [-2, 1]: every scalar multiple
-of it maps to zero. you can verify by hand: A[-2, 1]ᵀ = [(-2 + 2), (-4 + 4)] = [0, 0].
+the single equation `x₁ + 2x₂ = 0` gives `x₁ = -2x₂`. setting `x₂ = 1` gives the null
+vector `[-2, 1]`. the null space is the line spanned by `[-2, 1]`: every scalar multiple
+of it maps to zero. you can verify by hand: `A[-2, 1]ᵀ = [(-2 + 2), (-4 + 4)] = [0, 0]`.
 
 this is where 3D starts appearing even in simple cases. take a 2×3 matrix:
-A = [[1, 0, 1], [0, 1, 1]]. it's already in reduced row echelon form. the third
-column has no pivot so x₃ is free. setting x₃ = 1 gives x₁ = -1, x₂ = -1.
+`A = [[1, 0, 1], [0, 1, 1]]`. it's already in reduced row echelon form. the third
+column has no pivot so `x₃` is free. setting `x₃ = 1` gives `x₁ = -1`, `x₂ = -1`.
 
 <div className="math-highlight">null space of A spanned by [ -1, -1, 1 ]</div>
 
-the null space is a line in R³. the input is three-dimensional, the output is two-dimensional,
+the null space is a line in `R³`. the input is three-dimensional, the output is two-dimensional,
 and one dimension got destroyed in the process. which one is encoded in that vector: if you
 change the third input by 1 while pulling the first two back by 1, the output is zero. the
 matrix can't tell that happened.

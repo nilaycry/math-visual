@@ -2,9 +2,6 @@
 title: "the chain rule on a graph"
 description: "how neural networks actually compute gradients"
 tags: ["calculus", "machine learning", "neural networks"]
-color: "from-zinc-400 to-zinc-600"
-icon: "🔗"
-accent: "#8c8c8c"
 displayTag: "PART 4: BACKPROPAGATION"
 date: "2026-04-15"
 related:
@@ -25,13 +22,13 @@ the [gradient descent](/lessons/gradient-descent) lesson assumes you already hav
 
 ### a tiny network
 
-take the simplest nontrivial network: one input x, one hidden neuron with weight w and bias b, one output neuron with weight v and bias c. the forward pass is a chain of four operations:
+take the simplest nontrivial network: one input `x`, one hidden neuron with weight `w` and bias `b`, one output neuron with weight `v` and bias `c`. the forward pass is a chain of four operations:
 
 <div className="math-highlight">z = w · x + b &nbsp;&nbsp;&nbsp; h = σ(z) &nbsp;&nbsp;&nbsp; y = v · h + c &nbsp;&nbsp;&nbsp; L = (y − target)²</div>
 
 σ is the activation function, the nonlinearity that lets the network represent more than a line. I'm using tanh here because its derivative is clean and bounded, which makes the gradients easier to follow visually.
 
-L is a single number. the question is how L changes when you nudge w, v, or b. those are ∂L/∂w, ∂L/∂v, ∂L/∂b, and gradient descent needs all of them. computing them by expanding the full composition and differentiating by hand gets messy quickly. the graph approach keeps the pieces small.
+`L` is a single number. the question is how `L` changes when you nudge `w`, `v`, or `b`. those are `∂L/∂w`, `∂L/∂v`, `∂L/∂b`, and gradient descent needs all of them. computing them by expanding the full composition and differentiating by hand gets messy quickly. the graph approach keeps the pieces small.
 
 ---
 
@@ -41,7 +38,7 @@ the sketch draws this network as a computation graph. the forward pass runs left
 
 the colored bars on each node show the gradient magnitude at that node, how much a small change there would move the loss. bright means a lot of influence. dim means almost none.
 
-the specific thing to look for: drag x to a large positive or large negative value, so the hidden neuron saturates. watch the gradient bar on w go nearly dark while the bar on v stays lit. the two weights are connected to the same loss, but one is getting almost no gradient signal. that's not a coincidence, and the next section explains why.
+the specific thing to look for: drag `x` to a large positive or large negative value, so the hidden neuron saturates. watch the gradient bar on `w` go nearly dark while the bar on `v` stays lit. the two weights are connected to the same loss, but one is getting almost no gradient signal. that's not a coincidence, and the next section explains why.
 
 <div className="not-prose my-8">
   <BackpropSketch />
@@ -51,7 +48,7 @@ the specific thing to look for: drag x to a large positive or large negative val
 
 ### the chain rule, but on a graph
 
-the chain rule says: if L depends on y, and y depends on h, and h depends on z, then
+the chain rule says: if `L` depends on `y`, and `y` depends on `h`, and `h` depends on `z`, then
 
 <div className="math-highlight">∂L/∂z = ∂L/∂y · ∂y/∂h · ∂h/∂z</div>
 
@@ -61,7 +58,7 @@ on a graph the version of this is: to get the gradient at any node, follow every
 <div className="math-highlight">∂y/∂h = v</div>
 <div className="math-highlight">∂h/∂z = σ'(z) = 1 − tanh(z)²</div>
 
-multiply them to get ∂L/∂z. then ∂L/∂w = ∂L/∂z · x, and ∂L/∂b = ∂L/∂z · 1.
+multiply them to get `∂L/∂z`. then `∂L/∂w = ∂L/∂z · x`, and `∂L/∂b = ∂L/∂z · 1`.
 
 pause here. this might feel straightforward on a network this small, but consider a network with a hundred layers. if you try to compute the derivative of the loss with respect to a weight in the first layer using classical calculus, you have to expand out the chain rule through every single path that connects that weight to the output. in a fully connected network, the number of intersecting paths grows exponentially. computing gradients by expanding the formula would require more operations than there are atoms in the universe.
 
@@ -75,11 +72,11 @@ because each intermediate gradient is computed exactly once, the whole backward 
 
 ### why saturation kills learning
 
-look at σ'(z) = 1 − tanh(z)². when z is large, tanh(z) is near ±1 and σ'(z)
-is near 0. since the backward pass multiplies by σ'(z) at each node, a
+look at `σ'(z) = 1 − tanh(z)²`. when `z` is large, `tanh(z)` is near `±1` and `σ'(z)`
+is near `0`. since the backward pass multiplies by `σ'(z)` at each node, a
 saturated neuron nearly blocks the gradient entirely. that's what you saw in
-the sketch: w barely moves because its gradient gets squeezed through that
-near-zero derivative, while v stays lit because it sits after the saturation.
+the sketch: `w` barely moves because its gradient gets squeezed through that
+near-zero derivative, while `v` stays lit because it sits after the saturation.
 
 stack several saturated layers and this compounds. that story is in the
 [gradient flow](/lessons/gradient-flow) lesson.
@@ -106,9 +103,9 @@ knowing the mechanics helps when training breaks down. when a loss stops improvi
 
 one gradient on one example doesn't train a network. training means repeating the forward pass and the backward pass over a dataset, and at every step nudging each parameter a little in the opposite direction of its gradient. that nudging rule is [gradient descent](/lessons/gradient-descent), now applied to all four parameters at once instead of two.
 
-the sketch below does exactly that. same network as before (x → z → h → y, with parameters w, b, v, c), but now there are six (x, target) points shown as teal dots, and the pink curve is the function the network currently represents. hit start training and watch the pink curve bend toward the teal one as the loss falls.
+the sketch below does exactly that. same network as before (`x → z → h → y`, with parameters `w`, `b`, `v`, `c`), but now there are six `(x, target)` points shown as teal dots, and the pink curve is the function the network currently represents. hit start training and watch the pink curve bend toward the teal one as the loss falls.
 
-the four presets are the whole story in 30 seconds. try them in order. good init converges cleanly. saturated init starts with w=3, which pins tanh near ±1 on every data point, so ∂h/∂z ≈ 0 and w barely moves. that's the exact failure mode from the saturation section, now playing out live. lr too high makes the updates overshoot the minimum every step, so the loss oscillates instead of descending. lr too low takes steps so small that training visibly stalls even though everything is technically correct.
+the four presets are the whole story in 30 seconds. try them in order. good init converges cleanly. saturated init starts with `w=3`, which pins `tanh` near `±1` on every data point, so `∂h/∂z ≈ 0` and `w` barely moves. that's the exact failure mode from the saturation section, now playing out live. lr too high makes the updates overshoot the minimum every step, so the loss oscillates instead of descending. lr too low takes steps so small that training visibly stalls even though everything is technically correct.
 
 <div className="not-prose my-8">
   <BackpropTrainSketch />

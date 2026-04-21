@@ -10,8 +10,17 @@ export default function MachineLearningPage() {
   return (
     <>
       <style>{`
-        .ml-card { transition: border-color 0.2s ease; }
-        .ml-card:hover { border-color: #2a2a2a !important; }
+        .ml-card { 
+          transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+        }
+        .ml-card:hover { 
+          border-color: rgba(255,255,255,0.15) !important; 
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px -15px var(--hover-glow, rgba(255,255,255,0.05));
+          background-color: rgba(255,255,255,0.035) !important;
+        }
 
         @media (max-width: 768px) {
           .ml-page-nav, .ml-hero, .ml-content {
@@ -29,33 +38,44 @@ export default function MachineLearningPage() {
           minHeight: "100vh",
           backgroundColor: "#0a0a0a",
           color: "#e8e8e8",
-          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         }}
       >
         {/* ── NAVBAR ── */}
-        <nav
-          className="ml-page-nav"
+        <div 
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "20px 48px",
-            maxWidth: 1200,
-            margin: "0 auto",
+            position: "sticky",
+            top: 0,
+            zIndex: 50,
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            backgroundColor: "rgba(10, 10, 10, 0.65)",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
           }}
         >
-          <Link href="/" style={{ color: "#555", textDecoration: "none", fontSize: 14 }}>
-            ← back
-          </Link>
-          <a
-            href="https://github.com/nilaycry"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "#555", textDecoration: "none", fontSize: 14 }}
+          <nav
+            className="ml-page-nav"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "20px 48px",
+              maxWidth: 1200,
+              margin: "0 auto",
+            }}
           >
-            github
-          </a>
-        </nav>
+            <Link href="/" className="text-[#777] hover:text-[#ccc] transition-colors duration-200 no-underline text-sm font-medium">
+              ← back
+            </Link>
+            <a
+              href="https://github.com/nilaycry"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#777] hover:text-[#ccc] transition-colors duration-200 no-underline text-sm font-medium"
+            >
+              github
+            </a>
+          </nav>
+        </div>
 
         {/* ── HERO ── */}
         <section
@@ -113,7 +133,7 @@ export default function MachineLearningPage() {
         {/* ── LESSONS ── */}
         <div className="ml-content" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 120px" }}>
           <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 48, marginBottom: 32 }}>
-            <span style={{ fontSize: 11, fontWeight: 400, color: "#555", textTransform: "uppercase", letterSpacing: "0.14em" }}>
+            <span style={{ fontSize: 11, fontWeight: 500, color: "#888", textTransform: "uppercase", letterSpacing: "0.14em" }}>
               lessons
             </span>
           </div>
@@ -131,19 +151,21 @@ export default function MachineLearningPage() {
                 <div
                   className="ml-card"
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.025)",
-                    border: "0.5px solid #1e1e1e",
+                    backgroundColor: "rgba(255,255,255,0.02)",
+                    border: "0.5px solid rgba(255,255,255,0.08)",
+                    borderTop: `2px solid ${lesson.accent}40`,
                     borderRadius: 12,
                     padding: "20px 24px",
                     cursor: "pointer",
-                  }}
+                    "--hover-glow": `${lesson.accent}33`,
+                  } as React.CSSProperties}
                 >
                   <span
                     style={{
                       fontSize: 11,
-                      fontWeight: 400,
+                      fontWeight: 500,
                       color: lesson.accent,
-                      opacity: 0.7,
+                      opacity: 0.8,
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
                       display: "block",
@@ -155,7 +177,7 @@ export default function MachineLearningPage() {
                   <span style={{ fontSize: 15, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 8, lineHeight: 1.3 }}>
                     {lesson.title}
                   </span>
-                  <span style={{ fontSize: 13, color: "#666", lineHeight: 1.5, display: "block" }}>
+                  <span style={{ fontSize: 13, color: "#999", lineHeight: 1.5, display: "block" }}>
                     {lesson.description}
                   </span>
                 </div>

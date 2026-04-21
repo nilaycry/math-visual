@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -90,15 +90,15 @@
 }
 
 .prose h2 {
-  @apply text-2xl font-semibold mt-10 mb-4 text-foreground;
+  @apply text-2xl font-bold mt-12 mb-5 text-[#f4f4f5] tracking-tight;
 }
 
 .prose h3 {
-  @apply text-xl font-medium mt-6 mb-3 text-foreground;
+  @apply text-[1.3rem] font-semibold mt-10 mb-4 text-[#e4e4e7] tracking-tight;
 }
 
 .prose p {
-  @apply text-base leading-relaxed mb-4 text-foreground/85;
+  @apply text-[1.05rem] leading-[1.85] mb-6 text-[#a1a1aa];
 }
 
 .prose strong {
@@ -110,7 +110,7 @@
 }
 
 .prose code {
-  @apply px-1.5 py-0.5 rounded bg-secondary text-sm font-mono;
+  @apply px-1.5 py-0.5 rounded bg-[#18181b] text-[#71ccff] text-[0.9em] font-mono border border-[#27272a];
 }
 
 .prose ul {
@@ -165,7 +165,11 @@
 
 /* Math equation styling */
 .math-highlight {
-  @apply px-4 py-3 rounded-lg bg-secondary/50 border border-border font-mono text-sm my-4 overflow-x-auto;
+  @apply px-5 py-4 rounded-xl font-mono text-[0.95em] my-6 overflow-x-auto leading-relaxed shadow-lg tracking-wide w-full max-w-full;
+  background: linear-gradient(135deg, #1b1625 0%, #0e0a14 100%);
+  border: 1px solid #2d243f;
+  border-left: 3px solid #a855f7;
+  color: #e9d5ff;
 }
 
 /* Notes prose — light theme, hardcoded colors to bypass dark CSS variables */

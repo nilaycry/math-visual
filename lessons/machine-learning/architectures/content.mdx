@@ -3,9 +3,6 @@ title: "architectures for depth"
 description: "the engineering that made deep networks actually train"
 tags: ["machine learning", "deep learning"]
 displayTag: "PART 6: DEEP ARCHITECTURES"
-color: "from-zinc-400 to-zinc-600"
-accent: "#8c8c8c"
-icon: "🏗️"
 date: "2026-04-17"
 related:
   - slug: "gradient-flow"
@@ -38,7 +35,7 @@ it pins the activations so they remain centered in the regime where derivatives 
 
 even with stable activations, scaling depth introduced an unexpected failure: arbitrarily deep networks (e.g., 100 layers) strictly performed worse on training data than shallower networks (e.g., 20 layers). 
 
-mathematically, this is anomalous. the 100-layer network strictly contains the 20-layer network within it. the optimizer could theoretically set the first 20 layers to match the shallow network, and force the remaining 80 layers to act as an identity operation (f(x) = x). 
+mathematically, this is anomalous. the 100-layer network strictly contains the 20-layer network within it. the optimizer could theoretically set the first 20 layers to match the shallow network, and force the remaining 80 layers to act as an identity operation (`f(x) = x`). 
 
 but gradient descent routinely failed to find that solution. forcing 80 layers of matrices and non-linearities to precisely mimic a lossless pass-through is incredibly difficult to learn from random initializations.
 
@@ -46,9 +43,9 @@ the structural fix is **residual connections**. instead of forcing the block to 
 
 <div className="math-highlight">y = f(x) + x</div>
 
-now, the internal block f(x) does not have to learn the full mapping. it solely learns the *residual*—the necessary adjustment to x. 
+now, the internal block `f(x)` does not have to learn the full mapping. it solely learns the *residual*—the necessary adjustment to `x`. 
 
-if the optimal operation is to do nothing, the optimizer simply drives the weights of f(x) to zero. f(x) vanishes, and the equation collapses cleanly to y = 0 + x. the identity function operates as the default assumption rather than a complex target.
+if the optimal operation is to do nothing, the optimizer simply drives the weights of `f(x)` to zero. `f(x)` vanishes, and the equation collapses cleanly to `y = 0 + x`. the identity function operates as the default assumption rather than a complex target.
 
 skip connections additionally provide an unobstructed highway for the gradient to flow backward during backpropagation, bypassing blocks that might constrict it. this single architectural change permitted networks to scale to thousands of layers seamlessly.
 

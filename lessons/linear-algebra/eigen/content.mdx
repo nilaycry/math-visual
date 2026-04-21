@@ -2,9 +2,6 @@
 title: "the directions a matrix can't change"
 description: "what a matrix actually does to space"
 tags: ["linear algebra"]
-color: "from-orange-500 to-rose-500"
-icon: "🔄"
-accent: "#D85A30"
 displayTag: "eigenvalues"
 date: "2026-04-13"
 rigorousNote: "eigenvalues-and-eigenvectors"
@@ -17,7 +14,7 @@ related:
 
 import EigenSketch from '@/components/sketches/EigenSketch'
 
-the definition is really simple: Av = λv. a matrix times a vector equals a scalar
+the definition is really simple: `Av = λv`. a matrix times a vector equals a scalar
 times that same vector. it seems arbitrary. why would this particular equation matter?
 
 ---
@@ -41,13 +38,13 @@ direction. click anywhere on the unit circle to place a vector and watch where t
 
 ### the algebra, motivated by the geometry
 
-if Av = λv, then (A − λI)v = 0. for that to have a nonzero solution,
-(A − λI) has to be singular, squash space down a dimension.
+if `Av = λv`, then `(A − λI)v = 0`. for that to have a nonzero solution,
+`(A − λI)` has to be singular, squash space down a dimension.
 that only happens when its determinant is zero:
 
 <div className="math-highlight">det(A − λI) = 0</div>
 
-for a 2×2 matrix [[a, b], [c, d]] this expands to:
+for a 2×2 matrix `[[a, b], [c, d]]` this expands to:
 
 <div className="math-highlight">λ² − (a+d)λ + (ad−bc) = 0</div>
 
@@ -63,9 +60,9 @@ try the Scale preset and check it yourself. it's one of those things that feels 
 
 try rotation. the unit circle maps back to a unit circle. no direction is preserved. there are no real eigenvectors.
 
-looking at the numbers [[0, −1], [1, 0]] gives no intuition for why. but the geometric picture makes it obvious, almost trivial: if the transformation is a pure rotation, there's no direction that gets left alone. of course there are no real eigenvectors. the geometry makes the algebra feel inevitable instead of arbitrary.
+looking at the numbers `[[0, −1], [1, 0]]` gives no intuition for why. but the geometric picture makes it obvious, almost trivial: if the transformation is a pure rotation, there's no direction that gets left alone. of course there are no real eigenvectors. the geometry makes the algebra feel inevitable instead of arbitrary.
 
-the discriminant of the characteristic polynomial tells you when this happens: when (a+d)² − 4(ad−bc) < 0, the eigenvalues are complex. geometrically, the transformation spins space too much for any real direction to survive.
+the discriminant of the characteristic polynomial tells you when this happens: when `(a+d)² − 4(ad−bc) < 0`, the eigenvalues are complex. geometrically, the transformation spins space too much for any real direction to survive.
 
 ---
 

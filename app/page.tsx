@@ -63,8 +63,17 @@ export default function HomePage() {
   return (
     <>
       <style>{`
-        .scard { transition: border-color 0.2s ease; }
-        .scard:hover { border-color: #2a2a2a !important; }
+        .scard { 
+          transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+        }
+        .scard:hover { 
+          border-color: rgba(255,255,255,0.15) !important; 
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px -15px var(--hover-glow, rgba(255,255,255,0.05));
+          background-color: rgba(255,255,255,0.035) !important;
+        }
 
         @media (max-width: 768px) {
           .hero-section {
@@ -88,50 +97,62 @@ export default function HomePage() {
           minHeight: "100vh",
           backgroundColor: "#0a0a0a",
           color: "#e8e8e8",
-          fontFamily:
-            "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         }}
       >
         {/* ── NAVBAR ── */}
-        <nav
-          className="page-nav"
+        <div 
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "20px 48px",
-            maxWidth: 1200,
-            margin: "0 auto",
+            position: "sticky",
+            top: 0,
+            zIndex: 50,
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            backgroundColor: "rgba(10, 10, 10, 0.65)",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
           }}
         >
-          <span />
-          <div style={{ display: "flex", gap: 32 }}>
-            <SmoothScrollLink
-              targetId="explore"
-              style={{
-                color: "#555",
-                textDecoration: "none",
-                fontSize: 14,
-                fontWeight: 400,
-              }}
-            >
-              explore
-            </SmoothScrollLink>
-            <a
-              href="https://github.com/nilaycry"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                color: "#555",
-                textDecoration: "none",
-                fontSize: 14,
-                fontWeight: 400,
-              }}
-            >
-              github
-            </a>
-          </div>
-        </nav>
+          <nav
+            className="page-nav"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "20px 48px",
+              maxWidth: 1200,
+              margin: "0 auto",
+            }}
+          >
+            <span />
+            <div style={{ display: "flex", gap: 32 }}>
+              <SmoothScrollLink
+                targetId="explore"
+                style={{
+                  color: "#777",
+                  textDecoration: "none",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  transition: "color 0.2s",
+                }}
+              >
+                explore
+              </SmoothScrollLink>
+              <a
+                href="https://github.com/nilaycry"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "#777",
+                  textDecoration: "none",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  transition: "color 0.2s",
+                }}
+              >
+                github
+              </a>
+            </div>
+          </nav>
+        </div>
 
         {/* ── HERO ── */}
         <section
@@ -164,12 +185,15 @@ export default function HomePage() {
 
             <h1
               style={{
-                fontSize: 42,
+                fontSize: 46,
                 fontWeight: 500,
                 lineHeight: 1.15,
-                color: "#e8e8e8",
+                background: "linear-gradient(135deg, #ffffff 0%, #999999 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
                 margin: "0 0 24px 0",
                 maxWidth: 480,
+                letterSpacing: "-0.01em",
               }}
             >
               some math is easier to feel than to read
@@ -180,7 +204,7 @@ export default function HomePage() {
                 fontSize: 16,
                 fontWeight: 400,
                 lineHeight: 1.65,
-                color: "#888",
+                color: "#999",
                 margin: "0 0 36px 0",
                 maxWidth: 420,
               }}
@@ -191,15 +215,19 @@ export default function HomePage() {
 
             <SmoothScrollLink
               targetId="explore"
+              className="group"
               style={{
+                display: "inline-flex",
                 color: "#E8A020",
                 textDecoration: "none",
                 fontSize: 14,
-                fontWeight: 400,
+                fontWeight: 500,
                 cursor: "pointer",
+                alignItems: "center",
+                transition: "color 0.2s",
               }}
             >
-              explore ↓
+              explore <span className="transform transition-transform duration-300 group-hover:translate-y-1 inline-block ml-1">↓</span>
             </SmoothScrollLink>
           </div>
 
@@ -225,8 +253,8 @@ export default function HomePage() {
               <span
                 style={{
                   fontSize: 11,
-                  fontWeight: 400,
-                  color: "#555",
+                  fontWeight: 500,
+                  color: "#888",
                   textTransform: "uppercase" as const,
                   letterSpacing: "0.14em",
                   display: "block",
@@ -235,7 +263,7 @@ export default function HomePage() {
               >
                 lessons
               </span>
-              <p style={{ fontSize: 13, color: "#3a3a3a", margin: 0, lineHeight: 1.6 }}>
+              <p style={{ fontSize: 13, color: "#999", margin: 0, lineHeight: 1.6 }}>
                 interactive structural anchors. building the geometric intuition before trusting the algebra.
               </p>
             </div>
@@ -248,28 +276,29 @@ export default function HomePage() {
                   <div
                     className="scard"
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.025)",
-                      border: "0.5px solid #1e1e1e",
-                      borderTop: `2px solid ${subject.accent}33`,
+                      backgroundColor: "rgba(255,255,255,0.02)",
+                      border: "0.5px solid rgba(255,255,255,0.08)",
+                      borderTop: `2px solid ${subject.accent}40`,
                       borderRadius: 12,
                       padding: "28px 28px 24px",
                       cursor: "pointer",
                       height: "100%",
-                      boxSizing: "border-box" as const,
-                    }}
+                      boxSizing: "border-box",
+                      "--hover-glow": `${subject.accent}33`,
+                    } as React.CSSProperties}
                   >
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-                      <span style={{ fontSize: 11, fontWeight: 400, color: subject.accent, opacity: 0.7, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
+                      <span style={{ fontSize: 11, fontWeight: 500, color: subject.accent, opacity: 0.8, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
                         {subject.tag}
                       </span>
-                      <span style={{ fontSize: 11, color: "#333", letterSpacing: "0.05em" }}>
+                      <span style={{ fontSize: 11, color: "#888", letterSpacing: "0.05em" }}>
                         {subject.count} {subject.count === 1 ? "lesson" : "lessons"}
                       </span>
                     </div>
                     <span style={{ fontSize: 17, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 10, lineHeight: 1.3 }}>
                       {subject.title}
                     </span>
-                    <span style={{ fontSize: 13, fontWeight: 400, color: "#555", lineHeight: 1.6, display: "block" }}>
+                    <span style={{ fontSize: 13, fontWeight: 400, color: "#999", lineHeight: 1.6, display: "block" }}>
                       {subject.description}
                     </span>
                   </div>
@@ -287,8 +316,8 @@ export default function HomePage() {
               <span
                 style={{
                   fontSize: 11,
-                  fontWeight: 400,
-                  color: "#555",
+                  fontWeight: 500,
+                  color: "#888",
                   textTransform: "uppercase" as const,
                   letterSpacing: "0.14em",
                   display: "block",
@@ -297,7 +326,7 @@ export default function HomePage() {
               >
                 notebooks
               </span>
-              <p style={{ fontSize: 13, color: "#3a3a3a", margin: 0, lineHeight: 1.6 }}>
+              <p style={{ fontSize: 13, color: "#999", margin: 0, lineHeight: 1.6 }}>
                 written in real time, one definition at a time. sequential, honest about what&apos;s hard.
               </p>
             </div>
@@ -310,28 +339,29 @@ export default function HomePage() {
                   <div
                     className="scard"
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.018)",
-                      border: "0.5px solid #1a1a1a",
+                      backgroundColor: "rgba(255,255,255,0.015)",
+                      border: "0.5px solid rgba(255,255,255,0.06)",
                       borderLeft: `2px solid ${subject.accent}44`,
                       borderRadius: 12,
                       padding: "28px 28px 24px",
                       cursor: "pointer",
                       height: "100%",
-                      boxSizing: "border-box" as const,
-                    }}
+                      boxSizing: "border-box",
+                      "--hover-glow": `${subject.accent}33`,
+                    } as React.CSSProperties}
                   >
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-                      <span style={{ fontSize: 11, fontWeight: 400, color: subject.accent, opacity: 0.7, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
+                      <span style={{ fontSize: 11, fontWeight: 500, color: subject.accent, opacity: 0.8, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
                         {subject.tag}
                       </span>
-                      <span style={{ fontSize: 11, color: "#333", letterSpacing: "0.05em" }}>
+                      <span style={{ fontSize: 11, color: "#888", letterSpacing: "0.05em" }}>
                         {subject.count} {subject.count === 1 ? "note" : "notes"}
                       </span>
                     </div>
                     <span style={{ fontSize: 17, fontWeight: 500, color: "#d8d8d8", display: "block", marginBottom: 10, lineHeight: 1.3 }}>
                       {subject.title}
                     </span>
-                    <span style={{ fontSize: 13, fontWeight: 400, color: "#555", lineHeight: 1.6, display: "block" }}>
+                    <span style={{ fontSize: 13, fontWeight: 400, color: "#999", lineHeight: 1.6, display: "block" }}>
                       {subject.description}
                     </span>
                   </div>

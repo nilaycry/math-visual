@@ -55,7 +55,7 @@ const YourSketch = dynamic(() => import("@/components/sketches/YourSketch"), { s
 - Machine learning lessons: `tags: ["machine learning"]`
 - Connection notes: also tagged by subject, plus `type: "connection"` in frontmatter
 
-The `LessonMeta` object extracts `subject` from the parent directory name (e.g. `linear-algebra`). This property strictly isolates pagination between lessons. The `displayTag` frontmatter field sets the small label shown on the lesson card (e.g. "eigenvalues"). If omitted, it falls back to `tags[0]`.
+The `LessonMeta` object extracts `subject` from the parent directory name (e.g. `linear-algebra`). This property strictly isolates pagination between lessons. The `displayTag` frontmatter field sets the small label shown on the lesson card (e.g. "eigenvalues") and **also dictates the visual theme (border colors/accents)** via the central registry in `lib/theme.ts`. If omitted, it falls back to `tags[0]`.
 
 The main page counts (`app/page.tsx`) are also computed from `getAllLessons()` — no manual updating needed.
 
@@ -76,8 +76,7 @@ Copy this skeleton for every new lesson. Fill in each section as described.
 title: "lowercase title, like a thought not a heading"
 description: "one line, conversational"
 tags: ["tag"]
-color: "from-X-500 to-Y-500"
-icon: "emoji"
+displayTag: "category tag for theme styling"
 date: "YYYY-MM-DD"
 ---
 
@@ -406,7 +405,7 @@ const arrowScreenY = gy * scaleY; // no negation
 - Dark background: `#0a0a0a`, text: `#e8e8e8`, muted: `#888`, very muted: `#555`
 - Site is dark-only — no light/dark toggle
 - Navbar on lesson pages: `← lessons` left, `github` right, nothing else
-- Lesson cards: accent color top border, lowercase tag, conversational description
+- Lesson cards: accent color top border, lowercase tag, conversational description (Card colors are strictly pulled from `lib/theme.ts` based on the frontmatter `displayTag`)
 
 ### the ThemeProvider dark-class gotcha
 
@@ -501,4 +500,5 @@ notes/
 lib/
   lessons.ts                    — lesson metadata + content loader; sorted by date
   notes.ts                      — generic note loader; all functions accept optional course param (default: "abstract-linear-algebra")
+  theme.ts                      — centralized registry mapping displayTags to hex tokens
 ```

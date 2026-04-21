@@ -2,9 +2,6 @@
 title: "where gradient flow breaks"
 description: "what stops deep networks from training and what actually fixed it"
 tags: ["machine learning"]
-color: "from-zinc-400 to-zinc-600"
-icon: "⟶"
-accent: "#8c8c8c"
 displayTag: "PART 5: VANISHING GRADIENTS"
 date: "2026-04-16"
 related:
@@ -32,9 +29,9 @@ reliably for about two decades.
 
 ### the compounding picture
 
-set up a concrete case. a tanh neuron with pre-activation z = 2 has derivative
-σ'(2) = 1 − tanh(2)² ≈ 0.07. chain three of them and the gradient at the first
-layer is 0.07³ ≈ 0.0003. chain six and it's about 10⁻⁷.
+set up a concrete case. a `tanh` neuron with pre-activation `z = 2` has derivative
+`σ'(2) = 1 − tanh(2)² ≈ 0.07`. chain three of them and the gradient at the first
+layer is `0.07³ ≈ 0.0003`. chain six and it's about `10⁻⁷`.
 
 <div className="math-highlight">gradient at layer k = σ'(z)^k</div>
 
@@ -52,7 +49,7 @@ reaches each earlier layer during training.
 
 with tanh, drag the saturation slider right. watch the bars on the left go dark
 while the right side stays full. then drag the depth slider up. each layer you
-add cuts whatever is already left by another factor of σ'(z). by depth 7 or 8
+add cuts whatever is already left by another factor of `σ'(z)`. by depth 7 or 8
 with saturation at 2, nothing meaningful is reaching the input layer.
 
 switch to relu. drag depth to 8. the bars stay uniform. that contrast is the
@@ -67,7 +64,7 @@ whole story.
 ### the relu fix
 
 the problem with tanh is that its derivative shrinks toward zero as the neuron
-saturates. relu doesn't have that property. f(z) = max(0, z) has derivative
+saturates. `relu` doesn't have that property. `f(z) = max(0, z)` has derivative
 exactly 1 for any positive input. a chain of relu neurons with positive
 activations passes the gradient through unchanged. depth doesn't compound
 anything.
