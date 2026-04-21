@@ -446,7 +446,7 @@ To add another course (e.g. `real-analysis`):
 Each note (in any course) can have a companion problem set at `notes/<course>/<slug>/problems.mdx`. No routing registration needed.
 
 - **To add problems:** create `notes/<course>/<slug>/problems.mdx`
-- **Effect:** a `problems →` link appears in the note header
+- **Effect:** a `problems →` link appears at the bottom of the note
 - **Detection:** `hasProblems(slug, course)` in `lib/notes.ts`
 - **Format:** plain MDX with KaTeX. Use `###` for section headings. Number problems with `**1.**` bold prefix. Separate sections with `---`.
 - **Frontmatter:** `title` and `week` matching the parent note — no other fields needed.

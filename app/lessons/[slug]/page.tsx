@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getLessonBySlug, getAllLessonSlugs, getLessonContent, type LessonMeta, type RelatedEntry } from "@/lib/lessons";
+import { getNoteBySlug } from "@/lib/notes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { compileMDX } from "next-mdx-remote/rsc";
@@ -69,6 +70,8 @@ export default async function LessonPage({
     components,
   });
 
+  const rigorousNote = lesson.rigorousNote ? getNoteBySlug(lesson.rigorousNote) : null;
+
   // Resolve related entries — only include live (non-draft) lessons
   const resolvedRelated: (RelatedEntry & { meta: LessonMeta })[] = (lesson.related ?? [])
     .map((r) => ({ ...r, meta: getLessonBySlug(r.slug) }))
@@ -130,6 +133,45 @@ export default async function LessonPage({
 
       {/* MDX Content */}
       <article className="prose">{content}</article>
+
+      {/* Rigorous treatment link */}
+      {rigorousNote && (
+        <section style={{ marginTop: 64 }}>
+          <span
+            style={{
+              fontSize: 11,
+              color: "#555",
+              textTransform: "uppercase",
+              letterSpacing: "0.14em",
+              display: "block",
+              marginBottom: 20,
+            }}
+          >
+            rigorous treatment
+          </span>
+          <Link
+            href={`/abstract-linear-algebra/${lesson.rigorousNote}`}
+            style={{ textDecoration: "none", color: "inherit", display: "block" }}
+          >
+            <div style={{ padding: "14px 0", borderBottom: "1px solid #141414" }}>
+              <span
+                style={{
+                  fontSize: 14,
+                  fontWeight: 400,
+                  color: "#c8c8c8",
+                  display: "block",
+                  marginBottom: 4,
+                }}
+              >
+                {rigorousNote.title}
+              </span>
+              <span style={{ fontSize: 13, color: "#3a3a3a", lineHeight: 1.5 }}>
+                abstract linear algebra · week {rigorousNote.week}
+              </span>
+            </div>
+          </Link>
+        </section>
+      )}
 
       {/* Connected lessons */}
       {resolvedRelated.length > 0 && (

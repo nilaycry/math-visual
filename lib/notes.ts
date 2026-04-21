@@ -7,6 +7,7 @@ export interface NoteMeta {
   title: string;
   description: string;
   week: number;
+  visualLesson?: string;
 }
 
 function notesDir(course: string) {
@@ -33,6 +34,7 @@ export function getAllNotes(course = "abstract-linear-algebra"): NoteMeta[] {
         title: data.title as string,
         description: data.description as string,
         week: (data.week as number) ?? 1,
+        visualLesson: (data.visualLesson as string | undefined) ?? undefined,
       } as NoteMeta;
     })
     .filter((note): note is NoteMeta => note !== null)

@@ -20,6 +20,7 @@ export interface LessonMeta {
   date: string;
   lessonType: "lesson" | "connection";
   related: RelatedEntry[];
+  rigorousNote?: string;
 }
 
 const lessonsDirectory = path.join(process.cwd(), "lessons");
@@ -61,6 +62,7 @@ export function getAllLessons(): LessonMeta[] {
         date: (data.date as string) ?? "",
         lessonType: (data.type === "connection" ? "connection" : "lesson") as "lesson" | "connection",
         related: (data.related as RelatedEntry[] | undefined) ?? [],
+        rigorousNote: (data.rigorousNote as string | undefined) ?? undefined,
       });
     }
   }

@@ -1,0 +1,114 @@
+---
+title: "span and linear independence"
+week: 3
+---
+
+### check the span
+
+**1.** Is $(3, 1, 5)$ in $\text{span}((1, 0, 2),\, (0, 1, -1))$?
+
+<Solution>
+
+**the move.** set up $a(1,0,2) + b(0,1,-1) = (3,1,5)$ and solve component by component. the third equation is the check.
+
+row 1: $a = 3$. row 2: $b = 1$. row 3: $2(3) + (-1)(1) = 5$. the third equation is satisfied, so yes, $(3, 1, 5) \in \text{span}((1,0,2),(0,1,-1))$.
+
+</Solution>
+
+**2.** In $\mathcal{P}_3(\mathbf{F})$, is $x^3$ in $\text{span}(1 - x,\; x - x^2,\; x^2 - x^3)$?
+
+<Solution>
+
+**the move.** write $a(1-x) + b(x-x^2) + c(x^2-x^3) = x^3$ and match coefficients of $1, x, x^2, x^3$.
+
+constant: $a = 0$. $x$-coefficient: $-a + b = 0$, so $b = 0$. $x^2$-coefficient: $-b + c = 0$, so $c = 0$. $x^3$-coefficient: $-c = 1$, so $c = -1$. But we already concluded $c = 0$. Contradiction. $x^3 \notin \text{span}(1-x, x-x^2, x^2-x^3)$.
+
+</Solution>
+
+---
+
+### check independence
+
+**3.** Is $(1, 2, 0),\; (0, 1, 3),\; (1, 0, -6)$ linearly independent in $\mathbb{R}^3$?
+
+<Solution>
+
+**the move.** solve $a(1,2,0) + b(0,1,3) + c(1,0,-6) = (0,0,0)$ and look for a nontrivial solution.
+
+the system: $a + c = 0$, $2a + b = 0$, $3b - 6c = 0$. From the third equation: $b = 2c$. From the second: $a = -b/2 = -c$. From the first: $-c + c = 0$, which is satisfied for any $c$. Taking $c = 1$ gives $a = -1,\, b = 2,\, c = 1$: a nontrivial solution. The list is **linearly dependent**.
+
+</Solution>
+
+**4.** For which values of $t \in \mathbf{F}$ is $(1, t),\; (t, 4)$ linearly independent in $\mathbf{F}^2$?
+
+<Solution>
+
+**the move.** a list of two vectors in $\mathbf{F}^2$ is dependent exactly when one is a scalar multiple of the other, equivalently when the $2 \times 2$ matrix they form has zero determinant.
+
+**the key observation.** the condition for dependence is $4 \cdot 1 - t \cdot t = 4 - t^2 = 0$, i.e., $t = \pm 2$.
+
+The list $(1, t),\, (t, 4)$ is linearly independent for all $t \in \mathbf{F}$ with $t \neq 2$ and $t \neq -2$.
+
+</Solution>
+
+---
+
+### prove it
+
+**5.** Let $v_1, \ldots, v_m$ be linearly independent in $V$ and let $w \in V$. Prove that $v_1, \ldots, v_m, w$ is linearly independent if and only if $w \notin \text{span}(v_1, \ldots, v_m)$.
+
+<Solution>
+
+**the move.** both directions use the same structure: any dependence relation among $v_1, \ldots, v_m, w$ with $a_{m+1} = 0$ would contradict the independence of $v_1, \ldots, v_m$. so the $w$-coefficient is the only lever.
+
+**the key observation.** the independence of $v_1, \ldots, v_m$ forces any nontrivial dependence relation on the extended list to have a nonzero coefficient on $w$, which lets you solve for $w$ in terms of the others.
+
+$(\Leftarrow)$ Suppose $w \in \text{span}(v_1, \ldots, v_m)$. Write $w = a_1 v_1 + \cdots + a_m v_m$. Then
+
+$$a_1 v_1 + \cdots + a_m v_m - w = \mathbf{0}$$
+
+which is a nontrivial relation (coefficient $-1 \neq 0$ on $w$). So the extended list is dependent.
+
+$(\Rightarrow)$ Suppose $v_1, \ldots, v_m, w$ is dependent. Write $a_1 v_1 + \cdots + a_m v_m + a_{m+1} w = \mathbf{0}$ nontrivially. If $a_{m+1} = 0$, then $a_1 v_1 + \cdots + a_m v_m = \mathbf{0}$ nontrivially, contradicting independence of $v_1, \ldots, v_m$. So $a_{m+1} \neq 0$, and
+
+$$w = -\frac{a_1}{a_{m+1}} v_1 - \cdots - \frac{a_m}{a_{m+1}} v_m \in \text{span}(v_1, \ldots, v_m).$$
+
+</Solution>
+
+**6.** Prove that if $v_1, v_2, v_3$ is linearly independent in $V$, then $v_1,\; v_1 + v_2,\; v_1 + v_2 + v_3$ is also linearly independent.
+
+<Solution>
+
+**the move.** suppose $a\, v_1 + b(v_1 + v_2) + c(v_1 + v_2 + v_3) = \mathbf{0}$. expand and regroup by $v_1, v_2, v_3$, then use independence.
+
+$(a + b + c)\, v_1 + (b + c)\, v_2 + c\, v_3 = \mathbf{0}$.
+
+Since $v_1, v_2, v_3$ are linearly independent: $c = 0$, then $b + c = b = 0$, then $a + b + c = a = 0$.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**7.** If $v_1, v_2$ is linearly independent in $V$, then $v_1 + v_2,\; v_1 - v_2$ is also linearly independent.
+
+<Solution>
+
+**true.**
+
+Suppose $a(v_1 + v_2) + b(v_1 - v_2) = \mathbf{0}$. Expanding: $(a + b)\, v_1 + (a - b)\, v_2 = \mathbf{0}$. By independence of $v_1, v_2$: $a + b = 0$ and $a - b = 0$. Adding gives $2a = 0$, so $a = 0$, then $b = 0$.
+
+</Solution>
+
+**8.** If $V = \text{span}(v_1, v_2)$ and $w \in V$ is nonzero, then $w,\, v_1,\, v_2$ is linearly dependent.
+
+<Solution>
+
+**true.**
+
+Since $w \in V = \text{span}(v_1, v_2)$, write $w = a_1 v_1 + a_2 v_2$. Then $1 \cdot w - a_1 v_1 - a_2 v_2 = \mathbf{0}$ is a nontrivial relation (coefficient $1$ on $w$).
+
+</Solution>

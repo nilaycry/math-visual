@@ -1,0 +1,106 @@
+---
+title: "the rank-nullity theorem"
+week: 7
+---
+
+### apply rank-nullity
+
+**1.** Let $T: \mathbf{F}^5 \to \mathbf{F}^3$ be a surjective linear map. Find $\dim\,\text{null}\,T$.
+
+<Solution>
+
+**the move.** surjective means $\text{range}\,T = \mathbf{F}^3$, so $\dim\,\text{range}\,T = 3$. plug into rank-nullity.
+
+$\dim\,\text{null}\,T = \dim \mathbf{F}^5 - \dim\,\text{range}\,T = 5 - 3 = 2$.
+
+</Solution>
+
+**2.** Suppose $T: \mathbf{F}^4 \to \mathbf{F}^4$ is linear and $\dim\,\text{null}\,T = 2$. Is $T$ invertible?
+
+<Solution>
+
+**the move.** rank-nullity gives $\dim\,\text{range}\,T$. compare with $\dim \mathbf{F}^4$ to check surjectivity, and $\dim\,\text{null}\,T$ to check injectivity.
+
+$\dim\,\text{range}\,T = 4 - 2 = 2$. Since $\dim\,\text{range}\,T = 2 \neq 4 = \dim \mathbf{F}^4$, the range does not fill $\mathbf{F}^4$: $T$ is not surjective. Since $\dim\,\text{null}\,T = 2 \neq 0$, $T$ is not injective either. $T$ is not invertible.
+
+</Solution>
+
+**3.** Suppose $T: V \to W$ is linear with $\dim V = 7$ and $\dim\,\text{null}\,T = 3$. What is $\dim\,\text{range}\,T$? If also $\dim W = 5$, is $T$ surjective?
+
+<Solution>
+
+**the move.** rank-nullity gives $\dim\,\text{range}\,T$ directly. then compare with $\dim W$.
+
+$\dim\,\text{range}\,T = 7 - 3 = 4$.
+
+If $\dim W = 5$, then $\text{range}\,T$ has dimension $4$ inside a $5$-dimensional space, so $\text{range}\,T \subsetneq W$. $T$ is not surjective.
+
+</Solution>
+
+---
+
+### prove it
+
+**4.** Prove that there is no injective linear map from $\mathbf{F}^5$ to $\mathbf{F}^3$.
+
+<Solution>
+
+**the move.** assume $T: \mathbf{F}^5 \to \mathbf{F}^3$ is injective and derive a contradiction using rank-nullity.
+
+**the key observation.** rank-nullity converts the assumption of injectivity into a dimension count for the range, which then conflicts with the constraint that the range must fit inside $\mathbf{F}^3$.
+
+Suppose $T$ is injective. Then $\text{null}\,T = \{\mathbf{0}\}$, so $\dim\,\text{null}\,T = 0$. By rank-nullity:
+
+$$\dim\,\text{range}\,T = \dim \mathbf{F}^5 - 0 = 5.$$
+
+But $\text{range}\,T \subseteq \mathbf{F}^3$, and any subspace of $\mathbf{F}^3$ has dimension at most $3$. This gives $5 \leq 3$, a contradiction.
+
+</Solution>
+
+**5.** Let $T: V \to W$ be linear with $\dim V = \dim W$. Prove that $T$ is injective if and only if $T$ is surjective.
+
+<Solution>
+
+**the move.** chain together rank-nullity and the subspace dimension result from the dimension note: both injectivity and surjectivity reduce to the same statement about $\dim\,\text{range}\,T$.
+
+**the key observation.** in a square situation, injective and surjective are both equivalent to $\dim\,\text{range}\,T = n$. rank-nullity is the bridge.
+
+Let $n = \dim V = \dim W$.
+
+$T$ injective $\;\Leftrightarrow\;$ $\dim\,\text{null}\,T = 0$ $\;\Leftrightarrow\;$ $\dim\,\text{range}\,T = n$ (by rank-nullity) $\;\Leftrightarrow\;$ $\text{range}\,T = W$ (since $\text{range}\,T$ is a subspace of $W$ with $\dim W = n$, equality of dimensions forces $\text{range}\,T = W$) $\;\Leftrightarrow\;$ $T$ surjective.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**6.** There exists a surjective linear map from $\mathbf{F}^2$ to $\mathbf{F}^3$.
+
+<Solution>
+
+**false.**
+
+If $T: \mathbf{F}^2 \to \mathbf{F}^3$ were surjective, then $\dim\,\text{range}\,T = 3$. By rank-nullity:
+
+$$\dim\,\text{null}\,T = \dim \mathbf{F}^2 - \dim\,\text{range}\,T = 2 - 3 = -1.$$
+
+A dimension cannot be negative.
+
+</Solution>
+
+**7.** If $T: V \to V$ is linear and $T^2 = 0$ (meaning $T \circ T = 0$), then $\text{range}\,T \subseteq \text{null}\,T$.
+
+<Solution>
+
+**true.**
+
+Let $w \in \text{range}\,T$. Then $w = T(v)$ for some $v \in V$. Apply $T$:
+
+$$T(w) = T(T(v)) = T^2(v) = 0(v) = \mathbf{0}.$$
+
+So $w \in \text{null}\,T$.
+
+</Solution>

@@ -1,0 +1,96 @@
+---
+title: "invertibility and isomorphisms"
+week: 9
+---
+
+### check isomorphisms
+
+**1.** Determine whether $T: \mathcal{P}_2(\mathbf{F}) \to \mathbf{F}^3$ defined by $T(a + bx + cx^2) = (a + b,\; b - c,\; c)$ is an isomorphism.
+
+<Solution>
+
+**the move.** check injectivity by finding $\text{null}\,T$. since the domain and codomain have the same dimension, injectivity alone is enough.
+
+**the key observation.** the square-matrix symmetry from the note: for maps between equal-dimensional spaces, injective implies surjective. so one check suffices.
+
+Suppose $T(a + bx + cx^2) = (0, 0, 0)$. Then $c = 0$, $b - c = b = 0$, and $a + b = a = 0$. So $\text{null}\,T = \{0\}$: $T$ is injective. Since $\dim \mathcal{P}_2(\mathbf{F}) = \dim \mathbf{F}^3 = 3$ and $T$ is injective, it is also surjective. $T$ is an isomorphism.
+
+</Solution>
+
+**2.** Let $V = \{(x_1, x_2, x_3, x_4) \in \mathbf{F}^4 : x_1 + x_2 = 0,\; x_3 - x_4 = 0\}$. Identify a familiar vector space isomorphic to $V$ and write down an explicit isomorphism.
+
+<Solution>
+
+**the move.** count $\dim V$ by counting free parameters, then invoke the classification theorem.
+
+**the key observation.** the classification theorem says dimension is all that matters. once we know $\dim V$, we know exactly which space $V$ is isomorphic to.
+
+Two independent linear constraints on $4$ variables leave $2$ free parameters: set $x_2 = -x_1$ and $x_3 = x_4$, then $x_1$ and $x_4$ vary freely. So $\dim V = 2$. By the classification theorem, $V$ is isomorphic to $\mathbf{F}^2$.
+
+Explicit isomorphism: parametrize $V$ as $\{(-t, t, s, s) : t, s \in \mathbf{F}\}$ and define $T(-t, t, s, s) = (t, s)$. This is linear, injective (null space is $\{0\}$), and surjective (every $(t, s) \in \mathbf{F}^2$ is hit).
+
+</Solution>
+
+---
+
+### prove it
+
+**3.** Prove that if $T: V \to W$ is an isomorphism, then $T^{-1}: W \to V$ is a linear map.
+
+<Solution>
+
+**the move.** let $w_1, w_2 \in W$ and set $v_i = T^{-1}(w_i)$, so $T(v_i) = w_i$. use linearity of $T$ to compute $T$ on the combinations, then read off what $T^{-1}$ must do.
+
+**the key observation.** since $T$ is a bijection, the equation $T(v) = w$ has a unique solution $v = T^{-1}(w)$. linearity of $T$ forces these unique solutions to combine correctly.
+
+Let $w_1, w_2 \in W$ and $a \in \mathbf{F}$. Let $v_1 = T^{-1}(w_1)$ and $v_2 = T^{-1}(w_2)$.
+
+**additivity.** $T(v_1 + v_2) = T(v_1) + T(v_2) = w_1 + w_2$. By uniqueness of preimages, $T^{-1}(w_1 + w_2) = v_1 + v_2 = T^{-1}(w_1) + T^{-1}(w_2)$.
+
+**homogeneity.** $T(a v_1) = a T(v_1) = a w_1$. By uniqueness, $T^{-1}(a w_1) = a v_1 = a T^{-1}(w_1)$.
+
+</Solution>
+
+**4.** Prove that the composition of two isomorphisms is an isomorphism.
+
+<Solution>
+
+**the move.** let $S: U \to V$ and $T: V \to W$ be isomorphisms. the composition $T \circ S$ is linear by the linear-maps note. check that it is bijective.
+
+**the key observation.** linearity of compositions was already established. bijectivity follows from the separate injectivity and surjectivity of $S$ and $T$.
+
+**linearity.** proved in the linear-maps note: the composition of linear maps is linear.
+
+**injectivity.** if $(T \circ S)(u_1) = (T \circ S)(u_2)$, then $T(S(u_1)) = T(S(u_2))$. Injectivity of $T$ gives $S(u_1) = S(u_2)$, and injectivity of $S$ gives $u_1 = u_2$.
+
+**surjectivity.** let $w \in W$. Surjectivity of $T$ gives $v \in V$ with $T(v) = w$. Surjectivity of $S$ gives $u \in U$ with $S(u) = v$. Then $(T \circ S)(u) = T(v) = w$.
+
+$T \circ S$ is a bijective linear map, hence an isomorphism.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**5.** If $T: V \to V$ is linear and $T^2 = I_V$ (where $I_V$ is the identity on $V$), then $T$ is an isomorphism.
+
+<Solution>
+
+**true.**
+
+$T^2 = I_V$ means $T \circ T = I_V$. Taking $S = T$: $S \circ T = I_V$ and $T \circ S = I_V$. This is exactly the definition of invertibility with $T^{-1} = T$. An invertible linear map is an isomorphism.
+
+</Solution>
+
+**6.** Any two finite-dimensional vector spaces over the same field with the same dimension are isomorphic.
+
+<Solution>
+
+**true.** this is the classification theorem from the note.
+
+Let $V$ and $W$ be $n$-dimensional over $\mathbf{F}$. Choose a basis $v_1, \ldots, v_n$ of $V$ and a basis $w_1, \ldots, w_n$ of $W$. Define $T: V \to W$ on basis vectors by $T(v_i) = w_i$ and extend: for $v = \sum a_i v_i$, set $T(v) = \sum a_i w_i$. This is well-defined because every vector in $V$ has a unique representation in the basis. $T$ is injective: if $T\!\left(\sum a_i v_i\right) = \sum a_i w_i = \mathbf{0}$, then all $a_i = 0$ by independence of the $w_i$. Since $\dim V = \dim W$, the square symmetry theorem gives surjectivity. So $T$ is an isomorphism.
+
+</Solution>

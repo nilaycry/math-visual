@@ -1,0 +1,96 @@
+---
+title: "a single space, completely"
+week: 5.5
+---
+
+these problems don't introduce new material. they ask you to connect what you've built. each one pulls on more than one concept from the first five notes.
+
+### connecting the concepts
+
+**1.** Let $U = \{p \in \mathcal{P}_4(\mathbf{F}) : p(0) = 0\}$.
+
+(a) Show that $U$ is a subspace of $\mathcal{P}_4(\mathbf{F})$.
+
+(b) Find a basis for $U$ and determine $\dim U$.
+
+(c) The polynomial $p(x) = x^2 + 3x$ is in $U$. Write it as a linear combination of your basis.
+
+<Solution>
+
+**the move.** for (a), use the three-condition subspace test. for (b), figure out which polynomials of degree at most 4 satisfy $p(0) = 0$, then find the minimal spanning set. for (c), the basis gives unique coordinates.
+
+**(a)** The zero polynomial satisfies $0(0) = 0$. If $p(0) = q(0) = 0$, then $(p+q)(0) = 0$ and $(ap)(0) = a \cdot 0 = 0$. So $U$ is a subspace.
+
+**(b)** A polynomial $p = a_0 + a_1 x + a_2 x^2 + a_3 x^3 + a_4 x^4$ satisfies $p(0) = a_0 = 0$. So $U = \{a_1 x + a_2 x^2 + a_3 x^3 + a_4 x^4 : a_i \in \mathbf{F}\}$. The list $x, x^2, x^3, x^4$ spans $U$ and is independent (coefficients in distinct degrees). Basis: $x, x^2, x^3, x^4$. $\dim U = 4$.
+
+**(c)** $x^2 + 3x = 3 \cdot x + 1 \cdot x^2 + 0 \cdot x^3 + 0 \cdot x^4$.
+
+</Solution>
+
+**2.** Let $V$ be a vector space with $\dim V = n$, and let $v_1, \ldots, v_n \in V$.
+
+(a) Suppose $v_1, \ldots, v_n$ spans $V$. Must it be a basis?
+
+(b) Suppose $v_1, \ldots, v_n$ is linearly independent. Must it be a basis?
+
+(c) Suppose $v_1, \ldots, v_n$ is neither spanning nor independent. Is this possible?
+
+<Solution>
+
+**the move.** all three parts are consequences of the one-condition proposition from the dimension note.
+
+**the key observation.** at the right length, one condition forces the other. but the third part asks whether both conditions can fail simultaneously — which requires the list to be dependent, which is only possible for lists of the right length if they're also not spanning.
+
+**(a) Yes.** A spanning list of $n$ vectors in an $n$-dimensional space is a basis. If it were dependent, we could remove a vector and still span, giving a basis of length less than $n$, contradicting the definition of dimension.
+
+**(b) Yes.** An independent list of $n$ vectors in an $n$-dimensional space is a basis. If it didn't span, we could extend it, but any independent extension would exceed length $n$, violating the key inequality.
+
+**(c) No.** By parts (a) and (b): spanning forces a basis, and independence forces a basis. So at length $n$, the list is either a basis (spanning and independent) or it fails both. Wait — can it fail both? Take $V = \mathbf{F}^2$, $n = 2$, and the list $(1, 0), (2, 0)$. This is dependent (not independent) and does not span $\mathbf{F}^2$ ($(0,1)$ is unreachable). So yes, both can fail simultaneously — a dependent, non-spanning list of exactly $n$ vectors is possible.
+
+</Solution>
+
+**3.** Suppose $U$ and $W$ are subspaces of a finite-dimensional space $V$ with $U \cap W = \{\mathbf{0}\}$ and $\dim U + \dim W = \dim V$. Show that every $v \in V$ can be written uniquely as $v = u + w$ with $u \in U$ and $w \in W$.
+
+<Solution>
+
+**the move.** combine a basis of $U$ with a basis of $W$, show the union is a basis of $V$, then use the unique representation theorem.
+
+**the key observation.** $\dim U + \dim W = \dim V$ says the pieces are the right total size. $U \cap W = \{\mathbf{0}\}$ is what rules out double-counting and gives independence of the combined list.
+
+Let $u_1, \ldots, u_k$ be a basis of $U$ and $w_1, \ldots, w_m$ be a basis of $W$, where $k + m = n = \dim V$. Claim: $u_1, \ldots, u_k, w_1, \ldots, w_m$ is a basis of $V$.
+
+**Independence.** Suppose $a_1 u_1 + \cdots + a_k u_k + b_1 w_1 + \cdots + b_m w_m = \mathbf{0}$. Then $a_1 u_1 + \cdots + a_k u_k = -(b_1 w_1 + \cdots + b_m w_m)$. The left side is in $U$ and the right side is in $W$, so both equal some vector in $U \cap W = \{\mathbf{0}\}$. Independence of the $u_i$ gives all $a_i = 0$; independence of the $w_j$ gives all $b_j = 0$.
+
+**Spanning.** The combined list has length $k + m = n = \dim V$ and is independent, so by the one-condition proposition it is a basis of $V$.
+
+Now every $v \in V$ has a unique representation $v = a_1 u_1 + \cdots + a_k u_k + b_1 w_1 + \cdots + b_m w_m$. Setting $u = \sum a_i u_i \in U$ and $w = \sum b_j w_j \in W$ gives the unique decomposition $v = u + w$.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**4.** If $U$ is a subspace of $V$ and $V$ is finite-dimensional, then $U$ is finite-dimensional.
+
+<Solution>
+
+**true.**
+
+$U$ is spanned by finitely many vectors: take any basis $v_1, \ldots, v_n$ of $V$. Any $u \in U \subseteq V$ is a linear combination of $v_1, \ldots, v_n$. So $U \subseteq \text{span}(v_1, \ldots, v_n)$, which means $U$ is itself spanned by this finite list. Any subspace of a finitely-spanned space is finite-dimensional.
+
+</Solution>
+
+**5.** There exists a subspace $U$ of $\mathbf{F}^5$ with $\dim U = 3$ that contains the vectors $(1, 0, 0, 0, 0)$, $(0, 1, 0, 0, 0)$, and $(1, 1, 0, 0, 0)$.
+
+<Solution>
+
+**false.**
+
+The three vectors $(1,0,0,0,0)$, $(0,1,0,0,0)$, $(1,1,0,0,0)$ are linearly dependent: $(1,1,0,0,0) = (1,0,0,0,0) + (0,1,0,0,0)$. Any subspace containing the first two must also contain their sum, so the third vector adds nothing. The smallest subspace containing all three is $\text{span}((1,0,0,0,0),(0,1,0,0,0))$, which has dimension 2, not 3.
+
+There is no 3-dimensional subspace here — any subspace containing these three vectors has dimension at most 2, since the three vectors only span a 2-dimensional space.
+
+</Solution>

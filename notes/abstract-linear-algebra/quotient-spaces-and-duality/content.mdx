@@ -1,0 +1,123 @@
+---
+title: "quotient spaces and duality"
+description: "collapsing a subspace to a point, and the shadow world of linear functionals"
+week: 10
+---
+
+every linear map $T: V \to W$ collapses part of its domain. vectors in the null space all land at zero, indistinguishable from $T$'s perspective. the fundamental theorem accounts for this numerically: the null space uses up some of $V$'s dimension, leaving the rest for the range. but dimension is just a count. the real question is whether we can build the space that $T$ actually sees, with the null space collapsed to a single point.
+
+that is exactly what quotient spaces do.
+
+---
+
+### cosets
+
+let $U$ be a subspace of $V$. for any $v \in V$, the **coset** of $v$ with respect to $U$ is
+
+$$v + U = \{v + u : u \in U\}$$
+
+think of $U$ as a blur on $V$. two vectors $v$ and $w$ look the same once you ignore all of $U$, if and only if $v - w \in U$. the coset $v + U$ collects every vector that is indistinguishable from $v$ by that measure.
+
+cosets partition $V$: every vector belongs to exactly one. if $v + U$ and $w + U$ share any element, say $v + u_1 = w + u_2$ for some $u_1, u_2 \in U$, then $v - w = u_2 - u_1 \in U$. from there, every element of $v + U$ is also in $w + U$, and vice versa. two cosets are either identical or completely disjoint.
+
+---
+
+### the quotient space
+
+before reading the definition, try to write it yourself. we want the collection of all cosets of $U$ to form a vector space. what should addition look like? the natural choice is $(v + U) + (w + U) = (v + w) + U$. the only catch is checking this doesn't depend on which representative we pick: if $v + U = v' + U$, we need $(v + w) + U = (v' + w) + U$.
+
+since $v + U = v' + U$ means $v - v' \in U$, and $U$ is closed under addition, we get $(v + w) - (v' + w) = v - v' \in U$. the calculation works because $U$ is a subspace. this is why we need $U$ to be a subspace and not merely a subset.
+
+> **Definition.** Let $U$ be a subspace of $V$. The **quotient space** $V/U$ is the set of all cosets of $U$ in $V$, with operations $(v + U) + (w + U) = (v + w) + U$ and $\lambda(v + U) = (\lambda v) + U$.
+
+the zero vector of $V/U$ is the coset $0 + U = U$ itself. the map $\pi: V \to V/U$ sending $v \mapsto v + U$ is surjective and linear, with null space exactly $U$.
+
+---
+
+### an example and a non-example
+
+let $V = \mathbf{R}^3$ and $U$ be the $xy$-plane $\{(x, y, 0) : x, y \in \mathbf{R}\}$. a coset $(a, b, c) + U$ consists of all points sharing the same $z$-coordinate as $(a, b, c)$: it is the horizontal plane at height $c$. the quotient space $\mathbf{R}^3 / U$ is the collection of all such horizontal planes, parameterized entirely by their height. so $\mathbf{R}^3 / U \cong \mathbf{R}$, a one-dimensional space.
+
+as a non-example, take $S = \{(x, 0, 0) : x \geq 0\}$ in $\mathbf{R}^3$, the non-negative $x$-axis. this fails to be a subspace because $(-1)(1, 0, 0) = (-1, 0, 0) \notin S$: it is not closed under scalar multiplication. as a result, the relation $v \sim w \iff v - w \in S$ is not symmetric. we have $(1, 0, 0) \sim (0, 0, 0)$ since $(1, 0, 0) - (0, 0, 0) = (1, 0, 0) \in S$, but $(0, 0, 0) \not\sim (1, 0, 0)$ since $(0, 0, 0) - (1, 0, 0) = (-1, 0, 0) \notin S$. without a symmetric equivalence relation, there is no consistent way to partition $V$ into cosets.
+
+---
+
+### dimension and the connection to maps
+
+the dimension formula for quotient spaces mirrors the fundamental theorem:
+
+> **Theorem.** If $V$ is finite-dimensional and $U$ is a subspace, then $\dim(V/U) = \dim V - \dim U$.
+
+applied to the null space of a linear map $T: V \to W$:
+
+$$\dim(V / \operatorname{null}\, T) = \dim V - \dim \operatorname{null}\, T = \dim \operatorname{range}\, T$$
+
+this is not merely a dimensional coincidence. the map $\tilde{T}: V/\operatorname{null}\, T \to \operatorname{range}\, T$ defined by $\tilde{T}(v + \operatorname{null}\, T) = Tv$ is well-defined (any two representatives of the same coset differ by something in $\operatorname{null}\, T$, so $T$ sends them to the same place), injective (if $Tv = 0$ then $v \in \operatorname{null}\, T$, the zero coset), and surjective (every element of the range is $Tv$ for some $v$). so $V / \operatorname{null}\, T$ is isomorphic to $\operatorname{range}\, T$.
+
+the fundamental theorem was always a statement about quotient spaces in disguise.
+
+---
+
+### linear functionals and the dual space
+
+quotient spaces look at $V$ by collapsing part of it. duality looks at $V$ by mapping it into scalars.
+
+a **linear functional** on $V$ is a linear map $\varphi: V \to \mathbf{F}$. since $\mathbf{F}$ is one-dimensional, a linear functional extracts a single number from each vector, linearly.
+
+a few examples. on $\mathbf{R}^3$: the map $\varphi(x, y, z) = 2x - y + 3z$ is a linear functional. on $\mathcal{P}(\mathbf{R})$: integration $I(p) = \int_0^1 p(t)\, dt$ is a linear functional, as is evaluation at a point, $\delta_a(p) = p(a)$.
+
+not every map to $\mathbf{F}$ qualifies. the map $\varphi(x, y) = xy$ on $\mathbf{R}^2$ is not a linear functional: it fails homogeneity, since $\varphi(2 \cdot (1, 1)) = \varphi(2, 2) = 4$ while $2\varphi(1, 1) = 2$.
+
+> **Definition.** The **dual space** of $V$, written $V'$, is the vector space of all linear functionals on $V$, with pointwise addition and scalar multiplication.
+
+since a linear functional is a linear map from $V$ to a one-dimensional space, and the space of linear maps from an $n$-dimensional space to a $1$-dimensional space has dimension $n$, we get $\dim V' = \dim V$.
+
+---
+
+### the dual basis
+
+pick a basis $v_1, \ldots, v_n$ for $V$. for each $j$, define $\varphi_j \in V'$ by
+
+$$\varphi_j(v_k) = \begin{cases} 1 & \text{if } k = j \\ 0 & \text{if } k \neq j \end{cases}$$
+
+since a linear map is determined by its values on a basis, each $\varphi_j$ is well-defined. they form a basis for $V'$, called the **dual basis**.
+
+to see this: if $\sum_j a_j \varphi_j = 0$, evaluating on $v_k$ gives $a_k = 0$, so they are linearly independent. for spanning: any $\varphi \in V'$ satisfies $\varphi = \sum_j \varphi(v_j) \varphi_j$, which you can verify by evaluating both sides on each $v_k$.
+
+the dual basis exists and has the same size as the original. but it lives in a different space, and there is no canonical way to match $v_j$ with $\varphi_j$ without first choosing a basis. the two spaces are isomorphic but not identical.
+
+---
+
+### the dual map
+
+before reading the definition, think about what data you need to turn a linear functional on $W$ into one on $V$. you have $T: V \to W$ and $\varphi: W \to \mathbf{F}$. the composition $\varphi \circ T: V \to \mathbf{F}$ is already a linear functional on $V$.
+
+> **Definition.** The **dual map** of $T: V \to W$ is the map $T': W' \to V'$ defined by $T'(\varphi) = \varphi \circ T$ for each $\varphi \in W'$.
+
+I find the direction reversal worth pausing on. if $T$ goes from $V$ to $W$, then $T'$ goes from $W'$ back to $V'$. the dual map takes a way of measuring outputs and pulls it back to a way of measuring inputs. every arrow in the original picture flips.
+
+when $T$ is represented by a matrix $A$ in chosen bases, $T'$ is represented by the transpose $A^T$ in the dual bases. transposition is the matrix manifestation of this arrow-reversal.
+
+---
+
+### the annihilator
+
+both constructions connect through the idea of a subspace being "invisible" to certain measurements.
+
+> **Definition.** The **annihilator** of a subspace $U \subseteq V$ is the set
+
+$$U^0 = \{\varphi \in V' : \varphi(u) = 0 \text{ for all } u \in U\}$$
+
+the annihilator is a subspace of $V'$, and its dimension satisfies $\dim U^0 = \dim V - \dim U$.
+
+the same formula appeared for quotient spaces. that is not a coincidence: both $V/U$ and $U^0$ measure "the part of $V$ not captured by $U$," just from opposite sides. the quotient collapses $U$ to a point and watches what remains. the annihilator collects the linear functionals that cannot see $U$ at all. their dimensions agree because they are counting the same structural gap.
+
+---
+
+### what this doesn't cover yet
+
+the dual of the dual, $V''$, is naturally isomorphic to $V$ itself. this is not merely a dimension-matching isomorphism but a canonical one, given by the map that sends $v \in V$ to the evaluation functional $\hat{v}: V' \to \mathbf{F}$ defined by $\hat{v}(\varphi) = \varphi(v)$. the word "natural" here has a precise technical meaning: the isomorphism requires no choice of basis. that idea is the beginning of category theory in algebra.
+
+the full relationship between $T'$ and the matrix transpose also becomes cleaner with inner products, where there is a way to identify $V'$ with $V$ itself. that identification links the algebraic transpose to the geometric adjoint.
+
+the next shift is to operators: maps $T: V \to V$ from a space to itself. when the domain and codomain are the same, entirely new structure becomes visible.

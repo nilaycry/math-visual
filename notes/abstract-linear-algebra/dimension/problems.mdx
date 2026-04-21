@@ -1,0 +1,102 @@
+---
+title: "dimension"
+week: 5
+---
+
+### compute dimensions
+
+**1.** State the dimension of each space and write down a basis.
+
+(a) $\{(x, y, z) \in \mathbf{F}^3 : x + y + z = 0\}$
+
+(b) $\mathcal{P}_5(\mathbf{F})$
+
+<Solution>
+
+**the move.** for (a), count free variables after the constraint. for (b), name the standard basis and count.
+
+**(a)** The constraint $x + y + z = 0$ gives $x = -y - z$, leaving $y$ and $z$ free. Setting $(y, z) = (1, 0)$ gives $(-1, 1, 0)$; setting $(y, z) = (0, 1)$ gives $(-1, 0, 1)$. These are independent (neither is a multiple of the other) and span the subspace. $\dim = 2$, basis: $(-1, 1, 0),\, (-1, 0, 1)$.
+
+**(b)** The standard basis is $1, x, x^2, x^3, x^4, x^5$. $\dim \mathcal{P}_5(\mathbf{F}) = 6$.
+
+</Solution>
+
+**2.** Use the "one condition is enough" proposition to show that $(1, 1, 0),\; (0, 1, 1),\; (1, 0, 1)$ is a basis of $\mathbf{F}^3$.
+
+<Solution>
+
+**the move.** the list has 3 vectors and $\dim \mathbf{F}^3 = 3$, so it suffices to check linear independence alone.
+
+**the key observation.** this is what the proposition buys: at the right length, one condition forces the other. we only need to run one check instead of two.
+
+Suppose $a(1, 1, 0) + b(0, 1, 1) + c(1, 0, 1) = (0, 0, 0)$.
+
+The three equations: $a + c = 0$, $a + b = 0$, $b + c = 0$.
+
+From $b + c = 0$: $c = -b$. From $a + c = 0$: $a = -c = b$. From $a + b = 0$: $b + b = 0$, so $b = 0$. Then $a = 0$ and $c = 0$. Independent. By the proposition, a linearly independent list of length $3 = \dim \mathbf{F}^3$ is a basis.
+
+</Solution>
+
+---
+
+### prove it
+
+**3.** Prove: if $V$ is finite-dimensional, $U$ is a subspace of $V$, and $\dim U = \dim V$, then $U = V$.
+
+<Solution>
+
+**the move.** take a basis of $U$ and use the one-condition proposition to show it is also a basis of $V$.
+
+**the key observation.** a basis of $U$ is an independent list of length $\dim V$ inside $V$. the proposition says that is already enough to be a basis of $V$.
+
+Let $n = \dim V = \dim U$. Let $u_1, \ldots, u_n$ be a basis of $U$. This is a linearly independent list of $n$ vectors in $V$, and $\dim V = n$. By the one-condition proposition, it is a basis of $V$. Therefore $U = \text{span}(u_1, \ldots, u_n) = V$.
+
+</Solution>
+
+**4.** Prove that any linearly independent list in a finite-dimensional space $V$ can be extended to a basis of $V$.
+
+<Solution>
+
+**the move.** add vectors outside the current span one at a time. each addition preserves independence. the key inequality guarantees the process terminates.
+
+**the key observation.** the key inequality from this note says no independent list can exceed the length of a spanning list. so the growing independent list is bounded, and termination is guaranteed.
+
+Let $v_1, \ldots, v_m$ be linearly independent in $V$. If $\text{span}(v_1, \ldots, v_m) = V$, done. Otherwise pick $v_{m+1} \notin \text{span}(v_1, \ldots, v_m)$. The extended list is independent: any relation $a_1 v_1 + \cdots + a_m v_m + a_{m+1} v_{m+1} = \mathbf{0}$ with $a_{m+1} \neq 0$ would force $v_{m+1} \in \text{span}(v_1, \ldots, v_m)$, a contradiction. Repeat. The length grows by $1$ at each step, and by the key inequality it is at most $\dim V$. When the process terminates, the list is independent and spans $V$, hence is a basis.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**5.** Any list of 4 vectors in $\mathbf{F}^3$ is linearly dependent.
+
+<Solution>
+
+**true.**
+
+$\dim \mathbf{F}^3 = 3$. By the key inequality, any independent list in $\mathbf{F}^3$ has length at most $3$. A list of $4$ vectors exceeds this bound, so it cannot be independent.
+
+</Solution>
+
+**6.** If $U$ and $W$ are subspaces of $V$ with $\dim U = \dim W = \dim V - 1$, then $U = W$.
+
+<Solution>
+
+**false.**
+
+In $\mathbb{R}^3$, let $U = \{(x, y, z) : z = 0\}$ and $W = \{(x, y, z) : y = 0\}$. Both have dimension $2 = 3 - 1$, but $U \neq W$ (e.g., $(1, 0, 0) \in U \cap W$, but $(0, 1, 0) \in U \setminus W$).
+
+</Solution>
+
+**7.** Let $U$ and $W$ be subspaces of $\mathbf{F}^8$ such that $\dim U = 3$, $\dim W = 5$, and $U + W = \mathbf{F}^8$. What is $\dim(U \cap W)$?
+
+<Solution>
+
+**the move.** plug the given dimensions directly into the sum of subspaces theorem and solve for the intersection.
+
+By the theorem, $\dim(U + W) = \dim U + \dim W - \dim(U \cap W)$. We know $\dim(U + W) = \dim \mathbf{F}^8 = 8$, so $8 = 3 + 5 - \dim(U \cap W)$. Thus, $\dim(U \cap W) = 0$. The subspaces intersect only at the origin.
+
+</Solution>

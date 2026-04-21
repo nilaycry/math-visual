@@ -133,15 +133,7 @@ export default async function NotePage({
         <p style={{ fontSize: 16, color: MUTED, lineHeight: 1.6, margin: "0 0 20px 0" }}>
           {note.description}
         </p>
-        {noteHasProblems && (
-          <Link
-            href={`/combinatorics/${params.slug}/problems`}
-            style={{ fontSize: 13, color: ACCENT, textDecoration: "none" }}
-          >
-            problems →
-          </Link>
-        )}
-        <hr style={{ border: "none", borderTop: `1px solid ${BORDER}`, marginTop: noteHasProblems ? 20 : 0 }} />
+        <hr style={{ border: "none", borderTop: `1px solid ${BORDER}`, marginTop: 0 }} />
       </header>
 
       {/* ── CONTENT ── */}
@@ -161,6 +153,17 @@ export default async function NotePage({
         >
           {content}
         </article>
+
+        {noteHasProblems && (
+          <div style={{ marginTop: 48 }}>
+            <Link
+              href={`/combinatorics/${params.slug}/problems`}
+              style={{ fontSize: 14, fontWeight: 500, color: ACCENT, textDecoration: "none" }}
+            >
+              problems →
+            </Link>
+          </div>
+        )}
       </main>
 
       {/* ── NAVIGATION ── */}

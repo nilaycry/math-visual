@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getAllNotes, getAllNoteSlugs, getNoteBySlug, getNoteContent, hasProblems, type NoteMeta } from "@/lib/notes";
+import { getLessonBySlug } from "@/lib/lessons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { compileMDX } from "next-mdx-remote/rsc";
@@ -40,6 +41,7 @@ export default async function NotePage({
   if (!note) notFound();
 
   const noteHasProblems = hasProblems(params.slug);
+  const visualLesson = note.visualLesson ? getLessonBySlug(note.visualLesson) : null;
   const mdxSource = getNoteContent(params.slug);
   if (!mdxSource) notFound();
 
@@ -131,15 +133,7 @@ export default async function NotePage({
         <p style={{ fontSize: 16, color: MUTED, lineHeight: 1.6, margin: "0 0 20px 0" }}>
           {note.description}
         </p>
-        {noteHasProblems && (
-          <Link
-            href={`/abstract-linear-algebra/${params.slug}/problems`}
-            style={{ fontSize: 13, color: ACCENT, textDecoration: "none" }}
-          >
-            problems →
-          </Link>
-        )}
-        <hr style={{ border: "none", borderTop: `1px solid ${BORDER}`, marginTop: noteHasProblems ? 20 : 0 }} />
+        <hr style={{ border: "none", borderTop: `1px solid ${BORDER}`, marginTop: 0 }} />
       </header>
 
       {/* ── CONTENT ── */}
@@ -159,6 +153,27 @@ export default async function NotePage({
         >
           {content}
         </article>
+
+        {(noteHasProblems || visualLesson) && (
+          <div style={{ marginTop: 48, display: "flex", flexDirection: "column", gap: 14 }}>
+            {visualLesson && (
+              <Link
+                href={`/lessons/${note.visualLesson}`}
+                style={{ fontSize: 14, fontWeight: 500, color: ACCENT, textDecoration: "none" }}
+              >
+                see the visual intuition →
+              </Link>
+            )}
+            {noteHasProblems && (
+              <Link
+                href={`/abstract-linear-algebra/${params.slug}/problems`}
+                style={{ fontSize: 14, fontWeight: 500, color: ACCENT, textDecoration: "none" }}
+              >
+                problems →
+              </Link>
+            )}
+          </div>
+        )}
       </main>
 
       {/* ── NAVIGATION ── */}

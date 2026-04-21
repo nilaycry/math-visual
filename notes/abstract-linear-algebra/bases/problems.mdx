@@ -1,0 +1,84 @@
+---
+title: "bases"
+week: 4
+---
+
+### check and use a basis
+
+**1.** Show that $(1, 2),\; (3, 5)$ is a basis of $\mathbf{F}^2$, and find the coordinates of $(4, 7)$ in this basis.
+
+<Solution>
+
+**the move.** check independence (the only solution to $a(1,2) + b(3,5) = (0,0)$ is $a = b = 0$), then solve the coordinate system for $(4, 7)$.
+
+**independence.** $a + 3b = 0$ and $2a + 5b = 0$. Multiply the first by $2$: $2a + 6b = 0$. Subtract the second: $b = 0$, then $a = 0$. Independent. Since $\dim \mathbf{F}^2 = 2$ and the list has length 2, independence alone makes it a basis.
+
+**coordinates of $(4, 7)$.** Solve $a(1,2) + b(3,5) = (4,7)$: the system is $a + 3b = 4$ and $2a + 5b = 7$. Multiply the first by $2$: $2a + 6b = 8$. Subtract the second: $b = 1$. Then $a = 4 - 3(1) = 1$. So $(4, 7) = 1 \cdot (1,2) + 1 \cdot (3,5)$.
+
+</Solution>
+
+**2.** Is $1 - x,\; x - x^2,\; x^2 - x^3$ a basis of $\mathcal{P}_3(\mathbf{F})$?
+
+<Solution>
+
+**the move.** check the dimension first, before doing any computation.
+
+**the key observation.** $\dim \mathcal{P}_3(\mathbf{F}) = 4$, but the list has only 3 vectors. A basis must have exactly $\dim V$ elements. So the answer is no, without further work.
+
+Explicitly, the list cannot span: no combination $a(1-x) + b(x-x^2) + c(x^2-x^3)$ produces the polynomial $x^3$ alone (the $x^3$-coefficient gives $-c = 1$, but the $x^2$-coefficient then forces $c = b$, so $b = -1$, the $x$-coefficient gives $b - a = 0$ so $a = -1$, and the constant term gives $a = 0$, a contradiction).
+
+</Solution>
+
+---
+
+### prove it
+
+**3.** Prove: if $v_1, \ldots, v_n$ is a basis of $V$ and $a_1 v_1 + \cdots + a_n v_n = b_1 v_1 + \cdots + b_n v_n$, then $a_i = b_i$ for all $i$.
+
+<Solution>
+
+**the move.** subtract the two representations to get a linear combination equaling $\mathbf{0}$, then apply independence.
+
+**the key observation.** this is exactly the uniqueness half of the representation theorem. independence is what rules out two different coordinate tuples for the same vector.
+
+Subtract: $(a_1 - b_1) v_1 + \cdots + (a_n - b_n) v_n = \mathbf{0}$. Since $v_1, \ldots, v_n$ is linearly independent, the only solution is $a_i - b_i = 0$ for all $i$.
+
+</Solution>
+
+**4.** Let $U$ be a subspace of $V$ with basis $u_1, \ldots, u_m$. Prove that this basis can be extended to a basis of $V$.
+
+<Solution>
+
+**the move.** if the list already spans $V$, done. otherwise, pick a vector outside the current span and add it. argue the extension is still independent, then repeat.
+
+**the key observation.** adding a vector $v_{m+1}$ outside the span keeps the list independent: if $a_1 u_1 + \cdots + a_m u_m + a_{m+1} v_{m+1} = \mathbf{0}$ with $a_{m+1} \neq 0$, we could solve for $v_{m+1}$ as a combination of $u_1, \ldots, u_m$, contradicting our choice.
+
+If $\text{span}(u_1, \ldots, u_m) = V$, the list is already a basis of $V$. Otherwise, pick $v_1 \in V \setminus \text{span}(u_1, \ldots, u_m)$. The extended list $u_1, \ldots, u_m, v_1$ is linearly independent: any relation $\sum a_i u_i + a_{m+1} v_1 = \mathbf{0}$ with $a_{m+1} \neq 0$ would express $v_1$ as a combination of $u_1, \ldots, u_m$, contradicting our choice. Continue adding vectors outside the current span. Each step increases the list length by $1$. Since $V$ has a finite spanning list, no independent list can exceed its length, so the process terminates. The final list is independent and spans $V$, hence a basis.
+
+</Solution>
+
+---
+
+### true or false
+
+For each statement, say whether it is true or false and give a proof or counterexample.
+
+**5.** Every linearly independent list in $V$ is a basis of some subspace of $V$.
+
+<Solution>
+
+**true.**
+
+If $v_1, \ldots, v_m$ is linearly independent, consider $U = \text{span}(v_1, \ldots, v_m)$. This is a subspace of $V$. The list spans $U$ by definition and is independent by assumption, so it is a basis of $U$.
+
+</Solution>
+
+**6.** If $U$ is a subspace of $V$ and $b_1, \ldots, b_k$ is a basis of $U$, then $b_1, \ldots, b_k$ is also a basis of $V$.
+
+<Solution>
+
+**false.**
+
+In $\mathbb{R}^2$, let $U = \{(x, 0) : x \in \mathbb{R}\}$. Then $(1, 0)$ is a basis of $U$. But $(1, 0)$ alone does not span $\mathbb{R}^2$: the vector $(0, 1)$ is not in $\text{span}((1, 0))$.
+
+</Solution>

@@ -16,6 +16,8 @@ for a function to be strictly reversible, two things must happen. first, it cann
 
 so a linear map is invertible if and only if it is both injective and surjective.
 
+---
+
 ### isomorphic spaces
 
 when an invertible linear map exists between two spaces, we give that map a special name.
@@ -26,11 +28,15 @@ the word "isomorphic" means "same shape." when two vector spaces are isomorphic,
 
 we actually saw an isomorphism in the previous note. by picking a basis $v_1, \ldots, v_n$ for $V$, we can map every abstract vector in $V$ to an $n$-tuple of coordinates in $\mathbf{F}^n$. this coordinate mapping is itself an isomorphism. it faithfully preserves vector addition and scalar multiplication. this means any $n$-dimensional space $V$ is functionally identical to $\mathbf{F}^n$.
 
+---
+
 ### an example and a non-example
 
 the mapping $T: \mathcal{P}_2(\mathbf{F}) \to \mathbf{F}^3$ defined by $T(a + bx + cx^2) = (a, b, c)$ is an isomorphism. it is injective because the only way the tuple $(a, b, c)$ can be the zero vector is if the polynomial was $0 + 0x + 0x^2$. it is surjective because any point $(a, b, c)$ in $\mathbf{F}^3$ plainly comes from the polynomial $a + bx + cx^2$. 
 
 as a non-example, the derivative operator $D: \mathcal{P}_2(\mathbf{F}) \to \mathcal{P}_2(\mathbf{F})$ given by $D(p) = p'$ is not an isomorphism. its null space contains all constant polynomials, so it is not injective. its range is only the space of linear polynomials, so it is not surjective. you cannot uniquely undo a derivative without more information, which is exactly why anti-derivatives always come with an unknown integration constant.
+
+---
 
 ### the classification theorem
 
@@ -38,9 +44,13 @@ this leads to what I find to be one of the most remarkable classification theore
 
 > **Theorem.** Two finite-dimensional vector spaces over the same field are isomorphic if and only if they have the same dimension.
 
+pause here. run through the spaces you've seen so far: $\mathbf{F}^n$, polynomials of fixed degree, functions satisfying a linear condition. the theorem says every one of them is just $\mathbf{F}^n$ in different clothing. the fact that they look completely different — tuples versus polynomials versus function spaces — is completely invisible to linear algebra. the only thing that matters is the dimension.
+
 this is a sweeping statement. dimension is exactly the amount of "linear algebraic information" a space holds. 
 
-our example mapping polynomials to $\mathbf{F}^3$ is just one instance of this. despite polynomials and tuples looking like completely different objects, linear algebra cannot tell them apart because they both have dimension $3$. there is really only one vector space of any given finite dimension, up to the names you give the vectors. 
+our example mapping polynomials to $\mathbf{F}^3$ is just one instance of this. despite polynomials and tuples looking like completely different objects, linear algebra cannot tell them apart because they both have dimension $3$. there is really only one vector space of any given finite dimension, up to the names you give the vectors.
+
+---
 
 ### a symmetry for square matrices
 
@@ -51,6 +61,8 @@ suppose $T$ maps a finite-dimensional space $V$ to itself, or to another space o
 the argument runs backwards, too. if $T$ is surjective, its range has dimension $n$. the fundamental theorem forces the null space to have dimension zero, meaning it is injective.
 
 so for maps between spaces of the same dimension, injectivity and surjectivity are completely equivalent. you either have both, or neither. this gives a beautiful property for $n \times n$ square matrices: a square matrix is invertible if and only if its null space contains only the zero vector.
+
+---
 
 ### what this doesn't cover yet
 

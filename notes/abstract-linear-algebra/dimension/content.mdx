@@ -21,7 +21,11 @@ the proof uses the linear dependence lemma from the span-and-linear-independence
 the idea is an exchange argument: insert the $u$'s one at a time into the spanning list,
 and each insertion forces a removal of one of the $w$'s.
 
-start with $w_1, \ldots, w_n$ spanning $V$. add $u_1$ to the front: the list $u_1, w_1, \ldots, w_n$ still spans $V$ and is now dependent (since $u_1$ is already in the span of $w_1, \ldots, w_n$). the linear dependence lemma says some vector in the list is in the span of the ones before it, and we can remove it without shrinking the span. the lemma guarantees that vector is one of the $w$'s, not $u_1$, because $u_1$ sits first in the list and can't be expressed as a combination of nothing. remove that $w_j$. what remains is a spanning list of length $n$ that includes $u_1$.
+start with $w_1, \ldots, w_n$ spanning $V$. add $u_1$ to the front: the list $u_1, w_1, \ldots, w_n$ still spans $V$ and is now dependent (since $u_1$ is already in the span of $w_1, \ldots, w_n$). the linear dependence lemma says some vector in the list is in the span of the ones before it, and we can remove it without shrinking the span.
+
+pause here. the lemma guarantees the vector we toss out is one of the $w$'s, not $u_1$. why? because $u_1$ sits first in the list, and it can't be expressed as a combination of the vectors before it, because there are none. this is the trick: the $u$'s survive, the $w$'s get swapped out.
+
+remove that $w_j$. what remains is a spanning list of length $n$ that includes $u_1$.
 
 now insert $u_2$ at the front. the list is again dependent, and again we remove a $w$, not
 one of the $u$'s, because no $u_k$ is in the span of the others from an independent list.
@@ -32,6 +36,8 @@ we need $m \leq n$.
 ---
 
 ### definition
+
+if you were asked to measure the "size" of a vector space, a natural idea is to count how many independent directions it has. we just proved that no matter how you choose those directions, the count is always exactly the same. that invariant number deserves a name.
 
 > **Definition.** If $V$ is finite-dimensional, the **dimension** of $V$, written $\dim V$, is the length of any basis of $V$.
 
@@ -86,6 +92,19 @@ of $U$ is an independent list of $n$ vectors inside $V$. by the one-condition pr
 list is already a basis of $V$, which means $U = V$. a proper subspace is always strictly
 smaller in dimension. there's no room for a subspace to match the ambient dimension without
 filling the whole space.
+
+---
+
+### sum of subspaces
+
+if you have two finite sets $A$ and $B$, the size of their union is the sum of their sizes, minus the size of their overlap. dimension behaves exactly the same way for subspaces, serving as a continuous geometry analogue to counting.
+
+> **Theorem.** If $U_1$ and $U_2$ are subspaces of a finite-dimensional space $V$, then:
+> $$ \dim(U_1 + U_2) = \dim U_1 + \dim U_2 - \dim(U_1 \cap U_2) $$
+
+the proof is a basis extension argument: start with a basis of the intersection $U_1 \cap U_2$, extend it to a basis of $U_1$, and separately extend it to a basis of $U_2$. patching those together gives a basis for $U_1 + U_2$, and the arithmetic immediately drops out. 
+
+geometrically, this should feel inevitable. two 2D planes ($U_1$ and $U_2$) sitting inside a 3D space intersect in a 1D line ($U_1 \cap U_2$). their sum $U_1 + U_2$ fills the whole 3D space. the formula perfectly predicts this: $\dim(U_1 + U_2) = 2 + 2 - 1 = 3$.
 
 ---
 

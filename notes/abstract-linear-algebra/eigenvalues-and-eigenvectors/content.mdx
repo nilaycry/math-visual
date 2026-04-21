@@ -1,0 +1,117 @@
+---
+title: "eigenvalues and eigenvectors"
+description: "one-dimensional invariant subspaces, and the directions an operator scales"
+week: 11
+---
+
+when a linear map goes from $V$ to a different space $W$, the domain and codomain are
+separate. but the previous note gestured toward operators, maps $T: V \to V$ where
+the domain and codomain are the same space. with an operator, you can feed the output
+back in. you can ask which subspaces $T$ leaves exactly where it found them.
+
+> **Definition.** A subspace $U \subseteq V$ is **invariant under $T$** if $Tu \in U$
+> for every $u \in U$.
+
+the whole space $V$ is trivially invariant, and so is $\{0\}$. the interesting structure
+hides in the invariant subspaces strictly between those extremes.
+
+---
+
+### the simplest invariant subspace
+
+a one-dimensional subspace is the span of a single nonzero vector $v$. if this line is
+invariant, then $Tv$ must land back on the same line. it has to be a scalar multiple of $v$.
+
+before reading the definition, try to write it yourself. the line spanned by $v$ is
+invariant exactly when $T$ acts on $v$ like multiplication by a number. what equation
+would capture that?
+
+> **Definition.** Suppose $T$ is an operator on $V$. A scalar $\lambda \in \mathbf{F}$
+> is an **eigenvalue** of $T$ if there exists a nonzero vector $v \in V$ such that
+> $Tv = \lambda v$. Such a vector $v$ is called an **eigenvector** of $T$ corresponding
+> to $\lambda$.
+
+the condition $Tv = \lambda v$ rearranges to
+
+$$(T - \lambda I)v = 0$$
+
+where $I$ is the identity operator. eigenvectors are exactly the nonzero vectors in the
+null space of $T - \lambda I$. that null space is called the **eigenspace** for $\lambda$.
+
+this reframing is useful. it turns the question "does $T$ scale $v$?" into "is the
+operator $T - \lambda I$ non-injective?" — a question about null spaces, which we know
+how to handle.
+
+---
+
+### an example, and a non-example that surprised me
+
+let $T: \mathbf{R}^2 \to \mathbf{R}^2$ be defined by $T(x, y) = (2x, 3y)$. the
+vector $(1, 0)$ maps to $(2, 0) = 2 \cdot (1, 0)$, so it is an eigenvector with
+eigenvalue $2$. the vector $(0, 1)$ maps to $(0, 3) = 3 \cdot (0, 1)$, with
+eigenvalue $3$. both standard basis vectors are eigenvectors. $T$ just stretches along
+the axes.
+
+now let $S: \mathbf{R}^2 \to \mathbf{R}^2$ be counterclockwise rotation by $90°$, so
+$S(x, y) = (-y, x)$. does this have any eigenvectors?
+
+if $S(x, y) = \lambda(x, y)$, then $-y = \lambda x$ and $x = \lambda y$. substituting
+the second into the first gives $-y = \lambda^2 y$. since eigenvectors are nonzero, we
+can't have $y = 0$ without $x = 0$ too, so we need $\lambda^2 = -1$.
+
+pause here. there is no real number whose square is $-1$. the rotation operator has no
+eigenvalues over $\mathbf{R}$ — no line in the plane is sent back to itself by a $90°$
+rotation, which is geometrically obvious once you see it, but I remember being caught off
+guard that this breaks the algebra so completely. the equation $\lambda^2 = -1$ isn't
+close to having a solution. it has none.
+
+---
+
+### why complex numbers fix this
+
+over $\mathbf{C}$, the equation $\lambda^2 = -1$ has solutions: $\lambda = i$ and
+$\lambda = -i$. the rotation matrix has complex eigenvalues when treated as an operator
+on $\mathbf{C}^2$.
+
+this is not a coincidence specific to rotation. it reflects a general guarantee.
+
+> **Theorem.** Every operator on a finite-dimensional, nonzero complex vector space has
+> at least one eigenvalue.
+
+I find the proof worth knowing because the idea is clean. before reading it, try to see
+the shape: on an $n$-dimensional space you can only pick $n$ independent vectors. if
+you generate vectors by repeatedly applying $T$, you must eventually run out of room.
+what does that force?
+
+take any nonzero $v \in V$ with $\dim V = n$. the $n + 1$ vectors
+$v, Tv, T^2v, \ldots, T^nv$ live in an $n$-dimensional space, so they are linearly
+dependent. this gives scalars $a_0, \ldots, a_n$, not all zero, with
+
+$$a_0 v + a_1 Tv + \cdots + a_n T^n v = \mathbf{0}$$
+
+we can read this as a polynomial in $T$, applied to $v$. over $\mathbf{C}$, every
+polynomial factors completely into linear terms:
+
+$$c(T - r_1 I)(T - r_2 I) \cdots (T - r_m I)v = \mathbf{0}$$
+
+for this product to send $v$ to zero, at least one factor $(T - r_j I)$ must fail to be
+injective. a non-injective operator has a nontrivial null space, which means $r_j$ is an
+eigenvalue.
+
+pause here. the whole argument rests on the fundamental theorem of algebra: every
+polynomial over $\mathbf{C}$ factors into linear pieces. over $\mathbf{R}$, that fails
+(the polynomial $\lambda^2 + 1$ has no real roots), which is exactly why the rotation
+example has no real eigenvalues. the field matters.
+
+---
+
+### what this doesn't cover yet
+
+finding one eigenvalue is a start. to understand an operator fully, we want to know
+what it does to the whole space. if we can find a basis consisting entirely of
+eigenvectors, the matrix of the operator in that basis is diagonal: the eigenvalues
+sit on the main diagonal, and everything else is zero. computing powers or checking
+invertibility becomes immediate.
+
+not every operator has enough eigenvectors to fill a basis. the next note asks exactly
+when this is possible, and what structure we can always guarantee when it isn't.
