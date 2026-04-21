@@ -33,7 +33,7 @@ export default function HeroSketch() {
       };
 
       p.draw = () => {
-        p.background(13, 17, 23); // #0d1117
+        p.clear();
 
         let cx = W / 2;
         let cy = H / 2;

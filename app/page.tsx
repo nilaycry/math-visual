@@ -66,8 +66,9 @@ export default function HomePage() {
         @media (max-width: 768px) {
           .hero-section {
             flex-direction: column !important;
-            padding-top: 48px !important;
-            padding-bottom: 48px !important;
+            min-height: auto !important;
+            padding-top: 64px !important;
+            padding-bottom: 56px !important;
             gap: 40px !important;
           }
           .hero-canvas-col { display: none !important; }
@@ -162,12 +163,12 @@ export default function HomePage() {
         <section
           className="hero-section"
           style={{
-            minHeight: "70vh",
+            minHeight: "calc(100vh - 61px)",
             display: "flex",
             alignItems: "center",
             maxWidth: 1200,
             margin: "0 auto",
-            padding: "80px 48px 60px",
+            padding: "0 48px",
             gap: 64,
           }}
         >
@@ -210,12 +211,11 @@ export default function HomePage() {
                 lineHeight: 1.65,
                 color: "#999",
                 margin: "0 0 36px 0",
-                maxWidth: 420,
+                maxWidth: 380,
               }}
             >
               won&apos;t cover everything. might change how you see some of it.
             </p>
-
 
             <SmoothScrollLink
               targetId="explore"
@@ -235,8 +235,8 @@ export default function HomePage() {
             </SmoothScrollLink>
           </div>
 
-          {/* Right — canvas */}
-          <div className="hero-canvas-col" style={{ flexShrink: 0 }}>
+          {/* Right — canvas, vertically centered */}
+          <div className="hero-canvas-col" style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
             <HeroSketch />
           </div>
         </section>
@@ -248,7 +248,7 @@ export default function HomePage() {
           style={{
             maxWidth: 1200,
             margin: "0 auto",
-            padding: "80px 48px 120px",
+            padding: "80px 48px 100px",
           }}
         >
           {/* ── LESSONS ── */}
@@ -356,8 +356,10 @@ export default function HomePage() {
                       <span style={{ fontSize: 11, fontWeight: 500, color: subject.accent, opacity: 0.8, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
                         {subject.tag}
                       </span>
-                      <span style={{ fontSize: 11, color: "#888", letterSpacing: "0.05em" }}>
-                        {subject.count} {subject.count === 1 ? "note" : "notes"}
+                      <span style={{ fontSize: 11, color: "#555", letterSpacing: "0.05em" }}>
+                        {subject.count > 0
+                          ? `${subject.count} ${subject.count === 1 ? "note" : "notes"}`
+                          : "in progress"}
                       </span>
                     </div>
                     <h3 style={{ fontSize: 17, fontWeight: 500, color: "#d8d8d8", display: "block", marginBottom: 10, lineHeight: 1.3, marginTop: 0 }}>
@@ -372,6 +374,31 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ── FOOTER ── */}
+        <footer
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.04)",
+            padding: "32px 48px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            maxWidth: 1200,
+            margin: "0 auto",
+          }}
+        >
+          <span style={{ fontSize: 12, color: "#444", letterSpacing: "0.08em" }}>
+            math · uiuc
+          </span>
+          <a
+            href="https://github.com/nilaycry"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: 12, color: "#444", textDecoration: "none", letterSpacing: "0.08em", transition: "color 0.2s" }}
+          >
+            github
+          </a>
+        </footer>
       </div>
     </>
   );
