@@ -60,6 +60,9 @@ export default function HomePage() {
     },
   ];
 
+  const totalLessons = allLessons.length;
+  const totalNotes = getAllNotes().length + allComboNotes.filter((n) => n.week >= 1).length;
+
   return (
     <>
       <style>{`
@@ -83,6 +86,35 @@ export default function HomePage() {
             padding-top: 64px !important;
             padding-bottom: 64px !important;
           }
+        }
+      `}</style>
+
+      <style>{`
+        .nav-explore {
+          color: #E8A020;
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 500;
+          letter-spacing: 0.02em;
+          transition: opacity 0.2s;
+          opacity: 0.85;
+        }
+        .nav-explore:hover { opacity: 1; }
+
+        .nav-github {
+          color: #888;
+          text-decoration: none;
+          font-size: 12px;
+          font-weight: 400;
+          letter-spacing: 0.06em;
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 20px;
+          padding: 5px 14px;
+          transition: color 0.2s, border-color 0.2s;
+        }
+        .nav-github:hover {
+          color: #ccc;
+          border-color: rgba(255,255,255,0.2);
         }
       `}</style>
 
@@ -128,16 +160,10 @@ export default function HomePage() {
             }}
           >
             <span />
-            <div style={{ display: "flex", gap: 32 }}>
+            <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
               <SmoothScrollLink
                 targetId="explore"
-                style={{
-                  color: "#777",
-                  textDecoration: "none",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  transition: "color 0.2s",
-                }}
+                className="nav-explore"
               >
                 explore
               </SmoothScrollLink>
@@ -145,13 +171,7 @@ export default function HomePage() {
                 href="https://github.com/nilaycry"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  color: "#777",
-                  textDecoration: "none",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  transition: "color 0.2s",
-                }}
+                className="nav-github"
               >
                 github
               </a>
@@ -163,12 +183,11 @@ export default function HomePage() {
         <section
           className="hero-section"
           style={{
-            minHeight: "calc(100vh - 61px)",
             display: "flex",
             alignItems: "center",
             maxWidth: 1200,
             margin: "0 auto",
-            padding: "0 48px",
+            padding: "100px 48px 96px",
             gap: 64,
           }}
         >
@@ -248,7 +267,7 @@ export default function HomePage() {
           style={{
             maxWidth: 1200,
             margin: "0 auto",
-            padding: "80px 48px 100px",
+            padding: "32px 48px 100px",
           }}
         >
           {/* ── LESSONS ── */}
@@ -390,14 +409,9 @@ export default function HomePage() {
           <span style={{ fontSize: 12, color: "#444", letterSpacing: "0.08em" }}>
             math · uiuc
           </span>
-          <a
-            href="https://github.com/nilaycry"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontSize: 12, color: "#444", textDecoration: "none", letterSpacing: "0.08em", transition: "color 0.2s" }}
-          >
-            github
-          </a>
+          <span style={{ fontSize: 12, color: "#444", letterSpacing: "0.06em" }}>
+            {totalLessons} lessons · {totalNotes} notes
+          </span>
         </footer>
       </div>
     </>
