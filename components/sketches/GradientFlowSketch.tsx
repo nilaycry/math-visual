@@ -36,7 +36,7 @@ export default function GradientFlowSketch() {
         p.setup = () => {
           p.createCanvas(W, H);
           p.noLoop();
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
         };
 
         p.draw = () => {
@@ -207,7 +207,7 @@ export default function GradientFlowSketch() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card flex justify-center">
+      <div className="sketch-wrap">
         <div ref={containerRef} />
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 14, padding: "0 4px" }}>
@@ -227,7 +227,7 @@ export default function GradientFlowSketch() {
                   color: activation === act ? "#5DCAA5" : "#444",
                   fontSize: 12,
                   cursor: "pointer",
-                  fontFamily: "Inter, sans-serif",
+                  fontFamily: "Space Grotesk, sans-serif",
                 }}
               >
                 {act}

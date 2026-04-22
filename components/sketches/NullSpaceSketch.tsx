@@ -36,7 +36,7 @@ export default function NullSpaceSketch() {
         p.setup = () => {
           p.createCanvas(W, H);
           p.noLoop();
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
         };
 
         const drawAxes = (cx: number, cy: number) => {
@@ -204,7 +204,7 @@ export default function NullSpaceSketch() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card flex justify-center">
+      <div className="sketch-wrap">
         <div ref={containerRef} />
       </div>
 

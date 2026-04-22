@@ -119,7 +119,7 @@ export default function BackpropTrainSketch() {
 
       p.setup = () => {
         p.createCanvas(W, H);
-        p.textFont("Inter");
+        p.textFont("Space Grotesk");
         p.frameRate(30);
       };
 
@@ -185,7 +185,7 @@ export default function BackpropTrainSketch() {
         // Panel labels
         p.fill(140, 140, 165);
         p.textSize(11);
-        p.textFont("Inter");
+        p.textFont("Space Grotesk");
         p.textAlign(p.LEFT, p.TOP);
         p.text("fit: f(x) = v·tanh(wx+b) + c", leftX + 10, leftY + 10);
 
@@ -242,7 +242,7 @@ export default function BackpropTrainSketch() {
 
         // ---- header band: title on row 1, param readout on row 2 ----
         p.noStroke();
-        p.textFont("Inter");
+        p.textFont("Space Grotesk");
         p.textSize(11);
         p.fill(140, 140, 165);
         p.textAlign(p.LEFT, p.TOP);
@@ -282,41 +282,34 @@ export default function BackpropTrainSketch() {
   const containerRef = useP5Sketch(buildSketch);
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card flex justify-center">
+    <div>
+      {/* Canvas */}
+      <div className="sketch-wrap">
         <div ref={containerRef} />
       </div>
 
-      {/* Controls */}
-      <div className="flex flex-wrap gap-2">
+      {/* Primary controls */}
+      <div className="sketch-controls">
         <button
           onClick={handleToggle}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 transition-all"
+          className={`sketch-btn ${running ? "sketch-btn-active" : ""}`}
         >
           {running ? "pause" : stepCount === 0 ? "start training" : "resume"}
         </button>
-        <button
-          onClick={handleReset}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-secondary text-secondary-foreground border border-border/50 hover:bg-secondary/80 transition-all"
-        >
+        <button onClick={handleReset} className="sketch-btn">
           reset
         </button>
-        <div className="ml-auto text-xs text-muted-foreground self-center">
-          {PRESETS[presetKey].note}
-        </div>
+        <span className="sketch-note">{PRESETS[presetKey].note}</span>
       </div>
 
-      {/* Presets */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      {/* Preset row */}
+      <div className="sketch-controls" style={{ marginTop: 8 }}>
+        <span className="sketch-label" style={{ marginLeft: 0, marginRight: 4 }}>preset</span>
         {(Object.keys(PRESETS) as PresetKey[]).map((key) => (
           <button
             key={key}
             onClick={() => handlePreset(key)}
-            className={`py-2 rounded-lg text-xs font-medium border transition-all ${
-              presetKey === key
-                ? "bg-primary/15 text-primary border-primary/40"
-                : "bg-secondary text-secondary-foreground border-border/50 hover:bg-primary/10 hover:text-primary"
-            }`}
+            className={`sketch-btn ${presetKey === key ? "sketch-btn-active" : ""}`}
           >
             {PRESETS[key].label}
           </button>

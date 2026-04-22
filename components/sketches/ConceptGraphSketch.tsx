@@ -174,7 +174,7 @@ export default function ConceptGraphSketch() {
 
       p.setup = () => {
         p.createCanvas(W, H);
-        p.textFont("Inter, sans-serif");
+        p.textFont("Space Grotesk, sans-serif");
         p.frameRate(30);
       };
 

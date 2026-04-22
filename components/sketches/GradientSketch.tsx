@@ -7,6 +7,7 @@ import { useP5Sketch } from "@/hooks/useP5Sketch";
 export default function GradientSketch() {
   const [learningRate, setLearningRate] = useState(0.05);
   const [showGradient, setShowGradient] = useState(true);
+  const [speed, setSpeed] = useState(8); // frames between steps (higher = slower)
   const posRef = useRef<{ x: number; y: number; trail: { x: number; y: number }[] } | null>(null);
   const clickRef = useRef<{ x: number; y: number } | null>(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -14,6 +15,8 @@ export default function GradientSketch() {
   lrRef.current = learningRate;
   const showGradientRef = useRef(showGradient);
   showGradientRef.current = showGradient;
+  const speedRef = useRef(speed);
+  speedRef.current = speed;
 
   // Objective function: f(x,y) = x^2 + 3y^2 + 0.5*x*y + x - 2y + 5
   const f = (x: number, y: number) =>
@@ -26,8 +29,9 @@ export default function GradientSketch() {
   ];
 
   const buildSketch = (el: HTMLElement) => new p5((p: p5) => {
-      const width = 700;
-      const height = 500;
+      // Responsive width: fill the container
+      const width = el.clientWidth || 700;
+      const height = Math.round(width * (5 / 7)); // preserve 7:5 aspect ratio
       const rangeX = [-4, 4] as const;
       const rangeY = [-3, 3] as const;
       // px per math unit (for converting gradient vectors to screen vectors)
@@ -36,6 +40,7 @@ export default function GradientSketch() {
       let contourImg: p5.Image | null = null;
       const levels = [4, 6, 8, 10, 14, 20, 28, 38];
       let contourSegments: { level: number; segs: [number,number,number,number][] }[] = [];
+      let frameCount = 0;
 
       const toScreenX = (x: number) =>
         p.map(x, rangeX[0], rangeX[1], 0, width);
@@ -82,13 +87,14 @@ export default function GradientSketch() {
 
             let r: number, g: number, b: number;
             if (isDark) {
-              r = p.lerp(10, 50, t);
-              g = p.lerp(180, 20, t);
-              b = p.lerp(160, 80, t);
+              // Rose/crimson: low values = warm rose glow, high = deep wine
+              r = p.lerp(224, 26, t);
+              g = p.lerp(90, 18, t);
+              b = p.lerp(106, 24, t);
             } else {
-              r = p.lerp(230, 100, t);
-              g = p.lerp(250, 140, t);
-              b = p.lerp(255, 200, t);
+              r = p.lerp(255, 140, t);
+              g = p.lerp(230, 100, t);
+              b = p.lerp(180, 80, t);
             }
 
             const idx = 4 * (py * width + px);
@@ -120,18 +126,19 @@ export default function GradientSketch() {
 
       p.setup = () => {
         p.createCanvas(width, height);
-        p.textFont("Inter");
+        p.textFont("Space Grotesk");
         buildContourImage();
         buildContourLines();
         p.noLoop();
       };
 
       p.mousePressed = () => {
-        if (p.mouseX >= 0 && p.mouseX <= 700 && p.mouseY >= 0 && p.mouseY <= 500) {
+        if (p.mouseX >= 0 && p.mouseX <= width && p.mouseY >= 0 && p.mouseY <= height) {
           const mx = toMathX(p.mouseX);
           const my = toMathY(p.mouseY);
           posRef.current = { x: mx, y: my, trail: [{ x: mx, y: my }] };
           clickRef.current = { x: mx, y: my };
+          frameCount = 0;
           setIsRunning(true);
           p.loop();
         }
@@ -153,24 +160,28 @@ export default function GradientSketch() {
           }
         }
 
-        // Gradient descent step
+        // Gradient descent step — only on every N-th frame
         if (posRef.current) {
           const pos = posRef.current;
-          const [gx, gy] = grad(pos.x, pos.y);
-          const gradMag = Math.sqrt(gx * gx + gy * gy);
+          frameCount++;
 
-          if (gradMag > 0.001) {
-            pos.x -= lrRef.current * gx;
-            pos.y -= lrRef.current * gy;
-            pos.trail.push({ x: pos.x, y: pos.y });
-            if (pos.trail.length > 500) pos.trail.shift();
-            if (Math.abs(pos.x) > 6 || Math.abs(pos.y) > 5) {
+          if (frameCount % speedRef.current === 0) {
+            const [gx, gy] = grad(pos.x, pos.y);
+            const gradMag = Math.sqrt(gx * gx + gy * gy);
+
+            if (gradMag > 0.001) {
+              pos.x -= lrRef.current * gx;
+              pos.y -= lrRef.current * gy;
+              pos.trail.push({ x: pos.x, y: pos.y });
+              if (pos.trail.length > 500) pos.trail.shift();
+              if (Math.abs(pos.x) > 6 || Math.abs(pos.y) > 5) {
+                setIsRunning(false);
+                p.noLoop();
+              }
+            } else {
               setIsRunning(false);
               p.noLoop();
             }
-          } else {
-            setIsRunning(false);
-            p.noLoop();
           }
 
           // Draw trail
@@ -180,8 +191,8 @@ export default function GradientSketch() {
             const alpha = p.map(i, 0, pos.trail.length, 50, 255);
             p.stroke(
               isDark
-                ? p.color(255, 180, 50, alpha)
-                : p.color(220, 120, 0, alpha)
+                ? p.color(80, 220, 255, alpha)
+                : p.color(0, 120, 180, alpha)
             );
             p.line(
               toScreenX(pos.trail[i - 1].x),
@@ -192,6 +203,8 @@ export default function GradientSketch() {
           }
 
           // Gradient arrow at current position
+          const [gx, gy] = grad(pos.x, pos.y);
+          const gradMag = Math.sqrt(gx * gx + gy * gy);
           if (showGradientRef.current && gradMag > 0.001) {
             const sx = toScreenX(pos.x);
             const sy = toScreenY(pos.y);
@@ -267,18 +280,18 @@ export default function GradientSketch() {
   };
 
   return (
-    <div className="space-y-5">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card cursor-crosshair">
-        <div ref={containerRef} />
+    <div>
+      <div className="sketch-wrap" style={{ cursor: "crosshair" }}>
+        <div ref={containerRef} style={{ width: "100%" }} />
       </div>
 
-      {/* Controls */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Learning rate */}
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4">
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Learning Rate (α)
-          </label>
+      <div className="sketch-controls">
+        {/* Learning rate slider */}
+        <div className="sketch-slider-row" style={{ flex: 1, maxWidth: 200 }}>
+          <div className="sketch-slider-header">
+            <span className="sketch-label">learning rate α</span>
+            <span className="sketch-value">{learningRate.toFixed(3)}</span>
+          </div>
           <input
             id="gradient-lr-slider"
             type="range"
@@ -287,57 +300,47 @@ export default function GradientSketch() {
             step={0.005}
             value={learningRate}
             onChange={(e) => setLearningRate(parseFloat(e.target.value))}
-            className="w-full h-2 rounded-full appearance-none bg-gradient-to-r from-emerald-500 to-cyan-500 cursor-pointer accent-accent"
+            className="sketch-range"
           />
-          <div className="flex justify-between mt-1">
-            <span className="text-xs text-muted-foreground">0.005</span>
-            <span className="text-sm font-mono font-semibold text-accent">
-              {learningRate.toFixed(3)}
-            </span>
-            <span className="text-xs text-muted-foreground">0.35</span>
-          </div>
         </div>
 
-        {/* Gradient arrow toggle */}
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4 flex flex-col justify-between">
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Gradient Arrow
-          </label>
-          <button
-            id="gradient-arrow-toggle"
-            onClick={() => setShowGradient(!showGradient)}
-            className={`w-full py-2.5 rounded-lg text-sm font-medium transition-all ${
-              showGradient
-                ? "bg-accent text-accent-foreground shadow-lg shadow-accent/25"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            }`}
-          >
-            {showGradient ? "✦ Visible" : "Hidden"}
-          </button>
+        {/* Speed slider */}
+        <div className="sketch-slider-row" style={{ flex: 1, maxWidth: 160 }}>
+          <div className="sketch-slider-header">
+            <span className="sketch-label">speed</span>
+            <span className="sketch-value">{speed === 1 ? "max" : `1/${speed}`}</span>
+          </div>
+          <input
+            id="gradient-speed-slider"
+            type="range"
+            min={1}
+            max={30}
+            step={1}
+            value={speed}
+            onChange={(e) => setSpeed(parseInt(e.target.value))}
+            className="sketch-range"
+          />
         </div>
 
-        {/* Reset button */}
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-2">
-            <label className="block text-sm font-medium text-foreground">
-              Controls
-            </label>
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-              isRunning
-                ? "bg-emerald-500/15 text-emerald-400"
-                : "bg-secondary text-muted-foreground"
-            }`}>
-              {isRunning ? "running" : "idle"}
-            </span>
-          </div>
-          <button
-            id="gradient-reset-btn"
-            onClick={handleReset}
-            className="w-full py-2.5 rounded-lg text-sm font-medium bg-secondary text-muted-foreground hover:text-foreground border border-border/50 transition-all"
-          >
-            reset
-          </button>
-        </div>
+        <button
+          id="gradient-arrow-toggle"
+          onClick={() => setShowGradient(!showGradient)}
+          className={`sketch-btn ${showGradient ? "sketch-btn-active" : ""}`}
+        >
+          gradient arrow
+        </button>
+
+        <button
+          id="gradient-reset-btn"
+          onClick={handleReset}
+          className="sketch-btn"
+        >
+          reset
+        </button>
+
+        {isRunning && (
+          <span className="sketch-note" style={{ marginLeft: 0 }}>running</span>
+        )}
       </div>
     </div>
   );

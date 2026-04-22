@@ -93,7 +93,7 @@ export default function SVDSketch() {
 
         p.setup = () => {
           p.createCanvas(W, H);
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
           p.noLoop();
         };
 
@@ -275,7 +275,7 @@ export default function SVDSketch() {
           p.textFont("JetBrains Mono");
           p.text(`A = [${ma.toFixed(1)}, ${mb.toFixed(1)}]`, 0, 0);
           p.text(`    [${mc.toFixed(1)}, ${md.toFixed(1)}]`, 0, 18);
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
           p.pop();
         };
       }, el);
@@ -303,7 +303,7 @@ export default function SVDSketch() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card flex justify-center cursor-crosshair">
+      <div className="sketch-wrap" style={{ cursor: "crosshair" }}>
         <div ref={containerRef} />
       </div>
 

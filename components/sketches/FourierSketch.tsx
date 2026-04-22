@@ -25,7 +25,7 @@ export default function FourierSketch() {
 
       p.setup = () => {
         p.createCanvas(W, H);
-        p.textFont("Inter");
+        p.textFont("Space Grotesk");
       };
 
       p.draw = () => {
@@ -98,7 +98,7 @@ export default function FourierSketch() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card flex justify-center">
+      <div className="sketch-wrap">
         <div ref={containerRef} />
       </div>
 

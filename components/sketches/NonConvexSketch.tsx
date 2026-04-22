@@ -7,6 +7,7 @@ import { useP5Sketch } from "@/hooks/useP5Sketch";
 export default function NonConvexSketch() {
   const [mode, setMode] = useState<"basic" | "momentum" | "noise">("basic");
   const [learningRate, setLearningRate] = useState(0.05);
+  const [speed, setSpeed] = useState(8);
   const posRef = useRef<{ x: number; y: number; trail: { x: number; y: number }[] } | null>(null);
   const clickRef = useRef<{ x: number; y: number } | null>(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -16,6 +17,8 @@ export default function NonConvexSketch() {
   modeRef.current = mode;
   const isRunningRef = useRef(isRunning);
   isRunningRef.current = isRunning;
+  const speedRef = useRef(speed);
+  speedRef.current = speed;
 
   // Pure negative-Gaussian landscape: no bowl, just isolated wells.
   // Each well center is a genuine local minimum with natural ridges between them.
@@ -50,14 +53,15 @@ export default function NonConvexSketch() {
   };
 
   const buildSketch = (el: HTMLElement) => new p5((p: p5) => {
-    const width = 700;
-    const height = 500;
+    const width = el.clientWidth || 700;
+    const height = Math.round(width * (5 / 7));
     const rangeX = [-3, 3] as const;
     const rangeY = [-3, 3] as const;
     let contourImg: p5.Image | null = null;
     let velocityX = 0;
     let velocityY = 0;
     let stepCount = 0;
+    let localFrameCount = 0;
     const levels = [-3.5, -2.5, -1.8, -1.2, -0.6, -0.1];
     // Precomputed contour segments [x1,y1,x2,y2] in screen coords
     let contourSegments: { level: number; segs: [number,number,number,number][] }[] = [];
@@ -121,13 +125,14 @@ export default function NonConvexSketch() {
 
           let r: number, g: number, b: number;
           if (isDark) {
-            r = p.lerp(10, 60, t);
-            g = p.lerp(180, 30, t);
-            b = p.lerp(160, 90, t);
+            // Rose/crimson: deep wells = warm rose glow, ridges = deep wine
+            r = p.lerp(224, 26, t);
+            g = p.lerp(90, 18, t);
+            b = p.lerp(106, 24, t);
           } else {
-            r = p.lerp(230, 120, t);
-            g = p.lerp(250, 150, t);
-            b = p.lerp(255, 210, t);
+            r = p.lerp(255, 140, t);
+            g = p.lerp(230, 100, t);
+            b = p.lerp(180, 80, t);
           }
 
           const idx = 4 * (py * width + px);
@@ -142,7 +147,7 @@ export default function NonConvexSketch() {
 
     p.setup = () => {
       p.createCanvas(width, height);
-      p.textFont("Inter");
+      p.textFont("Space Grotesk");
       buildContourImage();
       buildContourLines();
       // Find actual minima by descending from each well center
@@ -154,7 +159,7 @@ export default function NonConvexSketch() {
     };
 
     p.mousePressed = () => {
-      if (p.mouseX >= 0 && p.mouseX <= 700 && p.mouseY >= 0 && p.mouseY <= 500) {
+      if (p.mouseX >= 0 && p.mouseX <= width && p.mouseY >= 0 && p.mouseY <= height) {
         const mx = toMathX(p.mouseX);
         const my = toMathY(p.mouseY);
         posRef.current = { x: mx, y: my, trail: [{ x: mx, y: my }] };
@@ -162,6 +167,7 @@ export default function NonConvexSketch() {
         velocityX = 0;
         velocityY = 0;
         stepCount = 0;
+        localFrameCount = 0;
         setIsRunning(true);
         p.loop();
       }
@@ -201,11 +207,12 @@ export default function NonConvexSketch() {
         }
       }
 
-      // Gradient descent step
+      // Gradient descent step — only on every N-th frame
       if (posRef.current) {
         const pos = posRef.current;
+        localFrameCount++;
 
-        if (isRunningRef.current) {
+        if (isRunningRef.current && localFrameCount % speedRef.current === 0) {
           const [gx, gy] = grad(pos.x, pos.y);
           const gradMag = Math.sqrt(gx * gx + gy * gy);
 
@@ -240,7 +247,7 @@ export default function NonConvexSketch() {
         // Draw trail
         p.noFill();
         p.strokeWeight(4);
-        p.stroke(isDark ? p.color(255, 180, 80) : p.color(200, 120, 20));
+        p.stroke(isDark ? p.color(80, 220, 255) : p.color(0, 120, 180));
         if (pos.trail.length > 1) {
           p.beginShape();
           for (let i = 0; i < pos.trail.length; i++) {
@@ -299,17 +306,18 @@ export default function NonConvexSketch() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card cursor-crosshair">
-        <div ref={containerRef} />
+      <div className="sketch-wrap" style={{ cursor: "crosshair" }}>
+        <div ref={containerRef} style={{ width: "100%" }} />
       </div>
 
       {/* Controls */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="sketch-controls" style={{ flexWrap: "wrap" }}>
         {/* Learning rate */}
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4">
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Learning Rate (α)
-          </label>
+        <div className="sketch-slider-row" style={{ flex: 1, maxWidth: 180 }}>
+          <div className="sketch-slider-header">
+            <span className="sketch-label">learning rate α</span>
+            <span className="sketch-value">{learningRate.toFixed(3)}</span>
+          </div>
           <input
             id="nonconvex-lr-slider"
             type="range"
@@ -318,77 +326,62 @@ export default function NonConvexSketch() {
             step={0.005}
             value={learningRate}
             onChange={(e) => setLearningRate(parseFloat(e.target.value))}
-            className="w-full h-2 rounded-full appearance-none bg-gradient-to-r from-rose-500 to-orange-500 cursor-pointer accent-accent"
+            className="sketch-range"
           />
-          <div className="flex justify-between mt-1">
-            <span className="text-xs text-muted-foreground">0.005</span>
-            <span className="text-sm font-mono font-semibold text-accent">
-              {learningRate.toFixed(3)}
-            </span>
-            <span className="text-xs text-muted-foreground">0.15</span>
-          </div>
         </div>
 
-        {/* Mode selector */}
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4 flex flex-col justify-between">
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Optimization Mode
-          </label>
-          <div className="flex gap-2">
-            <button
-              id="mode-basic"
-              onClick={() => { setMode("basic"); handleReset(); }}
-              className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${mode === "basic"
-                ? "bg-rose-500 text-white shadow-lg shadow-rose-500/25"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                }`}
-            >
-              basic
-            </button>
-            <button
-              id="mode-momentum"
-              onClick={() => { setMode("momentum"); handleReset(); }}
-              className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${mode === "momentum"
-                ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                }`}
-            >
-              momentum
-            </button>
-            <button
-              id="mode-noise"
-              onClick={() => { setMode("noise"); handleReset(); }}
-              className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${mode === "noise"
-                ? "bg-amber-500 text-white shadow-lg shadow-amber-500/25"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                }`}
-            >
-              noisy
-            </button>
+        {/* Speed */}
+        <div className="sketch-slider-row" style={{ flex: 1, maxWidth: 140 }}>
+          <div className="sketch-slider-header">
+            <span className="sketch-label">speed</span>
+            <span className="sketch-value">{speed === 1 ? "max" : `1/${speed}`}</span>
           </div>
+          <input
+            id="nonconvex-speed-slider"
+            type="range"
+            min={1}
+            max={30}
+            step={1}
+            value={speed}
+            onChange={(e) => setSpeed(parseInt(e.target.value))}
+            className="sketch-range"
+          />
         </div>
 
-        {/* Reset button */}
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-2">
-            <label className="block text-sm font-medium text-foreground">
-              Controls
-            </label>
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${isRunning
-              ? "bg-rose-500/15 text-rose-400"
-              : "bg-secondary text-muted-foreground"
-              }`}>
-              {isRunning ? "running" : "idle"}
-            </span>
-          </div>
-          <button
-            id="nonconvex-reset-btn"
-            onClick={handleReset}
-            className="w-full py-2.5 rounded-lg text-sm font-medium bg-secondary text-muted-foreground hover:text-foreground border border-border/50 transition-all"
-          >
-            reset
-          </button>
-        </div>
+        {/* Mode buttons */}
+        <button
+          id="mode-basic"
+          onClick={() => { setMode("basic"); handleReset(); }}
+          className={`sketch-btn ${mode === "basic" ? "sketch-btn-active" : ""}`}
+        >
+          basic
+        </button>
+        <button
+          id="mode-momentum"
+          onClick={() => { setMode("momentum"); handleReset(); }}
+          className={`sketch-btn ${mode === "momentum" ? "sketch-btn-active" : ""}`}
+        >
+          momentum
+        </button>
+        <button
+          id="mode-noise"
+          onClick={() => { setMode("noise"); handleReset(); }}
+          className={`sketch-btn ${mode === "noise" ? "sketch-btn-active" : ""}`}
+        >
+          noisy
+        </button>
+
+        <button
+          id="nonconvex-reset-btn"
+          onClick={handleReset}
+          className="sketch-btn"
+        >
+          reset
+        </button>
+
+        {isRunning && (
+          <span className="sketch-note" style={{ marginLeft: 0 }}>running</span>
+        )}
       </div>
     </div>
   );

@@ -45,7 +45,7 @@ export default function EigenSketch() {
 
         p.setup = () => {
           p.createCanvas(W, H);
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
           p.noLoop();
         };
 
@@ -252,7 +252,7 @@ export default function EigenSketch() {
           p.textFont("JetBrains Mono");
           p.text(`A = [${ma.toFixed(1)}, ${mb.toFixed(1)}]`, 0, 0);
           p.text(`    [${mc.toFixed(1)}, ${md.toFixed(1)}]`, 0, 18);
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
           p.pop();
         };
       }, el);
@@ -284,23 +284,25 @@ export default function EigenSketch() {
   };
 
   return (
-    <div className="space-y-5">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card flex justify-center cursor-crosshair">
+    <div>
+      {/* Canvas */}
+      <div className="sketch-wrap" style={{ cursor: "crosshair" }}>
         <div ref={containerRef} />
       </div>
 
-      {/* Matrix sliders */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {/* Slider grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginTop: 16 }}>
         {[
           { label: "a (row 1, col 1)", value: a, setter: setA, id: "eigen-a" },
           { label: "b (row 1, col 2)", value: b, setter: setB, id: "eigen-b" },
           { label: "c (row 2, col 1)", value: c, setter: setC, id: "eigen-c" },
           { label: "d (row 2, col 2)", value: d, setter: setD, id: "eigen-d" },
         ].map(({ label, value, setter, id }) => (
-          <div key={id} className="rounded-xl bg-secondary/50 border border-border/50 p-4">
-            <label className="block text-xs font-medium text-muted-foreground mb-1">
-              {label}
-            </label>
+          <div key={id} className="sketch-slider-row">
+            <div className="sketch-slider-header">
+              <span className="sketch-label">{label}</span>
+              <span className="sketch-value">{value.toFixed(1)}</span>
+            </div>
             <input
               id={`${id}-slider`}
               type="range"
@@ -309,55 +311,36 @@ export default function EigenSketch() {
               step={0.1}
               value={value}
               onChange={handleChange(setter)}
-              className="w-full h-2 rounded-full appearance-none bg-gradient-to-r from-orange-500 to-rose-500 cursor-pointer accent-primary"
+              className="sketch-range"
             />
-            <div className="text-center mt-1">
-              <span className="text-sm font-mono font-semibold text-primary">
-                {value.toFixed(1)}
-              </span>
-            </div>
           </div>
         ))}
       </div>
 
-      {/* Toggle + Presets */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4 flex flex-col justify-between">
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Show Eigenvectors
-          </label>
+      {/* Toggle + Presets row */}
+      <div className="sketch-controls" style={{ marginTop: 16 }}>
+        <button
+          id="eigen-toggle"
+          onClick={handleToggleEigen}
+          className={`sketch-btn ${showEigen ? "sketch-btn-active" : ""}`}
+        >
+          {showEigen ? "eigenvectors on" : "eigenvectors off"}
+        </button>
+        <span className="sketch-label" style={{ marginLeft: 4, marginRight: 4 }}>presets</span>
+        {[
+          { label: "shear",    vals: [2, 1, 0, 1] },
+          { label: "rotation", vals: [0, -1, 1, 0] },
+          { label: "scale",    vals: [2, 0, 0, 0.5] },
+          { label: "reflect",  vals: [1, 0, 0, -1] },
+        ].map(({ label, vals }) => (
           <button
-            id="eigen-toggle"
-            onClick={handleToggleEigen}
-            className={`w-full py-2.5 rounded-lg text-sm font-medium transition-all ${
-              showEigen
-                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            }`}
+            key={label}
+            onClick={() => handlePreset(vals)}
+            className="sketch-btn"
           >
-            {showEigen ? "✦ Visible" : "Hidden"}
+            {label}
           </button>
-        </div>
-
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4 flex flex-col justify-between">
-          <label className="block text-sm font-medium text-foreground mb-2">Presets</label>
-          <div className="flex gap-2">
-            {[
-              { label: "Shear",    vals: [2, 1, 0, 1] },
-              { label: "Rotation", vals: [0, -1, 1, 0] },
-              { label: "Scale",    vals: [2, 0, 0, 0.5] },
-              { label: "Reflect",  vals: [1, 0, 0, -1] },
-            ].map(({ label, vals }) => (
-              <button
-                key={label}
-                onClick={() => handlePreset(vals)}
-                className="flex-1 py-2 rounded-lg text-xs font-medium bg-secondary text-secondary-foreground hover:bg-primary/10 hover:text-primary border border-border/50 transition-all"
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

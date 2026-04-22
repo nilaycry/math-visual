@@ -78,8 +78,8 @@ the update rule says it's done.
 switch to **momentum** and drop the ball in the same spot. momentum adds an
 exponential moving average of past gradients to the update:
 
-<div className="math-highlight">v_t = β · v_{t-1} + ∇f(x_t)</div>
-<div className="math-highlight">x_{t+1} = x_t − α · v_t</div>
+<div className="math-highlight">v_t = β · v_(t-1) + ∇f(x_t)</div>
+<div className="math-highlight">x_(t+1) = x_t − α · v_t</div>
 
 `β = 0.95` means 95% of the step comes from where you were going, 5% from the
 current gradient. the ball has inertia and can punch through shallow minima that

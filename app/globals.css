@@ -283,3 +283,126 @@
   background: rgba(255,255,255,0.04) !important; 
   transform: translateX(4px); 
 }
+
+/* ── Sketch control system ───────────────────────────────── */
+
+/* Canvas wrapper: hugs the canvas exactly, no bg bleed */
+.sketch-wrap {
+  display: flex;
+  justify-content: center;
+  background: #0d1117;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.sketch-wrap > div {
+  width: 100%;
+  line-height: 0; /* kill inline-block gap below canvas */
+}
+.sketch-wrap canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Control row below canvas */
+.sketch-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 14px;
+}
+
+/* Base button */
+.sketch-btn {
+  font-size: 12px;
+  font-weight: 400;
+  font-family: inherit;
+  color: #666;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.sketch-btn:hover {
+  color: #aaa;
+  border-color: rgba(255,255,255,0.16);
+}
+
+/* Active/selected state — amber accent */
+.sketch-btn-active {
+  color: #E8A020;
+  border-color: rgba(232,160,32,0.3);
+  background: rgba(232,160,32,0.06);
+}
+.sketch-btn-active:hover {
+  color: #FFBC50;
+  border-color: rgba(232,160,32,0.45);
+}
+
+/* Small dimmed label */
+.sketch-label {
+  font-size: 10px;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Mono value readout */
+.sketch-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #bbb;
+}
+
+/* Slider row container */
+.sketch-slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sketch-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+/* Range input base reset */
+.sketch-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.1);
+  cursor: pointer;
+  outline: none;
+}
+.sketch-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #E8A020;
+  cursor: pointer;
+}
+.sketch-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #E8A020;
+  border: none;
+  cursor: pointer;
+}
+
+/* Note/hint text */
+.sketch-note {
+  font-size: 11px;
+  color: #444;
+  letter-spacing: 0.04em;
+  margin-left: auto;
+}

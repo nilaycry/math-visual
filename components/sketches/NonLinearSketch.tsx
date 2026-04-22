@@ -3,8 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import p5 from "p5";
 
+type Mode = "original" | "matrix" | "tanh";
+
 export default function NonLinearSketch() {
-  const [mode, setMode] = useState<"linear" | "tanh">("linear");
+  const [mode, setMode] = useState<Mode>("original");
   const modeRef = useRef(mode);
   modeRef.current = mode;
 
@@ -23,24 +25,56 @@ export default function NonLinearSketch() {
       if (p5Ref.current) { p5Ref.current.remove(); p5Ref.current = null; }
 
       p5Ref.current = new p5((p: p5) => {
-        const W = 660;
-        const H = 440;
-        const SF = 40; // Scale factor: 1 math unit = 40 pixels
+        const W = el.clientWidth || 800;
+        const H = Math.round(W * 0.56); // ~16:9
+        const CX = W / 2;
+        const CY = H / 2;
 
-        let t = 0; // 0 = linear, 1 = tanh
+        // Scale: how many pixels per math unit
+        // Show roughly -5 to +5 horizontally
+        const UNIT = W / 10;
 
-        // Points layout: 
-        // Red inner circle (r < 1.5), Blue outer ring (r in [2, 4])
+        let tMatrix = 0;
+        let tTanh = 0;
+
+        // Matrix A — shear + stretch
+        const A = [
+          [1.3, 0.5],
+          [0.4, 1.2]
+        ];
+
+        // Data points: inner cluster (red) + outer ring (blue)
         const points: { x: number; y: number; isRed: boolean }[] = [];
+
+        // Apply the 3-stage transform
+        const transform = (x: number, y: number, mT: number, tT: number): [number, number] => {
+          // Stage 1→2: identity → matrix A
+          const ax = p.lerp(x, A[0][0] * x + A[0][1] * y, mT);
+          const ay = p.lerp(y, A[1][0] * x + A[1][1] * y, mT);
+
+          // Stage 2→3: linear → tanh
+          const fx = Math.tanh(ax);
+          const fy = Math.tanh(ay);
+
+          return [
+            p.lerp(ax, fx * 3, tT),
+            p.lerp(ay, fy * 3, tT)
+          ];
+        };
+
+        // Convert math coords to screen
+        const toScreen = (mx: number, my: number): [number, number] => {
+          return [CX + mx * UNIT, CY - my * UNIT];
+        };
+
         p.setup = () => {
           p.createCanvas(W, H);
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
 
-          // Generate points
           for (let i = 0; i < 300; i++) {
             const r = p.random(0, 4);
             const theta = p.random(0, p.TWO_PI);
-            if (r > 1.5 && r < 2.0) continue; // gap
+            if (r > 1.5 && r < 2.0) continue;
             points.push({
               x: r * Math.cos(theta),
               y: r * Math.sin(theta),
@@ -49,98 +83,175 @@ export default function NonLinearSketch() {
           }
         };
 
-        const transform = (x: number, y: number, tVal: number) => {
-          // Matrix A (stretch and rotate slightly)
-          const tx = 1.3 * x + 0.5 * y;
-          const ty = 0.4 * x + 1.2 * y;
+        // Draw a transformed grid line as a smooth curve
+        const drawGridCurve = (
+          fixed: number,
+          axis: "x" | "y",
+          from: number,
+          to: number,
+          mT: number,
+          tT: number
+        ) => {
+          p.beginShape();
+          const steps = 80;
+          for (let i = 0; i <= steps; i++) {
+            const t = from + (to - from) * (i / steps);
+            const [mx, my] = axis === "x"
+              ? transform(fixed, t, mT, tT)
+              : transform(t, fixed, mT, tT);
+            const [sx, sy] = toScreen(mx, my);
+            p.vertex(sx, sy);
+          }
+          p.endShape();
+        };
 
-          // Non-linear step
-          const fx = Math.tanh(tx);
-          const fy = Math.tanh(ty);
-
-          return {
-            x: p.lerp(tx, fx * 3, tVal), // scale up tanh for visibility *3
-            y: p.lerp(ty, fy * 3, tVal)
-          };
+        // Draw an arrow
+        const drawArrow = (
+          x1: number, y1: number, x2: number, y2: number,
+          headLen: number = 10
+        ) => {
+          p.line(x1, y1, x2, y2);
+          const angle = Math.atan2(y2 - y1, x2 - x1);
+          p.line(x2, y2,
+            x2 - headLen * Math.cos(angle - Math.PI / 6),
+            y2 - headLen * Math.sin(angle - Math.PI / 6));
+          p.line(x2, y2,
+            x2 - headLen * Math.cos(angle + Math.PI / 6),
+            y2 - headLen * Math.sin(angle + Math.PI / 6));
         };
 
         p.draw = () => {
-          p.background(13, 17, 23);
-          p.translate(W / 2, H / 2);
-          p.scale(1, -1);
+          // Dark background
+          p.background(10, 12, 18);
 
-          // Animate t
-          const targetT = modeRef.current === "tanh" ? 1 : 0;
-          t = p.lerp(t, targetT, 0.08);
+          // Compute targets
+          let targetMatrix = 0;
+          let targetTanh = 0;
+          if (modeRef.current === "matrix") {
+            targetMatrix = 1; targetTanh = 0;
+          } else if (modeRef.current === "tanh") {
+            targetMatrix = 1; targetTanh = 1;
+          }
 
-          if (Math.abs(t - targetT) < 0.001) {
-            t = targetT;
+          tMatrix = p.lerp(tMatrix, targetMatrix, 0.06);
+          tTanh = p.lerp(tTanh, targetTanh, 0.06);
+
+          const done = Math.abs(tMatrix - targetMatrix) < 0.001
+                    && Math.abs(tTanh - targetTanh) < 0.001;
+          if (done) {
+            tMatrix = targetMatrix;
+            tTanh = targetTanh;
             p.noLoop();
           } else {
             p.loop();
           }
 
-          // Draw warped grid lines
-          p.stroke(40);
-          p.strokeWeight(1);
+          const mT = tMatrix;
+          const tT = tTanh;
+
+          // ── Grid lines (3b1b style: subtle blue) ──
           p.noFill();
+          p.strokeWeight(1);
 
-          // Vertical grid lines
-          for (let x = -5; x <= 5; x += 0.5) {
-            p.beginShape();
-            for (let y = -5; y <= 5; y += 0.2) {
-              const pt = transform(x, y, t);
-              p.vertex(pt.x * SF, pt.y * SF);
-            }
-            p.endShape();
+          // Secondary grid lines (every 1 unit)
+          p.stroke(30, 50, 80, 100);
+          for (let i = -5; i <= 5; i++) {
+            if (i === 0) continue; // skip axes
+            drawGridCurve(i, "x", -5, 5, mT, tT); // vertical lines (fixed x)
+            drawGridCurve(i, "y", -5, 5, mT, tT); // horizontal lines (fixed y)
           }
 
-          // Horizontal grid lines
-          for (let y = -5; y <= 5; y += 0.5) {
-            p.beginShape();
-            for (let x = -5; x <= 5; x += 0.2) {
-              const pt = transform(x, y, t);
-              p.vertex(pt.x * SF, pt.y * SF);
-            }
-            p.endShape();
-          }
+          // ── Axes (brighter, thicker) ──
+          p.stroke(80, 100, 130);
+          p.strokeWeight(2);
+          drawGridCurve(0, "x", -6, 6, mT, tT); // y-axis (x=0 line)
+          drawGridCurve(0, "y", -6, 6, mT, tT); // x-axis (y=0 line)
 
-          // Draw axes
-          p.stroke(80);
-          p.strokeWeight(1.5);
+          // ── Basis vectors (3b1b: green = î, red = ĵ) ──
+          p.strokeWeight(3);
+
+          // î (1,0) — green
+          const [i0x, i0y] = toScreen(...transform(0, 0, mT, tT));
+          const [i1x, i1y] = toScreen(...transform(1, 0, mT, tT));
+          p.stroke(100, 230, 100);
+          drawArrow(i0x, i0y, i1x, i1y, 12);
+
+          // ĵ (0,1) — red/crimson
+          const [j1x, j1y] = toScreen(...transform(0, 1, mT, tT));
+          p.stroke(230, 80, 80);
+          drawArrow(i0x, i0y, j1x, j1y, 12);
+
+          // ── Unit square / parallelogram ──
+          const [p00x, p00y] = toScreen(...transform(0, 0, mT, tT));
+          const [p10x, p10y] = toScreen(...transform(1, 0, mT, tT));
+          const [p11x, p11y] = toScreen(...transform(1, 1, mT, tT));
+          const [p01x, p01y] = toScreen(...transform(0, 1, mT, tT));
+
+          // Fill the unit parallelogram with semi-transparent yellow
+          p.fill(255, 230, 80, 18);
+          p.stroke(255, 230, 80, 50);
+          p.strokeWeight(1);
           p.beginShape();
-          for (let x = -6; x <= 6; x += 0.2) {
-             const pt = transform(x, 0, t);
-             p.vertex(pt.x * SF, pt.y * SF);
+          p.vertex(p00x, p00y);
+          // Trace the edges as curves for tanh warping
+          const edgeSteps = 30;
+          // Bottom edge: (0,0) → (1,0)
+          for (let s = 1; s <= edgeSteps; s++) {
+            const [ex, ey] = toScreen(...transform(s / edgeSteps, 0, mT, tT));
+            p.vertex(ex, ey);
           }
-          p.endShape();
-          p.beginShape();
-          for (let y = -6; y <= 6; y += 0.2) {
-             const pt = transform(0, y, t);
-             p.vertex(pt.x * SF, pt.y * SF);
+          // Right edge: (1,0) → (1,1)
+          for (let s = 1; s <= edgeSteps; s++) {
+            const [ex, ey] = toScreen(...transform(1, s / edgeSteps, mT, tT));
+            p.vertex(ex, ey);
           }
-          p.endShape();
+          // Top edge: (1,1) → (0,1)
+          for (let s = 1; s <= edgeSteps; s++) {
+            const [ex, ey] = toScreen(...transform(1 - s / edgeSteps, 1, mT, tT));
+            p.vertex(ex, ey);
+          }
+          // Left edge: (0,1) → (0,0)
+          for (let s = 1; s <= edgeSteps; s++) {
+            const [ex, ey] = toScreen(...transform(0, 1 - s / edgeSteps, mT, tT));
+            p.vertex(ex, ey);
+          }
+          p.endShape(p.CLOSE);
 
-          // Draw points
+          // ── Data points ──
           p.noStroke();
           for (const pt of points) {
-            const tPt = transform(pt.x, pt.y, t);
+            const [tx, ty] = transform(pt.x, pt.y, mT, tT);
+            const [sx, sy] = toScreen(tx, ty);
+            // Skip points outside canvas
+            if (sx < -20 || sx > W + 20 || sy < -20 || sy > H + 20) continue;
             if (pt.isRed) {
-              p.fill("rgba(255, 80, 160, 0.9)");
+              p.fill(255, 80, 160, 200);
             } else {
-              p.fill("rgba(80, 130, 200, 0.7)");
+              p.fill(80, 140, 220, 160);
             }
-            p.circle(tPt.x * SF, tPt.y * SF, 6);
+            p.circle(sx, sy, 5);
           }
 
-          // Readout
+          // ── Readout ──
           p.push();
-          p.translate(-W/2 + 15, -H/2 + 15);
-          p.scale(1, -1);
-          p.fill(220); p.textAlign(p.LEFT, p.TOP); p.noStroke();
-          p.text(modeRef.current === "linear" ? "y = A·x" : "y = tanh(A·x)", 0, 0);
-          p.pop();
+          p.fill(180);
+          p.noStroke();
+          p.textSize(13);
+          p.textAlign(p.LEFT, p.TOP);
+          const labels: Record<Mode, string> = {
+            original: "y = x",
+            matrix: "y = A·x",
+            tanh: "y = tanh(A·x)",
+          };
+          p.text(labels[modeRef.current], 14, 14);
 
+          // Show basis vector labels near tips
+          p.textSize(11);
+          p.fill(100, 230, 100);
+          p.text("î", i1x + 8, i1y - 4);
+          p.fill(230, 80, 80);
+          p.text("ĵ", j1x + 8, j1y - 4);
+          p.pop();
         };
       }, el);
     }, 0);
@@ -153,38 +264,38 @@ export default function NonLinearSketch() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setModeAndLoop = (m: "linear" | "tanh") => {
+  const setModeAndLoop = (m: Mode) => {
     setMode(m);
-    // Slight delay to ensure ref updates before next animation frame
     setTimeout(() => p5Ref.current?.loop(), 0);
   };
 
   return (
-    <div className="space-y-5">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card flex justify-center">
-        <div ref={containerRef} />
+    <div>
+      <div className="sketch-wrap">
+        <div ref={containerRef} style={{ width: "100%" }} />
       </div>
 
-      <div className="flex gap-4 max-w-sm mx-auto">
+      <div className="sketch-controls" style={{ marginTop: 14 }}>
         <button
-          onClick={() => setModeAndLoop("linear")}
-          className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
-            mode === "linear"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-          }`}
+          id="nonlinear-original"
+          onClick={() => setModeAndLoop("original")}
+          className={`sketch-btn ${mode === "original" ? "sketch-btn-active" : ""}`}
         >
-          Linear Space
+          original space
         </button>
         <button
-          onClick={() => setModeAndLoop("tanh")}
-          className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
-            mode === "tanh"
-              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-          }`}
+          id="nonlinear-matrix"
+          onClick={() => setModeAndLoop("matrix")}
+          className={`sketch-btn ${mode === "matrix" ? "sketch-btn-active" : ""}`}
         >
-          Apply Tanh
+          matrix A
+        </button>
+        <button
+          id="nonlinear-tanh"
+          onClick={() => setModeAndLoop("tanh")}
+          className={`sketch-btn ${mode === "tanh" ? "sketch-btn-active" : ""}`}
+        >
+          tanh
         </button>
       </div>
     </div>

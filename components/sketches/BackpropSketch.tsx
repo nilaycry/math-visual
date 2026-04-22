@@ -140,7 +140,7 @@ export default function BackpropSketch() {
 
         p.setup = () => {
           p.createCanvas(W, H);
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
           p.noLoop();
         };
 
@@ -276,7 +276,7 @@ export default function BackpropSketch() {
               p.text(label, pos.x, pos.y - 9);
 
               p.fill(160, 160, 180);
-              p.textFont("Inter");
+              p.textFont("Space Grotesk");
               p.textSize(10);
               p.text(valStr, pos.x, pos.y + 10);
             } else {
@@ -300,7 +300,7 @@ export default function BackpropSketch() {
 
               // Value (row 3)
               p.fill(200, 200, 215);
-              p.textFont("Inter");
+              p.textFont("Space Grotesk");
               p.textSize(10);
               p.text(valStr, pos.x, topY + 50);
             }
@@ -341,13 +341,13 @@ export default function BackpropSketch() {
             p.fill(200, 200, 220, 240);
             p.textAlign(p.CENTER, p.CENTER);
             p.text(edge.label, mx, labelY);
-            p.textFont("Inter");
+            p.textFont("Space Grotesk");
           }
 
           // ---- forward / backward labels ----
           p.noStroke();
           p.textSize(10);
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
           p.fill(110, 140, 180, 200);
           p.textAlign(p.LEFT, p.CENTER);
           p.text("forward →", 50, mainY + 55);
@@ -370,7 +370,7 @@ export default function BackpropSketch() {
           p.fill(180);
           p.noStroke();
           p.textSize(12);
-          p.textFont("Inter");
+          p.textFont("Space Grotesk");
           p.textAlign(p.LEFT, p.TOP);
           p.text("gradients  ∂L/∂·", 40, panelY + 16);
 
@@ -431,7 +431,7 @@ export default function BackpropSketch() {
             // Value
             p.fill(170, 170, 185);
             p.textSize(10);
-            p.textFont("Inter");
+            p.textFont("Space Grotesk");
             p.textAlign(p.LEFT, p.TOP);
             p.text(g.val.toFixed(4), bx, by + 34);
           });
@@ -480,7 +480,7 @@ export default function BackpropSketch() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl overflow-hidden border border-border/50 bg-card flex justify-center">
+      <div className="sketch-wrap">
         <div ref={containerRef} />
       </div>
 
