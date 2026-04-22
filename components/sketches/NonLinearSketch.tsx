@@ -183,9 +183,6 @@ export default function NonLinearSketch() {
 
           // ── Unit square / parallelogram ──
           const [p00x, p00y] = toScreen(...transform(0, 0, mT, tT));
-          const [p10x, p10y] = toScreen(...transform(1, 0, mT, tT));
-          const [p11x, p11y] = toScreen(...transform(1, 1, mT, tT));
-          const [p01x, p01y] = toScreen(...transform(0, 1, mT, tT));
 
           // Fill the unit parallelogram with semi-transparent yellow
           p.fill(255, 230, 80, 18);
