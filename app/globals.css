@@ -308,9 +308,10 @@
 .sketch-controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 16px;
   align-items: center;
   margin-top: 14px;
+  margin-bottom: 24px;
 }
 
 /* Base button */
@@ -363,7 +364,7 @@
 .sketch-slider-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 .sketch-slider-header {
   display: flex;
@@ -376,23 +377,23 @@
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 2px;
-  border-radius: 2px;
-  background: rgba(255,255,255,0.1);
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.22);
   cursor: pointer;
   outline: none;
 }
 .sketch-range::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: #E8A020;
   cursor: pointer;
 }
 .sketch-range::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: #E8A020;
   border: none;
