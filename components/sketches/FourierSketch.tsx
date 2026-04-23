@@ -102,54 +102,37 @@ export default function FourierSketch() {
         <div ref={containerRef} />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4">
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Number of Terms
-          </label>
+      <div className="sketch-controls" style={{ flexWrap: "wrap" }}>
+        <div className="sketch-slider-row" style={{ flex: 1, minWidth: 160 }}>
+          <div className="sketch-slider-header">
+            <span className="sketch-label">terms</span>
+            <span className="sketch-value">{numTerms}</span>
+          </div>
           <input
             type="range" min={1} max={30} value={numTerms}
             onChange={(e) => setNumTerms(parseInt(e.target.value))}
-            className="w-full cursor-pointer accent-primary"
+            className="sketch-range"
           />
-          <div className="flex justify-between mt-1">
-            <span className="text-xs text-muted-foreground">1</span>
-            <span className="text-sm font-mono font-semibold text-primary">{numTerms}</span>
-            <span className="text-xs text-muted-foreground">30</span>
-          </div>
         </div>
 
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4">
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Animation Speed
-          </label>
+        <div className="sketch-slider-row" style={{ flex: 1, minWidth: 160 }}>
+          <div className="sketch-slider-header">
+            <span className="sketch-label">speed</span>
+            <span className="sketch-value">{speed}×</span>
+          </div>
           <input
             type="range" min={0.5} max={5} step={0.5} value={speed}
             onChange={(e) => setSpeed(parseFloat(e.target.value))}
-            className="w-full cursor-pointer accent-primary"
+            className="sketch-range"
           />
-          <div className="flex justify-between mt-1">
-            <span className="text-xs text-muted-foreground">0.5×</span>
-            <span className="text-sm font-mono font-semibold text-primary">{speed}×</span>
-            <span className="text-xs text-muted-foreground">5×</span>
-          </div>
         </div>
 
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4 flex flex-col justify-between">
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Show Epicycles
-          </label>
-          <button
-            onClick={() => setShowCircles(!showCircles)}
-            className={`w-full py-2.5 rounded-lg text-sm font-medium transition-all ${
-              showCircles
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            }`}
-          >
-            {showCircles ? "visible" : "hidden"}
-          </button>
-        </div>
+        <button
+          onClick={() => setShowCircles(!showCircles)}
+          className={`sketch-btn ${showCircles ? "sketch-btn-active" : ""}`}
+        >
+          {showCircles ? "epicycles: on" : "epicycles: off"}
+        </button>
       </div>
     </div>
   );

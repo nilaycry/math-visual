@@ -1,0 +1,111 @@
+---
+title: "before we begin"
+description: "what this series covers, what it assumes, and how to navigate it"
+tags: ["machine learning"]
+displayTag: "PREFACE"
+date: "2026-04-10"
+related:
+  - slug: "on-empiricism"
+    note: "another preface note, on the friction between mathematical proof and empirical training"
+  - slug: "linear-models"
+    note: "part 1, where the series starts"
+---
+
+import PrefaceSketch from '@/components/sketches/PrefaceSketch'
+
+there is a specific thing that happens when you first encounter a working neural network. you read the code. you understand every line. you can trace the forward pass and the backward pass. and at the end you have no idea why it learned anything. you followed the steps. you didn't understand what you were looking at.
+
+that gap is what this series is trying to close.
+
+the destination is transformers: the architecture underneath every major language model and most other frontier systems right now. the path there is eighteen lessons, starting with a line fitting nine data points. eight lessons are written, the rest are in progress.
+
+---
+
+### before any formalism: the sketch
+
+click the canvas below.
+
+<div className="not-prose my-8">
+  <PrefaceSketch />
+</div>
+
+nine scattered points. a line starting far from the data. gradient descent running.
+
+watch the loss number in the bottom-left fall with each frame. when the line turns teal, it has converged. click to reset with a new random starting position.
+
+notice that the line has no global view of the problem. it doesn't know where the minimum is. it only reads the local slope of the error surface at its current position, and steps downhill. that local, gradient-following logic is the engine behind every model in this series. a transformer trained on billions of tokens is doing the same thing at a different scale.
+
+---
+
+### what this series is
+
+every lesson builds on the previous one and derives things rather than just stating them.
+
+MSE isn't introduced as a convenient loss function. it comes out of maximum likelihood estimation under a Gaussian noise assumption, so you can see that squaring the error is a consequence of a specific claim about your data. the gradient descent update rule isn't handed to you. it follows from a first-order Taylor approximation of the loss surface, which makes the step size and direction both interpretable.
+
+this is slower than listing formulas. I think it's the only way to build intuitions that hold up when things actually break.
+
+---
+
+### the arc
+
+- parts 1–8 cover the core machinery: what a network is, how it's trained, what goes wrong in deep networks, and what architectural decisions fix it.
+- parts 9–14 fill in what's needed before sequences make sense: generalization, classification, better optimizers, convolutional networks, and embeddings.
+- parts 15–17 arrive at the sequence problem, self-attention, and the full transformer block.
+- part 18 covers fourier analysis, placed at the end where it connects to the sinusoidal positional encodings in the original transformer paper.
+
+---
+
+### what it isn't
+
+this series doesn't cover reinforcement learning. RL is a different paradigm with different math, and it belongs in its own series.
+
+it doesn't cover diffusion models. those require stochastic processes that aren't built up anywhere here.
+
+it doesn't use frameworks. there's no PyTorch or JAX. the series implements things from scratch, because seeing the mechanics without abstraction is the point.
+
+---
+
+### what you need coming in
+
+calculus, specifically the chain rule: `d/dx[f(g(x))] = f'(g(x)) · g'(x)`. partial derivatives appear in part 2. if `∂L/∂w` looks unfamiliar, a short review of multivariable differentiation before continuing past part 1 is worth it.
+
+linear algebra: vectors, dot products, and matrix multiplication. you should know what `Ax = b` means and why you can't always solve it. this becomes important in parts 4 and 5.
+
+basic probability: enough to know what a probability distribution is and what "maximizing likelihood" means at a rough level. part 1 derives MSE from this. the rest of the series builds on what part 1 establishes, not on probability directly.
+
+you don't need programming experience to follow the math. the sketches are interactive, and each lesson is self-contained.
+
+---
+
+### how to engage
+
+look at each sketch before reading the text that accompanies it. the geometric picture is meant to come first. the text then has something to attach to.
+
+when you hit a derivation, stop and try to reproduce it before reading on. if you can't, something was either skipped or buried. that's worth noticing.
+
+every lesson ends with "what this doesn't cover yet." if something seems missing, it's named there.
+
+---
+
+### notation
+
+these symbols appear consistently across every lesson:
+
+- `x` — input (scalar or vector, depending on context)
+- `ŷ` — model prediction
+- `y` — true label or target value
+- `w`, `b` — weight and bias
+- `L` — loss function
+- `∂L/∂w` — partial derivative of the loss with respect to w
+- `∇L` — gradient, the vector of all partial derivatives
+- `σ` — sigmoid activation function (parts 3 onward)
+- `n` — number of data points
+
+vectors are bold lowercase (**w**), matrices bold uppercase (**W**). when the distinction matters, the lesson says so.
+
+---
+
+### where to start
+
+part 1 is the right place. it introduces the linear model, derives MSE from first principles, and builds the loss landscape. everything after connects back to what it establishes.

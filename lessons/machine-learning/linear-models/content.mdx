@@ -11,9 +11,9 @@ related:
 
 import LinearModelSketch from '@/components/sketches/LinearModelSketch'
 
-"machine learning" sounds like a black box. it isn't. before any discussion of neural networks or gradients, learning is the geometry of fitting a shape to points.
+before any discussion of neural networks or gradients, learning is the geometry of fitting a shape to points.
 
-this note isolates what that "fitting" actually means.
+this lesson is about what that "fitting" actually means.
 
 ---
 
@@ -39,7 +39,7 @@ the standard approach is to square that error and average it over the dataset. t
 
 <div className="math-highlight">MSE = average((y − ŷ)²)</div>
 
-this is the Mean Squared Error (MSE). minimizing it intuitively makes sense: squaring forces the error to be positive (so overshooting and undershooting do not cancel out) and heavily penalizes being strictly wrong.
+this is the Mean Squared Error (MSE). squaring makes all errors positive (overshooting and undershooting do not cancel out) and penalizes large errors harder than small ones.
 
 but why square it? why not take the absolute value? why not the fourth power? 
 

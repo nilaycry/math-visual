@@ -1,0 +1,108 @@
+---
+title: "training a network"
+description: "what the training loop does, why some starts fail, and what learning rate actually controls"
+tags: ["machine learning", "neural networks"]
+displayTag: "PART 6: TRAINING"
+date: "2026-04-17"
+related:
+  - slug: "backpropagation"
+    note: "the algorithm that computes the gradients the training loop depends on"
+  - slug: "gradient-descent"
+    note: "the update rule that training applies at every step"
+  - slug: "gradient-flow"
+    note: "what happens to those gradients in a deeper network"
+---
+
+import BackpropTrainSketch from '@/components/sketches/BackpropTrainSketch'
+
+[backpropagation](/lessons/backpropagation) gives you four numbers at every step: `∂L/∂w`, `∂L/∂v`, `∂L/∂b`, `∂L/∂c`. those are the gradients of the loss with respect to each parameter, computed in one backward pass through the computation graph.
+
+now you use them.
+
+---
+
+### the update rule
+
+the update at every training step is gradient descent on all four parameters simultaneously:
+
+<div className="math-highlight">w ← w − α · ∂L/∂w</div>
+<div className="math-highlight">v ← v − α · ∂L/∂v</div>
+<div className="math-highlight">b ← b − α · ∂L/∂b</div>
+<div className="math-highlight">c ← c − α · ∂L/∂c</div>
+
+`α` is the learning rate. it controls how big a step to take. the gradient tells you which direction is downhill. the learning rate tells you how far to walk.
+
+that's it. everything else in the training story is a consequence of applying this rule repeatedly.
+
+---
+
+### the full loop
+
+one training step:
+1. forward pass: compute `z = w·x + b`, `h = tanh(z)`, `y = v·h + c`, and `L = (1/n)·Σ(y − target)²` across all data points
+2. backward pass: run backpropagation to get the four gradients
+3. update: apply the rule above, once per parameter
+
+repeat. that loop, forward-backward-update, is the entirety of basic gradient descent training. deep learning frameworks automate steps 1 and 2. step 3 is a few lines.
+
+in this sketch, the network is the same tiny one from the [last two lessons](/lessons/backpropagation): one input, one hidden neuron with tanh, one output. six training points shown as teal dots. the pink curve is what the network predicts right now. each training step adjusts `w`, `b`, `v`, `c` to pull the pink curve closer to the teal dots.
+
+<div className="not-prose my-8">
+  <BackpropTrainSketch />
+</div>
+
+the four presets each isolate a different way the training loop can succeed or fail. try them in order.
+
+---
+
+### good init: what convergence looks like
+
+with `w=0.5`, `v=0.5`, `b=0`, `c=0`, the network starts far from the target function but the loss descends steadily. within a few hundred steps the pink curve has settled near the teal one.
+
+this is the clean case. the loss is convex-ish from this starting point, the gradients are well-scaled, and gradient descent does what it's supposed to do. it's worth holding this picture in your head, because the other three presets are deviations from it.
+
+---
+
+### saturated init: when gradients vanish before training starts
+
+with `w=3.0`, the hidden neuron computes `z = 3·x`. even for inputs near zero, `z` is large, and `tanh(z)` is near `±1`. the derivative `σ'(z) = 1 − tanh(z)²` is near `0`.
+
+the backward pass multiplies by `σ'(z)` at every node it crosses. if `σ'(z) ≈ 0`, then `∂L/∂w ≈ 0`. the gradient for `w` is essentially zero before training starts. `w` doesn't move. the network is stuck, not because the optimizer is failing, but because the gradient computation is handing it nothing to work with.
+
+this is exactly the saturation failure shown in the [backpropagation](/lessons/backpropagation) sketch. here you can see its effect on the full training curve: the loss barely moves, the pink curve barely shifts.
+
+---
+
+### lr too high: when steps overshoot
+
+with learning rate `4.0`, each gradient step is four times larger than in the good init case. the first step might reduce the loss. the second overshoots the minimum in parameter space. the third overshoots back. the loss oscillates instead of descending.
+
+pause here. this is a calibration failure, not a gradient failure. the gradients are correct. the step size is just so large that the parameters keep jumping across the valley floor rather than settling into it. if you watch the parameter readout in the sketch, you'll see `w`, `v`, `b`, `c` bouncing without converging.
+
+reducing `α` fixes this. there's no single right learning rate; it depends on the loss landscape, which depends on the data and the model.
+
+---
+
+### lr too low: when correct is too slow
+
+with learning rate `0.02`, the gradients are correct and the steps are in the right direction. but they're so small that training visibly stalls. the pink curve barely moves from its starting position even after hundreds of steps.
+
+this is the least catastrophic failure mode. it doesn't break the algorithm, it just makes it slow. in practice, a loss that doesn't move for many steps is often misread as the network being stuck. it might just need more time, or a larger learning rate.
+
+---
+
+### what learning rate actually controls
+
+learning rate sets the tradeoff between convergence speed and stability. too high, and the optimizer overshoots the minimum and oscillates. too low, and it barely moves. the right value sits somewhere between those two regimes.
+
+there is no theory that tells you the right `α` ahead of time. in practice, people try a few values on a log scale (0.001, 0.01, 0.1) and pick the one that descends fastest without diverging. that search is one of the most tedious parts of real model training.
+
+adaptive optimizers like Adam partially automate this. they track how fast each parameter has been moving and adjust the effective step size per parameter. the core idea remains gradient descent. the update rule gets more elaborate. the training loop stays the same.
+
+---
+
+### what this doesn't cover yet
+
+this lesson trained on the full dataset at every step. real training uses mini-batches: a small random subset of the data per step, which adds noise but also generalizes better and scales to datasets that don't fit in memory. the gradient is noisier, but the direction is still approximately right.
+
+also not covered: what happens to gradient flow when you add more layers. one hidden layer with tanh avoids the worst problems. stack six of them and the gradient reaching the first layer is a tiny fraction of what left the output. the [gradient flow](/lessons/gradient-flow) lesson is exactly that story.

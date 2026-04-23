@@ -229,11 +229,12 @@ export default function LinearModelSketch() {
         <div ref={containerRef} />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4">
-          <label className="block text-xs font-medium text-muted-foreground mb-1">
-            w (slope)
-          </label>
+      <div className="sketch-controls">
+        <div className="sketch-slider-row">
+          <div className="sketch-slider-header">
+            <span className="sketch-label">w (slope)</span>
+            <span className="sketch-value">{w.toFixed(2)}</span>
+          </div>
           <input
             type="range"
             min={-1}
@@ -241,17 +242,15 @@ export default function LinearModelSketch() {
             step={0.05}
             value={w}
             onChange={handleChange(setW)}
-            className="w-full h-2 rounded-full appearance-none bg-gradient-to-r from-blue-500 to-violet-500 cursor-pointer accent-primary"
+            className="sketch-range"
           />
-          <div className="text-center mt-1">
-            <span className="text-sm font-mono font-semibold text-primary">{w.toFixed(2)}</span>
-          </div>
         </div>
         
-        <div className="rounded-xl bg-secondary/50 border border-border/50 p-4">
-          <label className="block text-xs font-medium text-muted-foreground mb-1">
-            b (intercept)
-          </label>
+        <div className="sketch-slider-row">
+          <div className="sketch-slider-header">
+            <span className="sketch-label">b (intercept)</span>
+            <span className="sketch-value">{b.toFixed(2)}</span>
+          </div>
           <input
             type="range"
             min={-10}
@@ -259,11 +258,8 @@ export default function LinearModelSketch() {
             step={0.5}
             value={b}
             onChange={handleChange(setB)}
-            className="w-full h-2 rounded-full appearance-none bg-gradient-to-r from-blue-500 to-violet-500 cursor-pointer accent-primary"
+            className="sketch-range"
           />
-          <div className="text-center mt-1">
-            <span className="text-sm font-mono font-semibold text-primary">{b.toFixed(2)}</span>
-          </div>
         </div>
       </div>
     </div>

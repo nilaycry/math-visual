@@ -1,0 +1,92 @@
+---
+title: "from one weight to many"
+description: "how the scalar model becomes a matrix, and why that's the only natural thing to do"
+tags: ["machine learning"]
+displayTag: "PART 2.5: SCALING UP"
+date: "2026-04-13T18:00"
+related:
+  - slug: "linear-models"
+    note: "the scalar model this lesson generalizes"
+  - slug: "non-linearities"
+    note: "what happens next, once you have a matrix model"
+---
+
+import WeightMatrixSketch from '@/components/sketches/WeightMatrixSketch'
+
+the [first lesson](/lessons/linear-models) built a model with two knobs: `w` (slope) and `b` (intercept). it predicts a single output from a single input. that's the simplest possible case, and it was useful for building the loss landscape and gradient descent. but it's not a neural network. a real input isn't a single number. it's a list of numbers. and a real model produces not one output but many intermediate values on the way.
+
+this lesson is about what happens when you take the scalar model and let it grow.
+
+---
+
+### the input becomes a list
+
+suppose instead of one input `x`, you have three: say, the height, weight, and age of a patient, and you want to predict their blood pressure. call them `x₁`, `x₂`, `x₃`.
+
+the simplest prediction rule is still linear: each input gets its own weight, and you sum the contributions:
+
+<div className="math-highlight">ŷ = w₁·x₁ + w₂·x₂ + w₃·x₃ + b</div>
+
+this is the same structure as before. the prediction is a weighted sum of inputs, plus a bias. the only change is that there are now three weights instead of one. `w₁` controls how much `x₁` matters, `w₂` controls how much `x₂` matters, and so on.
+
+that weighted sum has a compact notation. if you arrange the inputs into a column vector **x** = [x₁, x₂, x₃] and the weights into a row vector **w** = [w₁, w₂, w₃], the sum is just a dot product:
+
+<div className="math-highlight">ŷ = w · x + b</div>
+
+same equation as before, but now **w** and **x** are vectors. the scalar model was always a dot product. it just had only one term.
+
+---
+
+### the output becomes a list too
+
+now push further. suppose you don't want one prediction but two. maybe you're predicting both blood pressure and resting heart rate from the same three inputs.
+
+each output needs its own set of weights:
+
+<div className="math-highlight">ŷ₁ = w₁₁·x₁ + w₁₂·x₂ + w₁₃·x₃ + b₁</div>
+<div className="math-highlight">ŷ₂ = w₂₁·x₁ + w₂₂·x₂ + w₂₃·x₃ + b₂</div>
+
+two outputs, three inputs each: six weights total, arranged in two rows of three. writing this out explicitly every time would be tedious. but notice the structure: it's the same dot product, run twice in parallel, once per output.
+
+arrange those six weights into a 2×3 grid (a matrix **W**) and both outputs fall out of one operation:
+
+<div className="math-highlight">ŷ = W · x + b</div>
+
+**W** is 2×3: two rows (one per output), three columns (one per input). **x** is a 3-vector. **b** is a 2-vector. the result **ŷ** is a 2-vector. this is matrix-vector multiplication, and it's exactly what a linear layer in a neural network computes.
+
+pause here. the matrix **W** isn't a new kind of thing. it's the same scalar weight `w` from part 1, generalized. each row is the weight vector for one output. the whole matrix is just several dot products stacked on top of each other, evaluated simultaneously.
+
+---
+
+### the sketch
+
+the sketch shows this concretely. three inputs on the left, two outputs on the right. each connection is a weight. the thickness shows its magnitude, the color shows its sign.
+
+drag any input slider. watch both outputs update immediately, each as the dot product of that input with its column of weights. drag a weight slider and watch how it scales one specific connection without touching the others.
+
+<div className="not-prose my-8">
+  <WeightMatrixSketch />
+</div>
+
+the six connections are the six entries of **W**. the two bias sliders are **b**. together they are the eight parameters of this tiny linear layer. a real layer in a language model has the same structure, just thousands of inputs and outputs instead of three and two.
+
+---
+
+### what a layer is
+
+a **layer** is this operation: a weight matrix times an input vector, plus a bias vector. it takes every input, mixes them according to **W**, and produces a new list of values.
+
+the word "layer" comes from the fact that you can stack these operations. the output of one layer becomes the input to the next. each layer sees a different representation of the original input, a different linear mixing, and the parameters of each layer are independent.
+
+stacking two linear layers gives:
+
+<div className="math-highlight">h = W₁ · x + b₁</div>
+<div className="math-highlight">ŷ = W₂ · h + b₂</div>
+
+`h` is an intermediate list of values: the outputs of the first layer, which become the inputs to the second. this is the two-layer structure from the next lesson. `h` is also what gets called a **hidden layer**: it sits between the input and the output, neither directly observed nor directly set by you.
+
+---
+
+### what this doesn't cover yet
+
+stacking linear layers has a problem. the next lesson shows what it is, and why the fix requires something non-linear between the layers.

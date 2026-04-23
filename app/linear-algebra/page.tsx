@@ -50,6 +50,10 @@ export default function LinearAlgebraPage() {
             grid-template-columns: 1fr !important;
           }
         }
+        .nav-pill:hover {
+          color: #ccc !important;
+          border-color: rgba(255,255,255,0.2) !important;
+        }
       `}</style>
 
       <div
@@ -93,14 +97,39 @@ export default function LinearAlgebraPage() {
               margin: "0 auto",
             }}
           >
-            <Link href="/" className="text-[#777] hover:text-[#ccc] transition-colors duration-200 no-underline text-sm font-medium">
-              ← back
+            <Link 
+              href="/" 
+              className="nav-pill group"
+              style={{ 
+                color: "#888", 
+                textDecoration: "none", 
+                fontSize: 12, 
+                fontWeight: 400, 
+                letterSpacing: "0.06em",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 20,
+                padding: "5px 14px",
+                transition: "all 0.2s"
+              }}
+            >
+              <span className="inline-block transition-transform duration-200 group-hover:-translate-x-1" style={{ marginRight: 4 }}>←</span> back
             </Link>
             <a
               href="https://github.com/nilaycry"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#777] hover:text-[#ccc] transition-colors duration-200 no-underline text-sm font-medium"
+              className="nav-pill"
+              style={{ 
+                color: "#888", 
+                textDecoration: "none", 
+                fontSize: 12, 
+                fontWeight: 400, 
+                letterSpacing: "0.06em",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 20,
+                padding: "5px 14px",
+                transition: "all 0.2s"
+              }}
             >
               github
             </a>

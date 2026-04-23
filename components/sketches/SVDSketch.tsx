@@ -308,17 +308,18 @@ export default function SVDSketch() {
       </div>
 
       {/* Matrix sliders */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="sketch-controls" style={{ flexWrap: "wrap" }}>
         {[
           { label: "a (row 1, col 1)", value: a, setter: setA, id: "svd-a" },
           { label: "b (row 1, col 2)", value: b, setter: setB, id: "svd-b" },
           { label: "c (row 2, col 1)", value: c, setter: setC, id: "svd-c" },
           { label: "d (row 2, col 2)", value: d, setter: setD, id: "svd-d" },
         ].map(({ label, value, setter, id }) => (
-          <div key={id} className="rounded-xl bg-secondary/50 border border-border/50 p-4">
-            <label className="block text-xs font-medium text-muted-foreground mb-1">
-              {label}
-            </label>
+          <div key={id} className="sketch-slider-row" style={{ flex: 1, minWidth: 140 }}>
+            <div className="sketch-slider-header">
+              <span className="sketch-label">{label}</span>
+              <span className="sketch-value">{value.toFixed(1)}</span>
+            </div>
             <input
               id={`${id}-slider`}
               type="range"
@@ -327,13 +328,8 @@ export default function SVDSketch() {
               step={0.1}
               value={value}
               onChange={handleChange(setter)}
-              className="w-full h-2 rounded-full appearance-none bg-gradient-to-r from-blue-500 to-violet-500 cursor-pointer accent-primary"
+              className="sketch-range"
             />
-            <div className="text-center mt-1">
-              <span className="text-sm font-mono font-semibold text-primary">
-                {value.toFixed(1)}
-              </span>
-            </div>
           </div>
         ))}
       </div>

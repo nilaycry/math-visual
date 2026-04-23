@@ -2,8 +2,8 @@
 title: "architectures for depth"
 description: "the engineering that made deep networks actually train"
 tags: ["machine learning", "deep learning"]
-displayTag: "PART 6: DEEP ARCHITECTURES"
-date: "2026-04-17"
+displayTag: "PART 8: DEEP ARCHITECTURES"
+date: "2026-04-19"
 related:
   - slug: "gradient-flow"
     note: "the mechanics of vanishing gradients that these architectures solve"
@@ -11,56 +11,62 @@ related:
 
 import ResNetSketch from '@/components/sketches/ResNetSketch'
 
-shifting to ReLU solved the local derivative problem, guaranteeing that local gradients would not strictly vanish. but gradients can still explode, and successive layers can learn severely conflicting shifts. 
+switching to ReLU solved the local derivative problem. gradients no longer vanish at every saturated neuron. but deep networks kept failing to train in a different way: the activations themselves would drift into bad ranges, and the gradients would either explode or become erratic. adding more layers made things worse, not better.
 
-training a network with hundreds of layers requires more than swapping the activation function. it requires explicit architectural pathways designed to keep the computation mathematically stable.
+the three fixes that actually made deep networks work (batch normalization, residual connections, and careful initialization) didn't come from theory. they came from years of empirical work on exactly this failure mode. I think that's worth saying directly, because in retrospect they look obvious in a way they weren't.
 
 ---
 
-### batch normalization
+### the drift problem: batch normalization
 
-in a deep network, layer 50 depends strictly on the outputs of layer 49. but as layer 49 updates its weights during training, its output distribution shifts. layer 50 is constantly adjusting to a moving target. 
+in a deep network, layer 50 depends on the outputs of layer 49. as training updates layer 49's weights, its output distribution shifts. layer 50 is perpetually chasing a moving target.
 
-furthermore, if a layer outputs extremely large values, they push subsequent non-linearities into saturation or force gradients to explode deeper in the chain. 
+worse: if any layer outputs large values, the next activation gets pushed into saturation, and the gradient through that layer shrinks toward zero. you're back to the vanishing gradient problem, but through distribution drift rather than bad initialization.
 
-**batch normalization** manually arrests this drift. after a linear layer, the batch norm operation collects the outputs for the current batch, computes their mean and variance, and forcibly standardizes them to a mean of zero and variance of one.
+batch normalization interrupts this after each linear layer. it takes the outputs for the current batch, computes their mean and variance, and rescales them to zero mean and unit variance:
 
 <div className="math-highlight">x̂ = (x − μ) / √(σ² + ε)</div>
 
-it pins the activations so they remain centered in the regime where derivatives flow cleanly. the network is then provided two learned parameters (a multiplier γ and a shift β) to allow it to un-normalize the data later if the optimization requires it. this approach guarantees stability by default.
+this keeps activations centered in the regime where derivatives flow cleanly, regardless of what the previous layer's weights are doing. two learned parameters γ and β are added back after normalization. they let the network shift and scale the distribution if the optimization needs it, but the default is stable.
 
 ---
 
-### residual connections (ResNets)
+### the depth problem: residual connections
 
-even with stable activations, scaling depth introduced an unexpected failure: arbitrarily deep networks (e.g., 100 layers) strictly performed worse on training data than shallower networks (e.g., 20 layers). 
+even with stable activations, something unexpected happened when scaling to 100+ layers: deeper networks performed worse on training data than shallower ones. not on test data, on training data. the optimizer just couldn't find a good solution.
 
-mathematically, this is anomalous. the 100-layer network strictly contains the 20-layer network within it. the optimizer could theoretically set the first 20 layers to match the shallow network, and force the remaining 80 layers to act as an identity operation (`f(x) = x`). 
+this is strange. a 100-layer network contains a 20-layer network as a special case: set the extra 80 layers to act as identities (`f(x) = x`) and you've recovered the shallow network. but gradient descent consistently failed to find that solution. learning "do nothing" across 80 layers of matrices and activations from random initialization turns out to be genuinely hard.
 
-but gradient descent routinely failed to find that solution. forcing 80 layers of matrices and non-linearities to precisely mimic a lossless pass-through is incredibly difficult to learn from random initializations.
-
-the structural fix is **residual connections**. instead of forcing the block to learn the complete transformation, a "skip path" is added that bypasses the block and carries the input directly into the output:
+the fix reframes the problem. instead of asking each block to learn the full transformation, add a direct path that carries the input around the block:
 
 <div className="math-highlight">y = f(x) + x</div>
 
-now, the internal block `f(x)` does not have to learn the full mapping. it solely learns the *residual*—the necessary adjustment to `x`. 
+now `f(x)` only needs to learn the residual: the correction to the input, not the full mapping. if the right answer is to do nothing, the optimizer just drives `f(x)` toward zero, which is easy. `y = 0 + x` gives the identity for free.
 
-if the optimal operation is to do nothing, the optimizer simply drives the weights of `f(x)` to zero. `f(x)` vanishes, and the equation collapses cleanly to `y = 0 + x`. the identity function operates as the default assumption rather than a complex target.
-
-skip connections additionally provide an unobstructed highway for the gradient to flow backward during backpropagation, bypassing blocks that might constrict it. this single architectural change permitted networks to scale to thousands of layers seamlessly.
+the skip path also gives the gradient a direct route backward that bypasses any block that might constrict it. this is what made hundred-layer networks trainable.
 
 <div className="not-prose my-8">
   <ResNetSketch />
 </div>
 
+watch the gradient magnitudes at each layer. with no skip connections, they decay with depth. add them, and the gradient at early layers stays close to what it was at the output. the skip path is doing real work.
+
 ---
 
-### bounded initialization
+### the scale problem: initialization
 
-if you initialize a network with weights that are too large, the first forward pass throws the activations into extreme ranges. if the weights are too small, the signal vanishes to zero before the first backward pass begins. 
+batch normalization stabilizes training once it starts. residual connections keep gradients flowing. but both of these can be undermined before the first update if the initial weights are badly scaled.
 
-initialization cannot be uniformly random. the variance must be specifically bounded.
+weights that are too large push activations into saturation on the very first forward pass. weights that are too small collapse the signal to near zero before the first backward pass. either way, gradients are useless before training begins.
 
-formulas like **Kaiming Initialization** exist specifically to ensure the variance of a layer's outputs exactly matches the variance of its inputs. this keeps the scale of the arithmetic strictly level across an arbitrary number of layers. 
+the solution is to bound the initial variance so a layer's output distribution has roughly the same scale as its input. Kaiming initialization does this for ReLU networks: weights drawn from a distribution with variance `2/n`, where `n` is the number of inputs to that layer. the factor of 2 accounts for ReLU zeroing out half the activations.
 
-these architectures are not mathematically inevitable. they are precise engineering constraints designed specifically to guard against the points where pure gradient descent collapses under high dimensionality.
+<div className="math-highlight">W ~ N(0, √(2/n))</div>
+
+this isn't theoretically derived from first principles. it's the empirically validated answer to "what scale keeps forward and backward signals alive across many layers?" there are variations for other activations, but the goal is always the same: keep the arithmetic level across depth.
+
+---
+
+### what this doesn't cover yet
+
+these three fixes stabilize optimization. they don't say anything about whether the model is actually learning the right thing. generalization, overfitting, and regularization are a separate story. the next set of lessons picks up there.

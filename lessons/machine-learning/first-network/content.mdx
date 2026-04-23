@@ -1,0 +1,85 @@
+---
+title: "a first network"
+description: "what training data, parameters, and loss actually are, before the algorithm"
+tags: ["machine learning", "neural networks"]
+displayTag: "PART 4: FIRST NETWORK"
+date: "2026-04-15"
+related:
+  - slug: "gradient-descent"
+    note: "the optimization engine that training uses"
+  - slug: "backpropagation"
+    note: "how the gradients that training needs are actually computed"
+---
+
+import BackpropTrainSketch from '@/components/sketches/BackpropTrainSketch'
+
+the [gradient descent](/lessons/gradient-descent) lesson steps downhill on a loss surface. but that lesson handed you the loss function and the parameters pre-built. here I want to slow down and ask: where does the loss function come from? what exactly are the parameters? why does minimizing a number correspond to a machine that learned something useful?
+
+---
+
+### the machine
+
+to keep the math visible, we'll use the smallest network that has real structure: one input, one hidden neuron, one output.
+
+<div className="math-highlight">z = w · x + b &nbsp;&nbsp;&nbsp; h = tanh(z) &nbsp;&nbsp;&nbsp; y = v · h + c</div>
+
+this is a one-hidden-layer network with scalar weights. the full matrix formulation from the [anatomy lesson](/lessons/network-anatomy) collapses to scalars when each layer has exactly one neuron. running this sequence from input `x` to output `y` is the **forward pass**.
+
+`h` is the hidden neuron: an intermediate value that the network computes on the way from input to output, neither directly observed nor directly set by you. `w`, `b`, `v`, `c` are the four parameters, the adjustable dials. the function this network can represent is entirely determined by those four values.
+
+---
+
+### the data
+
+to train a network, you need examples. supervised learning means you have pairs: an input `x` and the output you want the network to produce for that input. those pairs are the training data.
+
+in the sketch below, six pairs are shown as teal dots. each dot sits at `(x, target)`, input on the horizontal axis and desired output on the vertical. the teal curve in the background is the function those six points are sampled from. the network doesn't see the curve, only the six dots.
+
+the goal: find values of `w`, `b`, `v`, `c` such that the network's output matches those six targets as closely as possible.
+
+---
+
+### the loss
+
+"matches as closely as possible" needs to become a single number. the one that almost everyone uses is mean squared error:
+
+<div className="math-highlight">L = (1/n) · Σ (y(xᵢ) − targetᵢ)²</div>
+
+for each training example, compute how far the network's prediction is from the target, square it, average across all n examples. `L` is a function of the parameters. when the dials are set badly, `L` is large. when they're set well, `L` is small.
+
+the [first lesson](/lessons/linear-models) derived why squaring is the right choice: it follows from assuming Gaussian noise on the targets and running maximum likelihood estimation. the short practical consequence: squaring keeps `L` differentiable everywhere, unlike absolute value which has a kink at zero that makes gradient computation unreliable right where you need it most.
+
+---
+
+### the picture
+
+the pink curve is what the network currently predicts for the current dial settings. hit start training and watch it move toward the teal dots as `L` falls. the right panel shows the loss over training steps.
+
+<div className="not-prose my-8">
+  <BackpropTrainSketch />
+</div>
+
+try all four presets before reading on. each one shows a different failure mode. I'll explain the mechanics once you've seen how the gradient is computed. for now, just notice that some starts converge cleanly and some don't, even though the problem and data are identical.
+
+---
+
+### what training is
+
+training is repeated gradient descent on `L` with respect to the four parameters.
+
+each step:
+1. forward pass: run the network's computation from input to output, computing `z`, `h`, `y`, and `L` for every data point
+2. backward pass: compute how much `L` changes if you nudge each dial. those sensitivities are the gradients `∂L/∂w`, `∂L/∂v`, `∂L/∂b`, `∂L/∂c`
+3. update: move each dial a small step in the direction that reduces `L`
+
+repeat until `L` stops falling, or until you run out of patience.
+
+step 3 is gradient descent, the same update rule from the [gradient descent lesson](/lessons/gradient-descent). step 2 is what the next lesson is about.
+
+---
+
+### what this doesn't cover yet
+
+computing those four gradients requires running the chain rule through the network's computation from `L` backward to each parameter. that's backpropagation, and the mechanism it uses to do this efficiently is genuinely non-obvious.
+
+also not yet explained: why the saturated and high-lr presets fail the way they do. those failures have specific mechanical reasons, both of which become clear once you've seen the gradient computation.

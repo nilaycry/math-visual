@@ -19,6 +19,9 @@ const GradientFlowSketch = dynamic(() => import("@/components/sketches/GradientF
 const LinearModelSketch = dynamic(() => import("@/components/sketches/LinearModelSketch"), { ssr: false });
 const NonLinearSketch = dynamic(() => import("@/components/sketches/NonLinearSketch"), { ssr: false });
 const ResNetSketch = dynamic(() => import("@/components/sketches/ResNetSketch"), { ssr: false });
+const PrefaceSketch = dynamic(() => import("@/components/sketches/PrefaceSketch"), { ssr: false });
+const WeightMatrixSketch = dynamic(() => import("@/components/sketches/WeightMatrixSketch"), { ssr: false });
+const NetworkAnatomySketch = dynamic(() => import("@/components/sketches/NetworkAnatomySketch"), { ssr: false });
 
 const components = {
   FourierSketch,
@@ -33,6 +36,10 @@ const components = {
   LinearModelSketch,
   NonLinearSketch,
   ResNetSketch,
+  PrefaceSketch,
+  WeightMatrixSketch,
+  NetworkAnatomySketch,
+  NetworkAnatomy: NetworkAnatomySketch,
 };
 
 export async function generateStaticParams() {
@@ -94,6 +101,27 @@ export default async function LessonPage({
           .lesson-layout { flex-direction: column !important; }
           .lesson-sidebar { display: none !important; }
           .lesson-main { padding: 32px 20px 64px !important; }
+        }
+        .back-link:hover {
+          color: #E8A020 !important;
+        }
+        .nav-link-group:hover .nav-link-title {
+          color: #E8A020 !important;
+        }
+        .conn-link {
+          transition: all 0.2s ease;
+        }
+        .conn-link:hover {
+          transform: translateX(4px);
+        }
+        .conn-link:hover .conn-title {
+          color: #E8A020 !important;
+        }
+        .rigorous-link:hover .rigorous-title {
+          color: #9B7FDD !important;
+        }
+        .rigorous-link:hover .rigorous-border {
+          border-left-color: #9B7FDD !important;
         }
       `}</style>
 
@@ -171,15 +199,15 @@ export default async function LessonPage({
               }}
             >
               {prevLesson ? (
-                <Link href={`/lessons/${prevLesson.slug}`} style={{ textDecoration: "none" }}>
-                  <span style={{ fontSize: 11, color: "#555", display: "block", marginBottom: 4 }}>← previous</span>
-                  <span style={{ fontSize: 14, fontWeight: 500, color: "#888" }}>{prevLesson.title}</span>
+                <Link href={`/lessons/${prevLesson.slug}`} className="nav-link-group" style={{ textDecoration: "none" }}>
+                  <span style={{ fontSize: 10, color: "#444", display: "block", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.12em" }}>← previous</span>
+                  <span className="nav-link-title" style={{ fontSize: 14, fontWeight: 500, color: "#888", transition: "color 0.2s" }}>{prevLesson.title}</span>
                 </Link>
               ) : <div />}
               {nextLesson ? (
-                <Link href={`/lessons/${nextLesson.slug}`} style={{ textDecoration: "none", textAlign: "right" }}>
-                  <span style={{ fontSize: 11, color: "#555", display: "block", marginBottom: 4 }}>next →</span>
-                  <span style={{ fontSize: 14, fontWeight: 500, color: "#888" }}>{nextLesson.title}</span>
+                <Link href={`/lessons/${nextLesson.slug}`} className="nav-link-group" style={{ textDecoration: "none", textAlign: "right" }}>
+                  <span style={{ fontSize: 10, color: "#444", display: "block", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.12em" }}>next →</span>
+                  <span className="nav-link-title" style={{ fontSize: 14, fontWeight: 500, color: "#888", transition: "color 0.2s" }}>{nextLesson.title}</span>
                 </Link>
               ) : <div />}
             </nav>
@@ -203,18 +231,20 @@ export default async function LessonPage({
             {/* Back link */}
             <Link
               href={backHref}
+              className="back-link group"
               style={{
                 fontSize: 12,
-                color: "#444",
+                fontWeight: 500,
+                color: "#666",
                 textDecoration: "none",
                 letterSpacing: "0.06em",
                 display: "flex",
                 alignItems: "center",
                 gap: 6,
-                transition: "color 0.2s",
+                transition: "all 0.2s",
               }}
             >
-              ← {backLabel}
+              <span className="transform transition-transform duration-300 group-hover:-translate-x-1">←</span> {backLabel}
             </Link>
 
             {/* Lesson type badge */}
@@ -223,7 +253,7 @@ export default async function LessonPage({
                 <span style={{ fontSize: 10, color: "#444", textTransform: "uppercase", letterSpacing: "0.12em", display: "block", marginBottom: 6 }}>
                   type
                 </span>
-                <span style={{ fontSize: 12, color: "#666", letterSpacing: "0.04em" }}>
+                <span style={{ fontSize: 12, color: "#888", letterSpacing: "0.04em", fontWeight: 500, background: "rgba(255,255,255,0.03)", padding: "4px 10px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.05)" }}>
                   {lesson.lessonType}
                 </span>
               </div>
@@ -237,13 +267,14 @@ export default async function LessonPage({
                 </span>
                 <Link
                   href={`/abstract-linear-algebra/${lesson.rigorousNote}`}
+                  className="rigorous-link"
                   style={{ textDecoration: "none", color: "inherit", display: "block" }}
                 >
-                  <div style={{ borderLeft: "2px solid #9B7FDD33", paddingLeft: 10 }}>
-                    <span style={{ fontSize: 13, fontWeight: 400, color: "#aaa", display: "block", marginBottom: 3, lineHeight: 1.4, transition: "color 0.2s" }}>
+                  <div className="rigorous-border" style={{ borderLeft: "2px solid rgba(155, 127, 221, 0.2)", paddingLeft: 12, transition: "border-color 0.2s" }}>
+                    <span className="rigorous-title" style={{ fontSize: 13, fontWeight: 500, color: "#aaa", display: "block", marginBottom: 4, lineHeight: 1.4, transition: "color 0.2s" }}>
                       {rigorousNote.title}
                     </span>
-                    <span style={{ fontSize: 11, color: "#444" }}>
+                    <span style={{ fontSize: 11, color: "#444", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       week {rigorousNote.week}
                     </span>
                   </div>
@@ -257,18 +288,19 @@ export default async function LessonPage({
                 <span style={{ fontSize: 10, color: "#444", textTransform: "uppercase", letterSpacing: "0.12em", display: "block", marginBottom: 12 }}>
                   connected
                 </span>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   {resolvedRelated.map((r) => (
                     <Link
                       key={r.slug}
                       href={`/lessons/${r.slug}`}
+                      className="conn-link"
                       style={{ textDecoration: "none", color: "inherit", display: "block" }}
                     >
-                      <span style={{ fontSize: 13, color: "#888", lineHeight: 1.4, display: "block", transition: "color 0.2s" }}>
+                      <span className="conn-title" style={{ fontSize: 13, fontWeight: 500, color: "#888", lineHeight: 1.4, display: "block", transition: "color 0.2s" }}>
                         {r.meta.title}
                       </span>
                       {r.note && (
-                        <span style={{ fontSize: 11, color: "#444", display: "block", marginTop: 2 }}>
+                        <span style={{ fontSize: 11, color: "#444", display: "block", marginTop: 3 }}>
                           {r.note}
                         </span>
                       )}

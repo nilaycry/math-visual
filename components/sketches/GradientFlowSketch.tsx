@@ -210,49 +210,42 @@ export default function GradientFlowSketch() {
       <div className="sketch-wrap">
         <div ref={containerRef} />
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14, padding: "0 4px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: 13, color: "#555", width: 96 }}>activation</span>
-          <div style={{ display: "flex", gap: 8 }}>
-            {(["tanh", "relu"] as Activation[]).map((act) => (
-              <button
-                key={act}
-                onClick={() => handleActivation(act)}
-                style={{
-                  padding: "4px 14px",
-                  borderRadius: 6,
-                  border: "1px solid",
-                  borderColor: activation === act ? "#5DCAA5" : "#222",
-                  background: activation === act ? "rgba(93,202,165,0.08)" : "transparent",
-                  color: activation === act ? "#5DCAA5" : "#444",
-                  fontSize: 12,
-                  cursor: "pointer",
-                  fontFamily: "Space Grotesk, sans-serif",
-                }}
-              >
-                {act}
-              </button>
-            ))}
-          </div>
+      <div className="sketch-controls" style={{ flexWrap: "wrap" }}>
+        <div className="flex gap-2">
+          {(["tanh", "relu"] as Activation[]).map((act) => (
+            <button
+              key={act}
+              onClick={() => handleActivation(act)}
+              className={`sketch-btn ${activation === act ? "sketch-btn-active" : ""}`}
+            >
+              {act}
+            </button>
+          ))}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: 13, color: "#555", width: 96 }}>depth</span>
+        
+        <div className="sketch-slider-row" style={{ flex: 1, minWidth: 160 }}>
+          <div className="sketch-slider-header">
+            <span className="sketch-label">depth</span>
+            <span className="sketch-value">{depth} layers</span>
+          </div>
           <input
             type="range" min={2} max={8} step={1} value={depth}
             onChange={handleDepthChange}
-            style={{ width: 160 }}
+            className="sketch-range"
           />
-          <span style={{ fontSize: 12, color: "#444", minWidth: 60 }}>{depth} layers</span>
         </div>
+        
         {activation === "tanh" && (
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: 13, color: "#555", width: 96 }}>saturation</span>
+          <div className="sketch-slider-row" style={{ flex: 1, minWidth: 160 }}>
+            <div className="sketch-slider-header">
+              <span className="sketch-label">saturation (z)</span>
+              <span className="sketch-value">{saturation.toFixed(1)}</span>
+            </div>
             <input
               type="range" min={0} max={3} step={0.1} value={saturation}
               onChange={handleChange(setSaturation)}
-              style={{ width: 160 }}
+              className="sketch-range"
             />
-            <span style={{ fontSize: 12, color: "#444", minWidth: 60 }}>z = {saturation.toFixed(1)}</span>
           </div>
         )}
       </div>

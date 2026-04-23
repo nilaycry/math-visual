@@ -208,19 +208,19 @@ export default function NullSpaceSketch() {
         <div ref={containerRef} />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 48px", maxWidth: 480, margin: "0 auto" }}>
+      <div className="sketch-controls" style={{ flexWrap: "wrap", maxWidth: 600, margin: "0 auto" }}>
         {sliders.map(({ label, val, set }) => (
-          <div key={label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ fontSize: 13, color: "#555", width: 8, fontFamily: "monospace" }}>{label}</span>
+          <div key={label} className="sketch-slider-row" style={{ flex: 1, minWidth: 120 }}>
+            <div className="sketch-slider-header">
+              <span className="sketch-label">{label}</span>
+              <span className="sketch-value">{val.toFixed(2)}</span>
+            </div>
             <input
               type="range" min={-2} max={2} step={0.01}
               value={val}
               onChange={handleChange(set)}
-              style={{ flex: 1 }}
+              className="sketch-range"
             />
-            <span style={{ fontSize: 12, color: "#444", width: 36, textAlign: "right" }}>
-              {val.toFixed(2)}
-            </span>
           </div>
         ))}
       </div>

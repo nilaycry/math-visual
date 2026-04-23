@@ -5,60 +5,56 @@ tags: ["machine learning", "neural networks"]
 displayTag: "PART 3: BENDING SPACE"
 date: "2026-04-14"
 related:
+  - slug: "first-network"
+    note: "putting non-linearities to use: the simplest network and how it trains"
   - slug: "backpropagation"
     note: "how gradients flow through these non-linear chains"
 ---
 
 import NonLinearSketch from '@/components/sketches/NonLinearSketch'
 
-moving downhill in a loss landscape finds the best parameters for a model. but if the model is rigidly linear, and the data forms a complex structure like a circle, finding the "best" line does not solve the problem. the assumption itself is inadequate.
+the [previous lesson](/lessons/one-weight-to-many) showed that stacking layers is natural: the output of one weight matrix feeds into the next. you now have a model with real depth. the question is whether that depth actually buys you anything.
 
-to capture complex geometry, the model must be more complex. the standard approach is to chain simple transformations together.
+it doesn't, not yet. and the reason is worth understanding precisely before adding the fix.
 
 ---
 
 ### the failure of linear stacking
 
-a matrix multiplication is a linear map. it takes a vector and stretches, rotates, or shears it. 
-
-to build a stronger model, the intuitive step is feeding the output of one matrix into another:
+a matrix multiplication is a linear map: it stretches, rotates, or shears space. to build a more expressive model, the natural move is to chain them:
 
 <div className="math-highlight">y = A(B(Cx))</div>
 
-this resembles a deep network, executing three layers of computation. it appears capable of representing something much more complex than a single matrix. 
+this looks like three layers of computation. it isn't. matrix multiplication is associative: `A(BC)x` is exactly `(ABC)x`. the chain collapses to a single matrix `M = ABC`. three layers of linear maps is still just one linear map.
 
-it cannot. matrix multiplication is associative. `A(BC)x` is strictly equivalent to `(ABC)x`. the product of three matrices is identically another single matrix. the entire three-layer chain collapses immediately into a single transformation `y = Mx`.
-
-stacking linear maps only produces another linear map. infinite layers of matrices still represent nothing more than a flat hyper-plane. the model gains no expressivity. it remains entirely linear.
+this holds no matter how many matrices you stack. infinite layers of linear transformations represent nothing more than a single linear transformation. the model gains no new expressivity.
 
 ---
 
 ### breaking the collapse
 
-to prevent the chain from collapsing, a structural barrier must be injected between the matrices to force the operations to remain distinct. 
-
-that barrier is a non-linear function, standardly known as an **activation function**.
-
-instead of directly feeding the output of matrix `W₁` into `W₂`, the intermediate output passes through a non-linear operation, such as `tanh`:
+the fix is to insert something non-linear between the matrix multiplications, so the chain can't collapse:
 
 <div className="math-highlight">y = W₂ · tanh(W₁x + b₁) + b₂</div>
 
-because tanh warps the space non-linearly, the equation can no longer be factored down. the matrices cannot collapse. the multi-layer structure is preserved.
+`tanh` is called an activation function. because it's non-linear, the equation can no longer be factored. `W₁` and `W₂` are forced to stay distinct. the multi-layer structure is preserved.
 
 ---
 
-### the geometric role of non-linearities
+### the geometric role
 
-if a matrix transformation scales and rotates space, a non-linearity is what allows the space to bend.
+a matrix transformation scales and rotates space. tanh bends it.
 
-`tanh(z)` forces extreme positive values toward `1`, and extreme negative values toward `−1`. geometrically, this operation takes an infinite unbounded space and compresses it into a finite box. points that were distant are compressed near the boundaries, introducing severe curvature.
-
-by chaining alternating matrix multiplications and non-linearities, the network rotates the input space, compresses it, stretches it, and curves it repeatedly. this continuous warping allows structures that are impossible to separate linearly (like points inside a sphere from points outside) to be functionally unfolded until a flat plane can slice them cleanly at the final layer.
+specifically, `tanh(z)` compresses extreme values toward `±1`, introducing curvature. chaining matrices and activations alternately rotates, stretches, and bends the input space repeatedly. structures that can't be separated by a flat hyperplane (like two interleaved spirals) can often be unfolded by enough of these steps until a flat final layer can slice them cleanly.
 
 <div className="not-prose my-8">
   <NonLinearSketch />
 </div>
 
-this isn't just an intuition. it is a mathematical guarantee. if you stack enough matrices and enough non-linearities, a theorem called the **Universal Approximation Theorem** proves that the network can fold the space to approximate *any* continuous function to arbitrary precision. 
+there's a theorem, the Universal Approximation Theorem, which formalizes this: a network with enough width and a non-linear activation can approximate any continuous function to arbitrary precision. I find the theorem more reassuring than actionable. it says the geometry you need exists somewhere in the parameter space, but says nothing about how to find it. that's what the next few lessons are about.
 
-a neural network is not fundamentally "learning to think." it is a universal function approximator. the architecture guarantees that the required geometry *exists* within the parameter space. the hard part, which we tackle next, is figuring out how to actually find it.
+---
+
+### what this doesn't cover yet
+
+which activation function to use, and why tanh causes problems in deep networks. those failures have to do with the derivative of tanh near its limits, and how that derivative propagates backward through many layers. the [backpropagation](/lessons/backpropagation) lesson sets up the mechanism, and [gradient flow](/lessons/gradient-flow) covers what goes wrong at depth.

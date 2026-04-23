@@ -1,0 +1,89 @@
+---
+title: "what a network looks like"
+description: "neurons, layers, and the forward pass, before any training"
+tags: ["machine learning", "neural networks"]
+displayTag: "PART 3.5: NETWORK ANATOMY"
+date: "2026-04-14T18:00"
+related:
+  - slug: "one-weight-to-many"
+    note: "the layer operation this lesson assembles into a network"
+  - slug: "first-network"
+    note: "the training setup built on top of this structure"
+---
+
+import NetworkAnatomy from '@/components/sketches/NetworkAnatomySketch'
+
+the [previous lesson](/lessons/one-weight-to-many) built a layer: a weight matrix times an input vector, plus a bias. this lesson stacks layers into a network and names the pieces precisely. the vocabulary (neuron, hidden layer, forward pass) shows up in every lesson from here on. it's worth being exact about what each word means before the derivations start.
+
+---
+
+### a neuron
+
+a **neuron** is the smallest unit. it takes a list of inputs, computes a weighted sum, adds a bias, and passes the result through an activation function:
+
+<div className="math-highlight">output = activation(w · x + b)</div>
+
+the weight vector **w** and bias `b` are the neuron's parameters. the activation function is fixed. it's not learned. for now it's tanh, which squashes the result into (−1, 1).
+
+a neuron on its own is just a parameterized function. it has one output. what makes it interesting is what happens when you run many of them in parallel.
+
+---
+
+### a layer
+
+a **layer** is a bank of neurons that all receive the same input. if you have `m` neurons each taking `n` inputs, the whole layer is described by an `m×n` weight matrix **W** and a bias vector **b** of length `m`. the layer computes:
+
+<div className="math-highlight">h = activation(W · x + b)</div>
+
+where activation is applied element-wise: each neuron runs independently, computes its own dot product, and passes through its own activation. the result **h** is a vector of length `m`.
+
+the word "layer" is spatial. inputs come in from the left, outputs go out to the right. each neuron sits at the same horizontal position. there's nothing special about that geometry. it's just a useful picture.
+
+---
+
+### a network
+
+a **network** is a sequence of layers. the output of one layer becomes the input to the next:
+
+<div className="math-highlight">h₁ = activation(W₁ · x + b₁)</div>
+<div className="math-highlight">h₂ = activation(W₂ · h₁ + b₂)</div>
+<div className="math-highlight">ŷ = W₃ · h₂ + b₃</div>
+
+`h₁` and `h₂` are **hidden layers**: intermediate values that the network computes on the way from input to output. they're called hidden because you don't observe them directly, and you don't set them. they're whatever the parameters make them.
+
+the final layer (`W₃ · h₂ + b₃`) usually has no activation function, so the output `ŷ` is unconstrained. that makes sense for regression problems where the target can be any real number.
+
+running this sequence from `x` to `ŷ`, evaluating each layer in order, is the **forward pass**.
+
+---
+
+### the sketch
+
+the sketch shows a small network: two inputs, one hidden layer with three neurons, two outputs. click any input node to set its value. watch the activations propagate layer by layer: each neuron lights up according to its weighted sum, then tanh squashes it into (−1, 1), and those values feed the next layer.
+
+the thickness of each edge shows the magnitude of the weight on that connection. the color shows the sign: blue for positive, red for negative.
+
+<div className="not-prose my-8">
+  <NetworkAnatomy />
+</div>
+
+the specific thing to watch: click an input and trace what changes. the hidden neurons each react differently (some strongly, some weakly, some barely at all) because each has its own weight vector. the outputs then combine those hidden values with a second set of weights. the whole computation is just matrix multiplications and tanh, applied in sequence.
+
+---
+
+### counting parameters
+
+this small network has:
+- **W₁**: 3×2 = 6 weights, **b₁**: 3 biases → 9 parameters in the hidden layer
+- **W₂**: 2×3 = 6 weights, **b₂**: 2 biases → 8 parameters in the output layer
+- **total: 17 parameters**
+
+every one of those 17 numbers is a dial that training adjusts. gradient descent runs on all of them simultaneously, each getting its own gradient at every step. the next lesson sets up exactly what that means for a concrete training problem.
+
+---
+
+### a note on this series
+
+the networks in the next few lessons will use a single hidden neuron (one input, one hidden value, one output) to keep the algebra visible. that's not a real network. it's the minimum structure needed to see the training mechanics without matrix notation getting in the way.
+
+the matrix formulation is always there underneath. **W** is just several scalar weights stacked together. **h** is just several neurons running in parallel. whenever the scalar versions look familiar, it's because they are.

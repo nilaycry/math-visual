@@ -12,43 +12,65 @@ export default function Navbar() {
   const isNote = false;
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "20px 48px",
-        maxWidth: 1200,
-        margin: "0 auto",
-      }}
-    >
-      <Link
-        href={isNote ? "/abstract-linear-algebra" : "/"}
+    <>
+      <style>{`
+        .nav-pill:hover {
+          color: #ccc !important;
+          border-color: rgba(255,255,255,0.2) !important;
+        }
+      `}</style>
+      <nav
         style={{
-          color: "#555",
-          textDecoration: "none",
-          fontSize: 14,
-          fontWeight: 400,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "20px 48px",
+          maxWidth: 1200,
+          margin: "0 auto",
         }}
       >
-        {isNote ? "← notes" : "← lessons"}
-      </Link>
-
-      <div style={{ display: "flex", gap: 32 }}>
-        <a
-          href="https://github.com/nilaycry"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href={isNote ? "/abstract-linear-algebra" : "/"}
+          className="nav-pill group"
           style={{
-            color: "#555",
+            color: "#888",
             textDecoration: "none",
-            fontSize: 14,
+            fontSize: 12,
             fontWeight: 400,
+            letterSpacing: "0.06em",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 20,
+            padding: "5px 14px",
+            transition: "all 0.2s",
+            display: "inline-flex",
+            alignItems: "center"
           }}
         >
-          github
-        </a>
-      </div>
-    </nav>
+          <span className="inline-block transition-transform duration-200 group-hover:-translate-x-1" style={{ marginRight: 4 }}>←</span> {isNote ? "notes" : "lessons"}
+        </Link>
+
+        <div style={{ display: "flex", gap: 32 }}>
+          <a
+            href="https://github.com/nilaycry"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="nav-pill"
+            style={{
+              color: "#888",
+              textDecoration: "none",
+              fontSize: 12,
+              fontWeight: 400,
+              letterSpacing: "0.06em",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 20,
+              padding: "5px 14px",
+              transition: "all 0.2s"
+            }}
+          >
+            github
+          </a>
+        </div>
+      </nav>
+    </>
   );
 }

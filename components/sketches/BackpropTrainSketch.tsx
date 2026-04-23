@@ -104,12 +104,18 @@ export default function BackpropTrainSketch() {
 
   const buildSketch = (el: HTMLElement) => {
     return new p5((p: p5) => {
-      const W = 660;
-      const H = 420;
+      const W = el.clientWidth || 660;
+      const H = Math.round(W * (420 / 660));
 
       // Two panels side by side: function fit (left), loss curve (right)
-      const leftX = 20, leftY = 20, leftW = 320, leftH = 360;
-      const rightX = 360, rightY = 20, rightW = 280, rightH = 360;
+      const pad = Math.round(W * 0.03);
+      const gap = Math.round(W * 0.03);
+      const leftX = pad, leftY = pad;
+      const leftW = Math.round((W - pad * 2 - gap) * 0.55);
+      const leftH = H - pad * 2;
+      const rightX = leftX + leftW + gap, rightY = pad;
+      const rightW = W - rightX - pad;
+      const rightH = leftH;
 
       // Function panel math coord mapping
       const xMin = -2, xMax = 2;
@@ -285,7 +291,7 @@ export default function BackpropTrainSketch() {
     <div>
       {/* Canvas */}
       <div className="sketch-wrap">
-        <div ref={containerRef} />
+        <div ref={containerRef} style={{ width: "100%" }} />
       </div>
 
       {/* Primary controls */}

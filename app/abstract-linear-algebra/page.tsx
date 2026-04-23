@@ -18,8 +18,12 @@ export default function AbstractAlgebraPage() {
       <style>{`
         .aa-note-row { transition: background 0.15s ease; }
         .aa-note-row:hover { background: rgba(0,0,0,0.03) !important; }
-        .aa-companion-card { transition: background 0.15s ease; }
         .aa-companion-card:hover { background: rgba(0,0,0,0.04) !important; }
+        .nav-pill:hover {
+          color: #1c1917 !important;
+          border-color: rgba(0,0,0,0.15) !important;
+          background: rgba(0,0,0,0.02);
+        }
 
         @media (max-width: 768px) {
           .aa-page-nav, .aa-hero, .aa-content {
@@ -60,17 +64,41 @@ export default function AbstractAlgebraPage() {
               margin: "0 auto",
             }}
           >
-            <Link
-              href="/"
-              style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
+            <Link 
+              href="/" 
+              className="nav-pill group"
+              style={{ 
+                color: FAINT, 
+                textDecoration: "none", 
+                fontSize: 12, 
+                fontWeight: 500, 
+                letterSpacing: "0.06em",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: 20,
+                padding: "5px 14px",
+                transition: "all 0.2s",
+                display: "inline-flex",
+                alignItems: "center"
+              }}
             >
-              ← back
+              <span className="inline-block transition-transform duration-200 group-hover:-translate-x-1" style={{ marginRight: 4 }}>←</span> back
             </Link>
             <a
               href="https://github.com/nilaycry"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
+              className="nav-pill"
+              style={{ 
+                color: FAINT, 
+                textDecoration: "none", 
+                fontSize: 12, 
+                fontWeight: 500, 
+                letterSpacing: "0.06em",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: 20,
+                padding: "5px 14px",
+                transition: "all 0.2s"
+              }}
             >
               github
             </a>

@@ -196,12 +196,13 @@ export default function HomePage() {
             <span
               style={{
                 fontSize: 11,
-                fontWeight: 400,
-                color: "#555",
+                fontWeight: 500,
+                color: "#E8A020",
                 textTransform: "uppercase" as const,
                 letterSpacing: "0.14em",
                 display: "block",
                 marginBottom: 20,
+                opacity: 0.8,
               }}
             >
               math · uiuc
@@ -212,7 +213,7 @@ export default function HomePage() {
                 fontSize: 46,
                 fontWeight: 500,
                 lineHeight: 1.15,
-                background: "linear-gradient(135deg, #ffffff 0%, #999999 100%)",
+                background: "linear-gradient(to bottom, #777 0%, #333 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 margin: "0 0 24px 0",
@@ -228,7 +229,7 @@ export default function HomePage() {
                 fontSize: 16,
                 fontWeight: 400,
                 lineHeight: 1.65,
-                color: "#999",
+                color: "#888",
                 margin: "0 0 36px 0",
                 maxWidth: 380,
               }}

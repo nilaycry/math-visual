@@ -2,11 +2,13 @@
 title: "where gradient flow breaks"
 description: "what stops deep networks from training and what actually fixed it"
 tags: ["machine learning"]
-displayTag: "PART 5: VANISHING GRADIENTS"
-date: "2026-04-16"
+displayTag: "PART 7: VANISHING GRADIENTS"
+date: "2026-04-18"
 related:
   - slug: "backpropagation"
     note: "the mechanics of how gradients flow through one network, the prerequisite for this"
+  - slug: "training-loop"
+    note: "what happens to the training loop when gradients stop arriving"
   - slug: "gradient-descent"
     note: "uses these gradients to update weights, the training story from the optimization side"
 ---
@@ -61,6 +63,20 @@ whole story.
 
 ---
 
+### both directions fail
+
+vanishing gradients are the tanh case: local derivatives consistently below 1, so the signal shrinks exponentially with depth. but the symmetric failure also exists.
+
+if local derivatives are consistently above 1, the gradient grows exponentially with depth instead of shrinking. by the time it reaches the early layers, the updates are enormous. parameters overshoot. the loss explodes to NaN.
+
+<div className="math-highlight">gradient at layer k = σ'(z)^k &nbsp; → &nbsp; grows if σ'(z) > 1, shrinks if σ'(z) < 1</div>
+
+vanishing and exploding gradients are not separate bugs. they're the same bug in two directions: the product of many numbers less than 1 goes to zero, and the product of many numbers greater than 1 goes to infinity. the goal of every architectural and initialization trick in deep learning is to keep that product close to 1 across the depth of the network.
+
+batch normalization keeps the pre-activations from drifting into saturated regions by normalizing each layer's output. residual connections add a direct path for the gradient to flow backward without passing through any activations. careful initialization starts weights at a scale that keeps `σ'(z)` near 1 in the first forward pass. I want to be honest about how non-obvious all of those were to find. they came from years of empirical research on exactly this failure mode, not from any theoretical necessity that's obvious in advance.
+
+---
+
 ### the relu fix
 
 the problem with tanh is that its derivative shrinks toward zero as the neuron
@@ -82,8 +98,6 @@ all. that asymmetry is why the switch happened, and why relu replaced tanh as
 the default activation almost immediately after it was seriously tried.
 
 ---
-
-
 
 ### why it matters
 
