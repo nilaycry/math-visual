@@ -33,11 +33,9 @@ same network as the previous lesson: input `x`, hidden neuron (`w`, `b`), output
 
 ### the picture
 
-the sketch draws this network as a computation graph. the forward pass runs left to right: watch the node values update as you drag `x` or the weights. the backward pass runs right to left, and that's where the gradients come from.
+the sketch is a sandbox, not a training run. you're manually setting inputs and weights to see how the backward pass responds. in real training, backprop runs this computation automatically at every step and passes the gradients to gradient descent.
 
-the colored bars on each node show the gradient magnitude at that node: how much a small change there would move the loss. bright means a lot of influence. dim means almost none.
-
-the specific thing to look for: drag `x` to a large positive or large negative value, so the hidden neuron saturates. watch the gradient bar on `w` go nearly dark while the bar on `v` stays lit. the two weights are connected to the same loss, but one is getting almost no gradient signal. that's not a coincidence, and the next two sections explain why.
+drag `x` toward ±2 and watch the gradient bar on `w` dim while the bar on `v` stays bright. that asymmetry is the thing the next section explains.
 
 <div className="not-prose my-8">
   <BackpropSketch />
@@ -59,13 +57,7 @@ on a graph, the version of this is: to get the gradient at any node, follow ever
 
 multiply them to get `∂L/∂z`. then `∂L/∂w = ∂L/∂z · x`, and `∂L/∂b = ∂L/∂z · 1`.
 
-pause here. this might feel straightforward on a network this small, but consider a network with a hundred layers. if you try to compute the derivative of the loss with respect to a weight in the first layer using classical calculus, you have to expand out the chain rule through every single path that connects that weight to the output. in a fully connected network, the number of intersecting paths grows exponentially. computing gradients by expanding the formula would require more operations than there are atoms in the universe.
-
-what backpropagation actually is, is an elegant application of dynamic programming on a graph. it recognizes that millions of paths share the same sub-paths. instead of expanding the chain rule from the input forward, it computes the derivatives starting from the loss and flowing backward, caching the local gradient at every single node.
-
-when it's time to compute the gradient for an early layer, it doesn't recalculate the chain. it simply multiplies its own local derivative by the cached downstream gradient that was literally just handed to it.
-
-because each intermediate gradient is computed exactly once, the whole backward pass is O(n) in the number of parameters. it transforms a physically impossible combinatorial explosion into a fast, linear sweep. backpropagation isn't a new mathematical rule. it is an algorithmic mechanism that makes the chain rule computable on graphs with millions of nodes.
+on a network with many layers, naively expanding the chain rule requires tracing an exponential number of paths from each weight to the loss. backpropagation avoids this by caching the gradient at each node during the backward pass, so each weight just multiplies by what the next node already computed: one sweep, O(n).
 
 ---
 

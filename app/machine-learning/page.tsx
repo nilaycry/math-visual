@@ -119,7 +119,7 @@ export default function MachineLearningPage() {
         {/* ── HERO ── */}
         <section
           className="ml-hero"
-          style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 48px 72px" }}
+          style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 48px 48px" }}
         >
           <span
             style={{
@@ -151,20 +151,13 @@ export default function MachineLearningPage() {
 
           <div style={{ maxWidth: 560 }}>
             <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#666", margin: "0 0 18px 0" }}>
-              the standard introduction to machine learning is heavily algebraic. you learn the
-              update rule for gradient descent. you memorize that backpropagation is just the chain rule.
-            </p>
-            <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#666", margin: "0 0 18px 0" }}>
-              all of that is easy enough to implement. the problem is that you can write the code
-              flawlessly without ever knowing what is actually happening. the algebra hides the geometry.
-            </p>
-            <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#666", margin: "0 0 18px 0" }}>
-              if you don&apos;t know what a loss surface physically looks like, or how a computation
-              graph channels a gradient backwards, the math feels arbitrary. and when the network breaks,
-              you have absolutely no intuition for how to fix it.
+              the standard introduction to machine learning is algebraic. you learn the update rule,
+              you memorize that backpropagation is just the chain rule, and it&apos;s coherent enough
+              to implement. the algebra hides the geometry.
             </p>
             <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#555", margin: 0 }}>
-              these notes are the geometric anchors I couldn&apos;t find when I was learning this natively.
+              this is my attempt at a coherent account of what&apos;s actually happening. the series
+              I was looking for when I started.
             </p>
           </div>
         </section>

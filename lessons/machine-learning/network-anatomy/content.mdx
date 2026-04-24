@@ -37,6 +37,8 @@ a **layer** is a bank of neurons that all receive the same input. if you have `m
 
 where activation is applied element-wise: each neuron runs independently, computes its own dot product, and passes through its own activation. the result **h** is a vector of length `m`.
 
+each row of **W** is exactly one neuron's weight vector. row i computes `wᵢ·x + bᵢ` and passes through tanh, identical to the scalar neuron above — the matrix just runs all `m` of them at once.
+
 the word "layer" is spatial. inputs come in from the left, outputs go out to the right. each neuron sits at the same horizontal position. there's nothing special about that geometry. it's just a useful picture.
 
 ---
@@ -54,6 +56,8 @@ a **network** is a sequence of layers. the output of one layer becomes the input
 the final layer (`W₃ · h₂ + b₃`) usually has no activation function, so the output `ŷ` is unconstrained. that makes sense for regression problems where the target can be any real number.
 
 running this sequence from `x` to `ŷ`, evaluating each layer in order, is the **forward pass**.
+
+worth saying plainly: a network is just a parameterized function. the forward pass evaluates it.
 
 ---
 

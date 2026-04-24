@@ -3,12 +3,16 @@
 import { useState, useEffect, useRef } from "react";
 import p5 from "p5";
 
+const ROW_COLORS = [
+  { r: 93,  g: 202, b: 165 }, // teal  — row 1 / ŷ1
+  { r: 240, g: 165, b:   0 }, // orange — row 2 / ŷ2
+];
+
 export default function WeightMatrixSketch() {
-  // 3 inputs, 2 outputs → 6 weights + 2 biases
   const [x, setX] = useState([1.0, 0.5, -0.5]);
   const [W, setW] = useState([
-    [0.8, 0.4, -0.3],
-    [-0.2, 0.7, 0.6],
+    [ 0.8,  0.4, -0.3],
+    [-0.2,  0.7,  0.6],
   ]);
   const [b, setB] = useState([0.2, -0.1]);
 
@@ -39,113 +43,79 @@ export default function WeightMatrixSketch() {
 
       p5Ref.current = new p5((p: p5) => {
         const W_C = 660;
-        const H_C = 340;
+        const H_C = 270;
 
-        const inputX = 140;
-        const outputX = 520;
-        const inputYs = [100, 180, 260];
-        const outputYs = [130, 230];
+        const inputX  = 150;
+        const outputX = 510;
+        const inputYs  = [55, 135, 215];
+        const outputYs = [95, 175];
         const nodeR = 26;
-
-        const weightColor = (w: number) => {
-          const t = Math.max(-1, Math.min(1, w));
-          if (t >= 0) {
-            const g = Math.round(100 + t * 155);
-            return p.color(60, g, 200, 200); // More vibrant blue/teal
-          } else {
-            const r = Math.round(100 + (-t) * 155);
-            return p.color(r, 60, 80, 200); // More vibrant red
-          }
-        };
 
         p.setup = () => {
           p.createCanvas(W_C, H_C);
-          p.textFont("Space Grotesk");
+          p.textFont("Inter");
           p.noLoop();
         };
 
         p.draw = () => {
-          p.background(10, 10, 10); // Standard dark background
+          p.background(13, 17, 23);
 
-          const cx = xRef.current;
-          const cW = WRef.current;
-          const cb = bRef.current;
+          const cx  = xRef.current;
+          const cW  = WRef.current;
+          const cb  = bRef.current;
           const outs = getOutputs(cx, cW, cb);
 
-          // Draw weight connections
+          // Connections: colored by output row, opacity by |weight|
+          p.strokeWeight(1.5);
           for (let o = 0; o < 2; o++) {
+            const { r, g, b: bc } = ROW_COLORS[o];
             for (let i = 0; i < 3; i++) {
-              const w = cW[o][i];
-              const wt = Math.abs(w) * 6 + 0.8;
-              p.strokeWeight(wt);
-              p.stroke(weightColor(w));
+              const w   = cW[o][i];
+              const mag = Math.min(Math.abs(w) / 1.5, 1); // normalize to [0,1]
+              const alpha = Math.round(30 + mag * 210);   // 30 (faint) – 240 (solid)
+              p.stroke(r, g, bc, alpha);
               p.line(inputX + nodeR, inputYs[i], outputX - nodeR, outputYs[o]);
             }
           }
 
-          // Input nodes
+          // Input nodes — flat muted blue, fixed
           for (let i = 0; i < 3; i++) {
-            const val = cx[i];
-            const bright = Math.min(255, Math.abs(val) * 150 + 70);
-            p.fill(bright * 0.3, bright * 0.5, bright * 0.9);
-            p.stroke(60, 100, 180);
-            p.strokeWeight(2);
+            p.fill(45, 65, 115);
+            p.stroke(70, 100, 170);
+            p.strokeWeight(1.5);
             p.circle(inputX, inputYs[i], nodeR * 2);
 
-            p.fill(255);
-            p.noStroke();
-            p.textAlign(p.CENTER, p.CENTER);
-            p.textSize(14);
-            p.text(val.toFixed(1), inputX, inputYs[i]);
-
-            p.fill(160);
-            p.textAlign(p.RIGHT, p.CENTER);
-            p.textSize(12);
-            p.text(`x${i + 1}`, inputX - nodeR - 10, inputYs[i]);
-          }
-
-          // Output nodes
-          for (let o = 0; o < 2; o++) {
-            const val = outs[o];
-            const clamped = Math.max(-2, Math.min(2, val));
-            const bright = Math.abs(clamped) * 110 + 70;
-            p.fill(bright * 0.4, bright * 0.9, bright * 0.5);
-            p.stroke(60, 180, 100);
-            p.strokeWeight(2);
-            p.circle(outputX, outputYs[o], nodeR * 2);
-
-            p.fill(255);
+            p.fill(200);
             p.noStroke();
             p.textAlign(p.CENTER, p.CENTER);
             p.textSize(13);
-            p.text(val.toFixed(2), outputX, outputYs[o]);
+            p.text(cx[i].toFixed(2), inputX, inputYs[i]);
 
-            p.fill(160);
-            p.textAlign(p.LEFT, p.CENTER);
-            p.textSize(12);
-            p.text(`ŷ${o + 1}`, outputX + nodeR + 10, outputYs[o]);
+            p.fill(70);
+            p.textAlign(p.RIGHT, p.CENTER);
+            p.textSize(11);
+            p.text(`x${i + 1}`, inputX - nodeR - 8, inputYs[i]);
           }
 
-          // Layer labels
-          p.fill(100);
-          p.noStroke();
-          p.textAlign(p.CENTER, p.BOTTOM);
-          p.textSize(12);
-          p.text("inputs  x", inputX, H_C - 15);
-          p.text("outputs  ŷ = Wx + b", outputX, H_C - 15);
+          // Output nodes — colored by row
+          for (let o = 0; o < 2; o++) {
+            const { r, g, b: bc } = ROW_COLORS[o];
+            p.fill(r * 0.25, g * 0.25, bc * 0.25);
+            p.stroke(r * 0.6, g * 0.6, bc * 0.6);
+            p.strokeWeight(1.5);
+            p.circle(outputX, outputYs[o], nodeR * 2);
 
-          // W matrix label - Moved to top center with a small background
-          p.fill(20, 20, 20, 180);
-          p.noStroke();
-          const wLabelX = (inputX + outputX) / 2;
-          const wLabelY = 40;
-          p.rectMode(p.CENTER);
-          p.rect(wLabelX, wLabelY, 100, 30, 6);
-          
-          p.fill(180);
-          p.textAlign(p.CENTER, p.CENTER);
-          p.textSize(13);
-          p.text("W (2×3)", wLabelX, wLabelY - 1);
+            p.fill(220);
+            p.noStroke();
+            p.textAlign(p.CENTER, p.CENTER);
+            p.textSize(13);
+            p.text(outs[o].toFixed(2), outputX, outputYs[o]);
+
+            p.fill(r * 0.55, g * 0.55, bc * 0.55);
+            p.textAlign(p.LEFT, p.CENTER);
+            p.textSize(11);
+            p.text(`ŷ${o + 1}`, outputX + nodeR + 8, outputYs[o]);
+          }
         };
       }, el);
     }, 0);
@@ -178,13 +148,67 @@ export default function WeightMatrixSketch() {
 
   const outs = getOutputs(x, W, b);
 
+  // Row accent colors as CSS strings
+  const rowCss = ["#5DCAA5", "#F0A500"];
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-0">
+      {/* Canvas */}
       <div className="sketch-wrap">
         <div ref={containerRef} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Live W matrix grid */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "auto 1fr 1fr 1fr",
+          gap: "1px",
+          background: "#1a1a1a",
+          border: "1px solid #1a1a1a",
+          borderRadius: 10,
+          overflow: "hidden",
+          fontSize: 12,
+          fontFamily: "monospace",
+          marginTop: 2,
+        }}
+      >
+        {/* Header row */}
+        <div style={{ background: "#0d1117", padding: "6px 14px", color: "#333", fontSize: 10, display: "flex", alignItems: "center" }}>W</div>
+        {["x₁", "x₂", "x₃"].map(label => (
+          <div key={label} style={{ background: "#0d1117", padding: "6px 0", color: "#444", fontSize: 10, textAlign: "center" }}>{label}</div>
+        ))}
+
+        {/* Weight rows */}
+        {W.map((row, o) => (
+          <>
+            <div key={`row-${o}`} style={{ background: "#0d1117", padding: "8px 14px", color: rowCss[o], fontSize: 10, display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: rowCss[o], display: "inline-block", opacity: 0.7 }} />
+              ŷ{o + 1}
+            </div>
+            {row.map((v, i) => {
+              const mag = Math.min(Math.abs(v) / 1.5, 1);
+              const opacity = 0.25 + mag * 0.75;
+              return (
+                <div key={`w${o}${i}`} style={{
+                  background: "#0d1117",
+                  padding: "8px 0",
+                  textAlign: "center",
+                  color: rowCss[o],
+                  opacity,
+                  fontWeight: 500,
+                  transition: "opacity 0.15s, color 0.15s",
+                }}>
+                  {v >= 0 ? "+" : ""}{v.toFixed(2)}
+                </div>
+              );
+            })}
+          </>
+        ))}
+      </div>
+
+      {/* Controls */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ marginTop: 20 }}>
         {/* Inputs */}
         <div className="space-y-4">
           <div className="sketch-label tracking-[0.2em] opacity-60">inputs</div>
@@ -193,7 +217,7 @@ export default function WeightMatrixSketch() {
               <div key={i} className="sketch-slider-row">
                 <div className="sketch-slider-header">
                   <span className="sketch-label">x{i + 1}</span>
-                  <span className="sketch-value">{v.toFixed(1)}</span>
+                  <span className="sketch-value">{v.toFixed(2)}</span>
                 </div>
                 <input type="range" min={-2} max={2} step={0.05} value={v}
                   onChange={e => setXi(i, parseFloat(e.target.value))}
@@ -206,12 +230,12 @@ export default function WeightMatrixSketch() {
         {/* Weights */}
         <div className="space-y-4">
           <div className="sketch-label tracking-[0.2em] opacity-60">weights W</div>
-          <div className="grid grid-cols-1 gap-5">
+          <div className="space-y-5">
             {W.map((row, o) =>
               row.map((v, i) => (
                 <div key={`${o}-${i}`} className="sketch-slider-row">
                   <div className="sketch-slider-header">
-                    <span className="sketch-label">w{o + 1}{i + 1}</span>
+                    <span className="sketch-label" style={{ color: rowCss[o] }}>w{o + 1}{i + 1}</span>
                     <span className="sketch-value">{v.toFixed(2)}</span>
                   </div>
                   <input type="range" min={-1.5} max={1.5} step={0.05} value={v}
@@ -230,7 +254,7 @@ export default function WeightMatrixSketch() {
             {b.map((v, i) => (
               <div key={i} className="sketch-slider-row">
                 <div className="sketch-slider-header">
-                  <span className="sketch-label">b{i + 1}</span>
+                  <span className="sketch-label" style={{ color: rowCss[i] }}>b{i + 1}</span>
                   <span className="sketch-value">{v.toFixed(2)}</span>
                 </div>
                 <input type="range" min={-2} max={2} step={0.05} value={v}
@@ -241,8 +265,8 @@ export default function WeightMatrixSketch() {
             <div className="pt-4 border-t border-white/5 space-y-3">
               {outs.map((v, i) => (
                 <div key={i} className="flex items-center justify-between font-mono">
-                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider">ŷ{i + 1}</span>
-                  <span className="text-sm font-semibold text-[#60a5fa]">{v.toFixed(3)}</span>
+                  <span className="text-[10px] uppercase tracking-wider" style={{ color: rowCss[i] }}>ŷ{i + 1}</span>
+                  <span className="text-sm font-semibold" style={{ color: rowCss[i] }}>{v.toFixed(3)}</span>
                 </div>
               ))}
             </div>

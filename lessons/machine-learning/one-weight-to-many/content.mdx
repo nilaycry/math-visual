@@ -12,6 +12,7 @@ related:
 ---
 
 import WeightMatrixSketch from '@/components/sketches/WeightMatrixSketch'
+import MatrixVectorVisual from '@/components/MatrixVectorVisual'
 
 the [first lesson](/lessons/linear-models) built a model with two knobs: `w` (slope) and `b` (intercept). it predicts a single output from a single input. that's the simplest possible case, and it was useful for building the loss landscape and gradient descent. but it's not a neural network. a real input isn't a single number. it's a list of numbers. and a real model produces not one output but many intermediate values on the way.
 
@@ -51,6 +52,10 @@ two outputs, three inputs each: six weights total, arranged in two rows of three
 arrange those six weights into a 2×3 grid (a matrix **W**) and both outputs fall out of one operation:
 
 <div className="math-highlight">ŷ = W · x + b</div>
+
+<div className="not-prose my-6">
+  <MatrixVectorVisual />
+</div>
 
 **W** is 2×3: two rows (one per output), three columns (one per input). **x** is a 3-vector. **b** is a 2-vector. the result **ŷ** is a 2-vector. this is matrix-vector multiplication, and it's exactly what a linear layer in a neural network computes.
 

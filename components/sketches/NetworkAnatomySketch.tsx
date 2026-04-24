@@ -48,16 +48,16 @@ export default function NetworkAnatomySketch() {
 
       p5Ref.current = new p5((p: p5) => {
         const W_C = 660;
-        const H_C = 380;
-        const nodeR = 24;
+        const H_C = 420;
+        const nodeR = 30;
 
         // Layer x positions
-        const layerX = [110, 280, 450, 570];
+        const layerX = [120, 330, 540];
         // Node y positions per layer
         const layerY = [
-          [130, 250],           // inputs: 2 nodes
-          [90, 190, 290],       // hidden: 3 nodes
-          [130, 250],           // output: 2 nodes
+          [145, 285],           // inputs: 2 nodes
+          [90, 210, 330],       // hidden: 3 nodes
+          [145, 285],           // output: 2 nodes
         ];
 
         // Which node the user is hovering (for highlight)
@@ -157,22 +157,22 @@ export default function NetworkAnatomySketch() {
             p.strokeWeight(isHov ? 2.5 : 1.5);
             p.circle(nx, ny, nodeR * 2);
 
-            p.fill(200);
+            p.fill(210);
             p.noStroke();
             p.textAlign(p.CENTER, p.CENTER);
-            p.textSize(11);
+            p.textSize(13);
             p.text(cx[i].toFixed(1), nx, ny);
 
-            p.fill(80);
+            p.fill(130);
             p.textAlign(p.RIGHT, p.CENTER);
-            p.textSize(10);
-            p.text(`x${i + 1}`, nx - nodeR - 5, ny);
+            p.textSize(12);
+            p.text(`x${i + 1}`, nx - nodeR - 6, ny);
 
             if (isHov) {
-              p.fill(140, 140, 60);
+              p.fill(180, 180, 80);
               p.textAlign(p.CENTER, p.TOP);
-              p.textSize(9);
-              p.text("click", nx, ny + nodeR + 3);
+              p.textSize(11);
+              p.text("click", nx, ny + nodeR + 4);
             }
           }
 
@@ -185,10 +185,10 @@ export default function NetworkAnatomySketch() {
             p.strokeWeight(1.5);
             p.circle(nx, ny, nodeR * 2);
 
-            p.fill(200);
+            p.fill(210);
             p.noStroke();
             p.textAlign(p.CENTER, p.CENTER);
-            p.textSize(11);
+            p.textSize(13);
             p.text(h1[i].toFixed(2), nx, ny);
           }
 
@@ -197,38 +197,38 @@ export default function NetworkAnatomySketch() {
             const nx = layerX[2];
             const ny = layerY[2][i];
             p.fill(nodeColor(h2[i]));
-            p.stroke(40, 100, 60);
+            p.stroke(40, 60, 100);
             p.strokeWeight(1.5);
             p.circle(nx, ny, nodeR * 2);
 
-            p.fill(200);
+            p.fill(210);
             p.noStroke();
             p.textAlign(p.CENTER, p.CENTER);
-            p.textSize(11);
+            p.textSize(13);
             p.text(h2[i].toFixed(2), nx, ny);
 
-            p.fill(80);
+            p.fill(130);
             p.textAlign(p.LEFT, p.CENTER);
-            p.textSize(10);
-            p.text(`ŷ${i + 1}`, nx + nodeR + 5, ny);
+            p.textSize(12);
+            p.text(`ŷ${i + 1}`, nx + nodeR + 6, ny);
           }
 
           // Layer labels
-          const labelY = H_C - 18;
-          p.fill(55);
+          const labelY = H_C - 16;
+          p.fill(100);
           p.noStroke();
           p.textAlign(p.CENTER, p.BOTTOM);
-          p.textSize(10);
+          p.textSize(12);
           p.text("input", layerX[0], labelY);
           p.text("hidden layer", layerX[1], labelY);
           p.text("output", layerX[2], labelY);
 
           // Equation labels
-          p.fill(40);
+          p.fill(110);
           p.textAlign(p.CENTER, p.TOP);
-          p.textSize(9);
-          p.text("h = tanh(W₁x + b₁)", (layerX[0] + layerX[1]) / 2 + 20, 12);
-          p.text("ŷ = tanh(W₂h + b₂)", (layerX[1] + layerX[2]) / 2 + 20, 12);
+          p.textSize(12);
+          p.text("h = tanh(W₁x + b₁)", (layerX[0] + layerX[1]) / 2, 14);
+          p.text("ŷ = tanh(W₂h + b₂)", (layerX[1] + layerX[2]) / 2, 14);
         };
       }, el);
     }, 0);

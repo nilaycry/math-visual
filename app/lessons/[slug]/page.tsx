@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { compileMDX } from "next-mdx-remote/rsc";
 import dynamic from "next/dynamic";
+import MatrixVectorVisual from "@/components/MatrixVectorVisual";
 
 // Import sketch components for MDX (dynamic import with ssr: false)
 const FourierSketch = dynamic(() => import("@/components/sketches/FourierSketch"), { ssr: false });
@@ -40,6 +41,7 @@ const components = {
   WeightMatrixSketch,
   NetworkAnatomySketch,
   NetworkAnatomy: NetworkAnatomySketch,
+  MatrixVectorVisual,
 };
 
 export async function generateStaticParams() {
