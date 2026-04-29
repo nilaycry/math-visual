@@ -1,38 +1,158 @@
 import Link from "next/link";
 import { getAllLessons, type LessonMeta } from "@/lib/lessons";
 
+const foundationsOrder = [
+  "linear-models",
+  "gradient-descent",
+  "one-weight-to-many",
+  "non-linearities",
+  "network-anatomy",
+  "first-network",
+] as const;
+
+const trainingOrder = [
+  "backpropagation",
+  "training-loop",
+  "gradient-flow",
+  "architectures",
+] as const;
+
+const extensionOrder = ["fourier-series"] as const;
+
+function bySlug(slug: string, lessons: LessonMeta[]) {
+  return lessons.find((lesson) => lesson.slug === slug);
+}
+
 export default function MachineLearningPage() {
   const allLessons = getAllLessons();
   const mlLessons = allLessons.filter(
-    (l): l is LessonMeta => l.tags.includes("machine learning") && l.lessonType === "lesson"
+    (lesson): lesson is LessonMeta =>
+      lesson.tags.includes("machine learning") && lesson.lessonType === "lesson"
   );
-  const prefaceLessons = mlLessons.filter((l) => l.displayTag === "PREFACE");
-  const mainLessons = mlLessons.filter((l) => l.displayTag !== "PREFACE");
+
+  const prefaceLessons = mlLessons.filter((lesson) => lesson.displayTag === "PREFACE");
+  const mainLessons = mlLessons.filter((lesson) => lesson.displayTag !== "PREFACE");
+  const liveCount = mainLessons.length;
+
+  const foundations = foundationsOrder
+    .map((slug) => bySlug(slug, mainLessons))
+    .filter((lesson): lesson is LessonMeta => lesson !== undefined);
+
+  const training = trainingOrder
+    .map((slug) => bySlug(slug, mainLessons))
+    .filter((lesson): lesson is LessonMeta => lesson !== undefined);
+
+  const extensions = extensionOrder
+    .map((slug) => bySlug(slug, mainLessons))
+    .filter((lesson): lesson is LessonMeta => lesson !== undefined);
+
+  const groupedSlugs = new Set([
+    ...foundations.map((lesson) => lesson.slug),
+    ...training.map((lesson) => lesson.slug),
+    ...extensions.map((lesson) => lesson.slug),
+  ]);
+  const remainingLessons = mainLessons.filter((lesson) => !groupedSlugs.has(lesson.slug));
+  const extensionLessons = [...extensions, ...remainingLessons];
+  const hasSingleExtension = extensionLessons.length === 1;
 
   return (
     <>
       <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
           .ml-page-nav, .ml-hero, .ml-content {
             padding-left: 20px !important;
             padding-right: 20px !important;
           }
           .ml-hero {
             padding-top: 48px !important;
-            padding-bottom: 48px !important;
+            padding-bottom: 36px !important;
+          }
+          .ml-hero-inner {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
+          .ml-hero-visual {
+            display: none !important;
           }
           .ml-content {
             padding-bottom: 64px !important;
           }
-          .ml-lessons-grid {
+          .ml-sequence-grid, .ml-extensions-grid {
             grid-template-columns: 1fr !important;
           }
+          .ml-section-head {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 10px !important;
+          }
         }
-        .ml-preface-card { transition: background 0.15s ease; }
-        .ml-preface-card:hover { background: rgba(255,255,255,0.04) !important; }
+        @media (max-width: 420px) {
+          .ml-hero-title {
+            font-size: 34px !important;
+            line-height: 1.14 !important;
+          }
+          .ml-hero-meta {
+            align-items: flex-start !important;
+            flex-direction: column !important;
+          }
+          .ml-card-top {
+            align-items: flex-start !important;
+          }
+          .ml-card-label {
+            max-width: 190px;
+            text-align: right;
+          }
+        }
+        .ml-hero-visual {
+          position: relative;
+          min-height: 340px;
+          opacity: 0.92;
+        }
+        .ml-hero-grid {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+          background-size: 46px 46px;
+          mask-image: radial-gradient(ellipse at 50% 50%, black 0%, transparent 72%);
+          -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 0%, transparent 72%);
+        }
+        .ml-contour {
+          position: absolute;
+          border: 1px solid rgba(93,202,165,0.18);
+          border-radius: 50%;
+          transform: rotate(-18deg);
+        }
+        .ml-step-line {
+          position: absolute;
+          height: 2px;
+          transform-origin: left center;
+          background: linear-gradient(90deg, rgba(93,202,165,0.24), rgba(232,160,32,0.42));
+          border-radius: 999px;
+        }
+        .ml-step-dot {
+          position: absolute;
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          background: #5dcaa5;
+          box-shadow: 0 0 18px rgba(93,202,165,0.4);
+        }
+        .ml-preface-card {
+          transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .ml-preface-card:hover {
+          background: rgba(255,255,255,0.04) !important;
+          border-color: rgba(255,255,255,0.12) !important;
+        }
         .nav-pill:hover {
           color: #ccc !important;
           border-color: rgba(255,255,255,0.2) !important;
+        }
+        .ml-sequence-card:hover {
+          border-color: rgba(255,255,255,0.14) !important;
+          transform: translateY(-2px);
         }
       `}</style>
 
@@ -45,17 +165,24 @@ export default function MachineLearningPage() {
           overflow: "hidden",
         }}
       >
-        {/* ── BACKGROUND GLOW ── */}
-        <div 
+        <div
           style={{
-            position: "fixed", top: "10%", left: "50%", transform: "translateX(-50%)",
-            width: "80vw", height: "80vw", maxWidth: 800, maxHeight: 800,
-            background: "radial-gradient(circle, rgba(93, 202, 165, 0.05) 0%, rgba(10, 10, 10, 0) 65%)",
-            pointerEvents: "none", zIndex: 0 
-          }} 
+            position: "fixed",
+            top: "10%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "80vw",
+            height: "80vw",
+            maxWidth: 800,
+            maxHeight: 800,
+            background:
+              "radial-gradient(circle, rgba(93, 202, 165, 0.05) 0%, rgba(10, 10, 10, 0) 65%)",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
         />
-        {/* ── NAVBAR ── */}
-        <div 
+
+        <div
           style={{
             position: "sticky",
             top: 0,
@@ -77,38 +204,44 @@ export default function MachineLearningPage() {
               margin: "0 auto",
             }}
           >
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="nav-pill group"
-              style={{ 
-                color: "#888", 
-                textDecoration: "none", 
-                fontSize: 12, 
-                fontWeight: 400, 
+              style={{
+                color: "#888",
+                textDecoration: "none",
+                fontSize: 12,
+                fontWeight: 400,
                 letterSpacing: "0.06em",
                 border: "1px solid rgba(255,255,255,0.1)",
                 borderRadius: 20,
                 padding: "5px 14px",
-                transition: "all 0.2s"
+                transition: "all 0.2s",
               }}
             >
-              <span className="inline-block transition-transform duration-200 group-hover:-translate-x-1" style={{ marginRight: 4 }}>←</span> back
+              <span
+                className="inline-block transition-transform duration-200 group-hover:-translate-x-1"
+                style={{ marginRight: 4 }}
+              >
+                ←
+              </span>{" "}
+              back
             </Link>
             <a
               href="https://github.com/nilaycry"
               target="_blank"
               rel="noopener noreferrer"
               className="nav-pill"
-              style={{ 
-                color: "#888", 
-                textDecoration: "none", 
-                fontSize: 12, 
-                fontWeight: 400, 
+              style={{
+                color: "#888",
+                textDecoration: "none",
+                fontSize: 12,
+                fontWeight: 400,
                 letterSpacing: "0.06em",
                 border: "1px solid rgba(255,255,255,0.1)",
                 borderRadius: 20,
                 padding: "5px 14px",
-                transition: "all 0.2s"
+                transition: "all 0.2s",
               }}
             >
               github
@@ -116,57 +249,161 @@ export default function MachineLearningPage() {
           </nav>
         </div>
 
-        {/* ── HERO ── */}
         <section
           className="ml-hero"
-          style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 48px 48px" }}
+          style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 48px 36px" }}
         >
-          <span
+          <div
+            className="ml-hero-inner"
             style={{
-              fontSize: 11,
-              fontWeight: 400,
-              color: "#555",
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              display: "block",
-              marginBottom: 20,
+              display: "grid",
+              gridTemplateColumns: "minmax(0, 0.95fr) minmax(340px, 0.8fr)",
+              gap: 64,
+              alignItems: "center",
             }}
           >
-            machine learning
-          </span>
+            <div>
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 400,
+                  color: "#666",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.14em",
+                  display: "block",
+                  marginBottom: 20,
+                }}
+              >
+                machine learning
+              </span>
 
-          <h1
-            style={{
-              fontSize: 38,
-              fontWeight: 500,
-              lineHeight: 1.2,
-              color: "#e8e8e8",
-              margin: "0 0 32px 0",
-              maxWidth: 520,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            geometry underneath the learning
-          </h1>
+              <h1
+                className="ml-hero-title"
+                style={{
+                  fontSize: 38,
+                  fontWeight: 500,
+                  lineHeight: 1.2,
+                  color: "#e8e8e8",
+                  margin: "0 0 22px 0",
+                  maxWidth: 520,
+                  letterSpacing: 0,
+                }}
+              >
+                geometry underneath the learning
+              </h1>
 
-          <div style={{ maxWidth: 560 }}>
-            <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#666", margin: "0 0 18px 0" }}>
-              the standard introduction to machine learning is algebraic. you learn the update rule,
-              you memorize that backpropagation is just the chain rule, and it&apos;s coherent enough
-              to implement. the algebra hides the geometry.
-            </p>
-            <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.8, color: "#555", margin: 0 }}>
-              this is my attempt at a coherent account of what&apos;s actually happening. the series
-              I was looking for when I started.
-            </p>
+              <div style={{ maxWidth: 620 }}>
+                <p
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 400,
+                    lineHeight: 1.8,
+                    color: "#858585",
+                    margin: "0 0 18px 0",
+                  }}
+                >
+                  the standard introduction to machine learning is algebraic. you learn the update
+                  rule, you memorize that backpropagation is just the chain rule, and it&apos;s coherent
+                  enough to implement. the algebra hides the geometry.
+                </p>
+                <p
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 400,
+                    lineHeight: 1.8,
+                    color: "#777",
+                    margin: "0 0 24px 0",
+                  }}
+                >
+                  this is my attempt at an account of what&apos;s actually happening. the series I was
+                  looking for when I started.
+                </p>
+
+                <div
+                  className="ml-hero-meta"
+                  style={{ display: "inline-flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}
+                >
+                  <span
+                    style={{
+                      fontSize: 11,
+                      color: "#9ed4bd",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.12em",
+                      border: "1px solid rgba(93,202,165,0.22)",
+                      background: "rgba(93,202,165,0.08)",
+                      borderRadius: 999,
+                      padding: "6px 12px",
+                    }}
+                  >
+                    {liveCount} live lessons
+                  </span>
+                  <span style={{ fontSize: 12, color: "#777", letterSpacing: "0.03em" }}>
+                    read in order. the preface notes handle scope and assumptions.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="ml-hero-visual" aria-hidden="true">
+              <div className="ml-hero-grid" />
+              <div className="ml-contour" style={{ left: 70, top: 58, width: 300, height: 176 }} />
+              <div className="ml-contour" style={{ left: 110, top: 88, width: 220, height: 126 }} />
+              <div className="ml-contour" style={{ left: 148, top: 112, width: 144, height: 78 }} />
+              <div
+                className="ml-step-line"
+                style={{ left: 92, top: 94, width: 82, transform: "rotate(23deg)" }}
+              />
+              <div
+                className="ml-step-line"
+                style={{ left: 166, top: 125, width: 78, transform: "rotate(4deg)" }}
+              />
+              <div
+                className="ml-step-line"
+                style={{ left: 237, top: 130, width: 58, transform: "rotate(-24deg)" }}
+              />
+              <div className="ml-step-dot" style={{ left: 88, top: 89 }} />
+              <div className="ml-step-dot" style={{ left: 162, top: 119 }} />
+              <div className="ml-step-dot" style={{ left: 233, top: 124 }} />
+              <div className="ml-step-dot" style={{ left: 288, top: 100, background: "#e8a020" }} />
+              <div
+                style={{
+                  position: "absolute",
+                  left: 38,
+                  right: 28,
+                  bottom: 42,
+                  height: 1,
+                  background:
+                    "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  left: 54,
+                  bottom: 62,
+                  width: 270,
+                  height: 84,
+                  borderLeft: "1px solid rgba(255,255,255,0.1)",
+                  borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  transform: "skewX(-18deg)",
+                }}
+              />
+            </div>
           </div>
         </section>
 
-        {/* ── BEFORE YOU START ── */}
         {prefaceLessons.length > 0 && (
           <div className="ml-content" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 56px" }}>
             <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 48, marginBottom: 24 }}>
-              <span style={{ fontSize: 11, fontWeight: 400, color: "#444", textTransform: "uppercase", letterSpacing: "0.14em" }}>
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 400,
+                  color: "#444",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.14em",
+                }}
+              >
                 before you start
               </span>
             </div>
@@ -184,12 +421,21 @@ export default function MachineLearningPage() {
                       borderRadius: 8,
                       padding: "18px 22px",
                       cursor: "pointer",
+                      background: "rgba(255,255,255,0.012)",
                     }}
                   >
-                    <span style={{ fontSize: 14, fontWeight: 400, color: "#ccc", display: "block", marginBottom: 6 }}>
+                    <span
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 400,
+                        color: "#ccc",
+                        display: "block",
+                        marginBottom: 6,
+                      }}
+                    >
                       {lesson.title}
                     </span>
-                    <span style={{ fontSize: 12, color: "#555", lineHeight: 1.6 }}>
+                    <span style={{ fontSize: 12, color: "#767676", lineHeight: 1.6 }}>
                       {lesson.description}
                     </span>
                   </div>
@@ -199,60 +445,251 @@ export default function MachineLearningPage() {
           </div>
         )}
 
-        {/* ── LESSONS ── */}
         <div className="ml-content" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 120px" }}>
-          <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 48, marginBottom: 32, position: "relative", zIndex: 10 }}>
-            <h2 style={{ fontSize: 11, fontWeight: 500, color: "#888", textTransform: "uppercase", letterSpacing: "0.14em", margin: 0 }}>
-              lessons
-            </h2>
-          </div>
+          <section style={{ marginBottom: 72 }}>
+            <div className="ml-section-head" style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+              <div>
+                <h3 style={{ fontSize: 15, fontWeight: 500, color: "#e8e8e8", margin: "0 0 6px 0" }}>
+                  foundations
+                </h3>
+                <p style={{ fontSize: 13, color: "#777", lineHeight: 1.6, margin: 0, maxWidth: 520 }}>
+                  fitting, loss, gradients, and the first transition from scalar models to actual
+                  network structure.
+                </p>
+              </div>
+            </div>
 
-          <div
-            className="ml-lessons-grid"
-            style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}
-          >
-            {mainLessons.map((lesson) => (
-              <Link
-                key={lesson.slug}
-                href={`/lessons/${lesson.slug}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <div
-                  className="lesson-card"
-                  style={{
-                    backgroundColor: "rgba(255,255,255,0.02)",
-                    border: "0.5px solid rgba(255,255,255,0.08)",
-                    borderTop: `2px solid ${lesson.accent}40`,
-                    borderRadius: 12,
-                    padding: "20px 24px",
-                    cursor: "pointer",
-                    "--hover-glow": `${lesson.accent}33`,
-                  } as React.CSSProperties}
+            <div
+              className="ml-sequence-grid"
+              style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 18 }}
+            >
+              {foundations.map((lesson, index) => (
+                <Link
+                  key={lesson.slug}
+                  href={`/lessons/${lesson.slug}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <span
+                  <div
+                    className="ml-sequence-card"
                     style={{
-                      fontSize: 11,
-                      fontWeight: 500,
-                      color: lesson.accent,
-                      opacity: 0.8,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.1em",
-                      display: "block",
-                      marginBottom: 10,
+                      backgroundColor: "rgba(255,255,255,0.02)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      borderTop: `2px solid ${lesson.accent}45`,
+                      borderRadius: 16,
+                      padding: "22px 22px 20px",
+                      cursor: "pointer",
+                      transition: "transform 0.2s, border-color 0.2s",
                     }}
                   >
-                    {lesson.displayTag}
-                  </span>
-                  <h3 style={{ fontSize: 15, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 8, lineHeight: 1.3, marginTop: 0 }}>
-                    {lesson.title}
+                    <div
+                      className="ml-card-top"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "baseline",
+                        gap: 12,
+                        marginBottom: 12,
+                      }}
+                    >
+                      <span style={{ fontSize: 11, color: "#555", letterSpacing: "0.08em" }}>
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 500,
+                          color: lesson.accent,
+                          opacity: 0.85,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                        }}
+                        className="ml-card-label"
+                      >
+                        {lesson.displayTag}
+                      </span>
+                    </div>
+                    <h4 style={{ fontSize: 17, fontWeight: 500, color: "#e8e8e8", margin: "0 0 10px 0", lineHeight: 1.35 }}>
+                      {lesson.title}
+                    </h4>
+                    <p style={{ fontSize: 13, lineHeight: 1.65, color: "#999", margin: 0 }}>
+                      {lesson.description}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <section style={{ marginBottom: 72 }}>
+            <div
+              className="ml-section-head"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                borderTop: "1px solid #161616",
+                paddingTop: 40,
+                marginBottom: 20,
+              }}
+            >
+              <div>
+                <h3 style={{ fontSize: 15, fontWeight: 500, color: "#e8e8e8", margin: "0 0 6px 0" }}>
+                  training mechanics
+                </h3>
+                <p style={{ fontSize: 13, color: "#777", lineHeight: 1.6, margin: 0, maxWidth: 560 }}>
+                  once the model exists, these are the lessons that explain how signals move
+                  backward, why training stalls, and what changed to make depth usable.
+                </p>
+              </div>
+            </div>
+
+            <div
+              className="ml-sequence-grid"
+              style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 18 }}
+            >
+              {training.map((lesson, index) => (
+                <Link
+                  key={lesson.slug}
+                  href={`/lessons/${lesson.slug}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <div
+                    className="ml-sequence-card"
+                    style={{
+                      backgroundColor: "rgba(255,255,255,0.02)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      borderTop: `2px solid ${lesson.accent}45`,
+                      borderRadius: 16,
+                      padding: "22px 22px 20px",
+                      cursor: "pointer",
+                      transition: "transform 0.2s, border-color 0.2s",
+                    }}
+                  >
+                    <div
+                      className="ml-card-top"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "baseline",
+                        gap: 12,
+                        marginBottom: 12,
+                      }}
+                    >
+                      <span style={{ fontSize: 11, color: "#555", letterSpacing: "0.08em" }}>
+                        {String(foundations.length + index + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 500,
+                          color: lesson.accent,
+                          opacity: 0.85,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                        }}
+                        className="ml-card-label"
+                      >
+                        {lesson.displayTag}
+                      </span>
+                    </div>
+                    <h4 style={{ fontSize: 17, fontWeight: 500, color: "#e8e8e8", margin: "0 0 10px 0", lineHeight: 1.35 }}>
+                      {lesson.title}
+                    </h4>
+                    <p style={{ fontSize: 13, lineHeight: 1.65, color: "#999", margin: 0 }}>
+                      {lesson.description}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {extensionLessons.length > 0 && (
+            <section>
+              <div
+                className="ml-section-head"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "baseline",
+                  borderTop: "1px solid #161616",
+                  paddingTop: 40,
+                  marginBottom: 20,
+                }}
+              >
+                <div>
+                  <h3 style={{ fontSize: 15, fontWeight: 500, color: "#e8e8e8", margin: "0 0 6px 0" }}>
+                    extensions
                   </h3>
-                  <span style={{ fontSize: 13, color: "#999", lineHeight: 1.5, display: "block" }}>
-                    {lesson.description}
-                  </span>
+                  <p style={{ fontSize: 13, color: "#777", lineHeight: 1.6, margin: 0, maxWidth: 560 }}>
+                    related branches. these are still part of the world this section is building,
+                    but they read more like openings than prerequisites.
+                  </p>
                 </div>
-              </Link>
-            ))}
-          </div>
+              </div>
+
+              <div
+                className="ml-extensions-grid"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: hasSingleExtension ? "minmax(0, 560px)" : "repeat(3, 1fr)",
+                  gap: 16,
+                }}
+              >
+                {extensionLessons.map((lesson) => (
+                  <Link
+                    key={lesson.slug}
+                    href={`/lessons/${lesson.slug}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <div
+                      className="lesson-card"
+                      style={{
+                        backgroundColor: "rgba(255,255,255,0.018)",
+                        border: "0.5px solid rgba(255,255,255,0.08)",
+                        borderTop: `2px solid ${lesson.accent}40`,
+                        borderRadius: 12,
+                        padding: hasSingleExtension ? "22px 24px" : "20px 22px",
+                        cursor: "pointer",
+                        "--hover-glow": `${lesson.accent}33`,
+                      } as React.CSSProperties}
+                    >
+                      <span
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 500,
+                          color: lesson.accent,
+                          opacity: 0.8,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          display: "block",
+                          marginBottom: 10,
+                        }}
+                      >
+                        {lesson.displayTag}
+                      </span>
+                      <h4
+                        style={{
+                          fontSize: 15,
+                          fontWeight: 500,
+                          color: "#e8e8e8",
+                          display: "block",
+                          marginBottom: 8,
+                          lineHeight: 1.35,
+                          marginTop: 0,
+                        }}
+                      >
+                        {lesson.title}
+                      </h4>
+                      <span style={{ fontSize: 13, color: "#999", lineHeight: 1.55, display: "block" }}>
+                        {lesson.description}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </>

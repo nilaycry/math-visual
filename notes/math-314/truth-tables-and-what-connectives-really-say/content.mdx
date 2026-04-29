@@ -1,0 +1,156 @@
+---
+title: "truth tables and what connectives really say"
+description: "and, or, not, and if-then look harmless until you ask what they force a proof to do"
+week: 2
+---
+
+once you stop treating mathematical statements as just English sentences, the connectives
+start to matter a lot more.
+
+"and." "or." "not." "if ... then ..."
+
+those are not decoration. they control when a statement counts as true, which means they
+control what a proof is allowed to assume and what it still has to show. a lot of early
+proof mistakes are really connective mistakes in disguise.
+
+---
+
+### why truth tables matter at all
+
+a truth table looks mechanical at first. you write down every possible truth value for
+the component statements, then compute the truth value of the compound statement.
+
+that can feel beneath the level of actual mathematics. I used to think that too. but the
+point is not the table itself. the point is that the table forces you to stop relying on
+vibes about what a statement "sounds like" and instead say exactly when it is true.
+
+for a proof-based course, that precision is the whole game.
+
+---
+
+### conjunction and disjunction
+
+if $P$ and $Q$ are propositions, then:
+
+- $P \land Q$ means "$P$ and $Q$"
+- $P \lor Q$ means "$P$ or $Q$"
+
+the connective $\land$ is strict. the statement $P \land Q$ is true only when both parts
+are true. if even one part fails, the whole conjunction fails.
+
+the connective $\lor$ is looser. in this course, $P \lor Q$ is true when at least one of
+the two statements is true. that includes the case where both are true.
+
+this is the first place where ordinary English causes trouble. in everyday speech, "or"
+sometimes suggests a choice between two incompatible options. in logic, it does not. it is
+an inclusive or.
+
+pause here. if a theorem assumes "$P$ or $Q$," that does not mean you are allowed to pick
+whichever one feels easier and forget the other exists. it means the proof may need cases.
+
+---
+
+### negation
+
+the connective $\lnot P$ means "not $P$." its truth value is the easiest one:
+
+- if $P$ is true, then $\lnot P$ is false
+- if $P$ is false, then $\lnot P$ is true
+
+that sounds too simple to mention, but negation gets harder the moment the statement being
+negated has internal structure. "not $P$" is easy. "not ($P \land Q$)" is already a
+different kind of object. that is where the next note is going.
+
+for now, the important point is that negation flips truth value. it does not automatically
+tell you what the new sentence should look like in words. you have to rewrite it carefully.
+
+---
+
+### the conditional is the one people mistrust
+
+the statement
+
+$$P \implies Q$$
+
+means "if $P$, then $Q$."
+
+the first two rows of its truth table feel natural:
+
+- if $P$ is true and $Q$ is true, then the conditional is true
+- if $P$ is true and $Q$ is false, then the conditional is false
+
+that second row is the one a proof is trying to rule out. a theorem of the form
+$P \implies Q$ is really saying: there is no case where the hypothesis holds and the
+conclusion fails.
+
+the strange part is what happens when $P$ is false. in logic, the conditional counts as
+true in both remaining cases. that is the part people usually dislike the first time.
+
+I think the cleanest way to say it is this: a conditional only makes a promise about the
+worlds where the hypothesis actually happens. if the hypothesis never occurs, the statement
+has not been broken.
+
+---
+
+### why that weird definition is actually useful
+
+suppose the statement is:
+
+> if an integer $n$ is divisible by $4$, then $n$ is even.
+
+if $n = 12$, the hypothesis and conclusion are both true. good.
+
+if $n = 6$, the hypothesis is false but the conclusion is true. the conditional still
+counts as true, because the statement never promised anything about numbers that are not
+divisible by $4$.
+
+if $n = 7$, the hypothesis is false and the conclusion is false. the conditional still
+counts as true for the same reason.
+
+the only way the statement fails is if you produce some integer divisible by $4$ that is
+not even. that is exactly the counterexample pattern for an implication.
+
+the truth table is not arbitrary here. it matches the proof behavior we want.
+
+---
+
+### what a connective tells a proof to do
+
+once you know the connective, you already know something about proof shape.
+
+if the claim is $P \land Q$, you must show both parts.
+
+if the claim is $P \lor Q$, you must justify at least one branch, and sometimes you need
+to decide carefully which branch you can actually prove.
+
+if the claim is $P \implies Q$, you usually begin by assuming $P$ and work toward $Q$.
+
+if the claim is $\lnot P$, you are often trying to show that $P$ would lead somewhere
+impossible, though the exact method depends on context.
+
+the connective is already telling you the shape of the argument. that is the part worth
+remembering after the truth tables themselves fade.
+
+---
+
+### one subtle distinction that keeps coming back
+
+do not confuse a statement with its converse.
+
+$P \implies Q$ and $Q \implies P$ are different claims. one can be true while the other is
+false. "if a number is divisible by $4$, then it is even" is true. "if a number is even,
+then it is divisible by $4$" is false.
+
+this seems obvious in a simple arithmetic example. it becomes much less obvious once the
+statements get abstract, which is why it is worth building the reflex now.
+
+---
+
+### what this does not cover yet
+
+this note tells you how the basic connectives behave and why the conditional is defined the
+way it is. it does not yet say how to negate compound statements cleanly, or why
+contrapositive proofs line up so well with implications.
+
+that comes next. the moment you start negating statements with connectives and quantifiers,
+the bookkeeping gets harder and much more useful.

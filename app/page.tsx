@@ -13,6 +13,7 @@ export default function HomePage() {
   const allLessons = getAllLessons();
   const allNotes = getAllNotes();
   const allComboNotes = getAllNotes("combinatorics");
+  const all314Notes = getAllNotes("math-314");
 
   const lessons = [
     {
@@ -58,10 +59,23 @@ export default function HomePage() {
       count: allComboNotes.filter((n) => n.week >= 1).length,
       unit: "note",
     },
+    {
+      href: "/math-314",
+      tag: "introduction to higher mathematics",
+      title: "the grammar of proof",
+      description:
+        "logic, sets, functions, induction, and the habits that make upper-level math readable.",
+      accent: "#2f6b6f",
+      count: all314Notes.filter((n) => n.week >= 1).length,
+      unit: "note",
+    },
   ];
 
   const totalLessons = allLessons.length;
-  const totalNotes = getAllNotes().length + allComboNotes.filter((n) => n.week >= 1).length;
+  const totalNotes =
+    getAllNotes().length +
+    allComboNotes.filter((n) => n.week >= 1).length +
+    all314Notes.filter((n) => n.week >= 1).length;
 
   return (
     <>

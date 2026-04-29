@@ -24,6 +24,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+diff.txt
+
+# local review/browser artifacts
+.chrome-review-profile*/
+.review-shots/
 
 # local env files
 .env*.local

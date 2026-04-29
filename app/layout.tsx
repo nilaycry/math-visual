@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import ConditionalLayout from "@/components/ConditionalLayout";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://math-visual-nu.vercel.app"),
   title: "nilay — math, visualized",
   description:
     "Interactive math lessons on Fourier series, gradient descent, and eigenvalues. Built at UIUC.",
@@ -26,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body
+        className="font-sans"
+        style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif' }}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

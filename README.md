@@ -107,4 +107,4 @@ lib/
 
 ## adding content
 
-see `CLAUDE.md` for the full guide — sketch rules, note format, voice guidelines, and step-by-step instructions for lessons, notes, and problem sets.
+see `AGENTS.md` for the project guide and `docs/content-workflow.md` for repeatable lesson, note, and problem-set workflows.

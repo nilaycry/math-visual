@@ -1,0 +1,62 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import p5 from "p5";
+
+const W = 660;
+const H = 440;
+
+export default function YourSketch() {
+  const [value, setValue] = useState(1);
+  const valueRef = useRef(value);
+  valueRef.current = value;
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const p5Ref = useRef<p5 | null>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    p5Ref.current = new p5((p: p5) => {
+      p.setup = () => {
+        p.createCanvas(W, H);
+        p.noLoop();
+      };
+
+      p.draw = () => {
+        p.background(13, 17, 23);
+        p.fill(232);
+        p.noStroke();
+        p.text(`value: ${valueRef.current.toFixed(2)}`, 24, 32);
+      };
+    }, el);
+
+    return () => {
+      p5Ref.current?.remove();
+      p5Ref.current = null;
+    };
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(parseFloat(e.target.value));
+    setTimeout(() => p5Ref.current?.redraw(), 0);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="overflow-hidden rounded-lg border border-white/10 bg-black">
+        <div ref={containerRef} />
+      </div>
+      <input
+        aria-label="value"
+        type="range"
+        min="-2"
+        max="2"
+        step="0.01"
+        value={value}
+        onChange={handleChange}
+      />
+    </div>
+  );
+}

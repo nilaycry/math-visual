@@ -1,0 +1,54 @@
+"use client";
+
+import { useRef, useState } from "react";
+import type p5 from "p5";
+import { useP5Sketch } from "@/hooks/useP5Sketch";
+
+const W = 660;
+const H = 440;
+
+export default function YourSketch() {
+  const [speed, setSpeed] = useState(0.1);
+  const speedRef = useRef(speed);
+  speedRef.current = speed;
+
+  const buildSketch = (p: p5) => {
+    p.setup = () => {
+      p.createCanvas(W, H);
+      p.noLoop();
+    };
+
+    p.mousePressed = () => {
+      p.loop();
+    };
+
+    p.draw = () => {
+      p.background(13, 17, 23);
+      p.fill(232);
+      p.noStroke();
+      p.text("simulation sketch", 24, 32);
+
+      // Read speedRef.current here, not speed.
+      if (p.frameCount > 180) p.noLoop();
+    };
+  };
+
+  const containerRef = useP5Sketch(buildSketch);
+
+  return (
+    <div className="space-y-4">
+      <div className="overflow-hidden rounded-lg border border-white/10 bg-black">
+        <div ref={containerRef} />
+      </div>
+      <input
+        aria-label="speed"
+        type="range"
+        min="0.01"
+        max="0.3"
+        step="0.01"
+        value={speed}
+        onChange={(e) => setSpeed(parseFloat(e.target.value))}
+      />
+    </div>
+  );
+}

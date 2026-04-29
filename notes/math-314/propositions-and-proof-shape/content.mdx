@@ -1,0 +1,123 @@
+---
+title: "propositions and the shape of a proof"
+description: "before proving anything, you need to know what kind of sentence you're even holding"
+week: 1
+---
+
+before you can write a proof, you need a sentence that can actually be true or false.
+that sounds too basic to matter, until you notice how many mathematical sentences are
+not complete enough to carry a truth value yet.
+
+`x = 2` is not a proposition by itself. neither is "take an integer $n$." neither is
+"is this always true?" they might become part of a proposition later, but on their own
+they are missing context.
+
+that is the first filter in this course. before asking whether something is provable,
+ask whether it is even a proposition.
+
+---
+
+### propositions versus open sentences
+
+a **proposition** is a statement with a definite truth value. it is either true or false.
+
+$3 \mid 12$ is a proposition. so is "$5$ is even." the second one happens to be false,
+but it is still a proposition because it has a definite truth value.
+
+an **open sentence** has variables whose roles have not been fixed yet. the sentence
+$x^2 = 4$ does not have a truth value until you say what $x$ is allowed to be. if
+$x = 2$, it is true. if $x = 3$, it is false. until the variable is pinned down or
+quantified, there is nothing to prove.
+
+I think this is one of the earliest places where proof courses feel annoying on purpose.
+you want the math to start, and instead someone is asking whether your sentence is even
+grammatical. but that fussiness is doing real work.
+
+---
+
+### logical connectives are not decoration
+
+once you have propositions, you can combine them. "and," "or," "not," "if ... then ..."
+these are not stylistic choices. they change the conditions under which a statement is
+true, so they change what a proof has to do.
+
+if a theorem says "$P$ and $Q$," then both pieces matter. if it says "$P$ or $Q$," you
+need to know whether the proof uses one branch, both branches, or a case split. if it says
+"if $P$, then $Q$," then a proof usually starts by assuming $P$ and works toward $Q$.
+
+this is the part that seems trivial until a proof fails because "or" was treated like
+"and," or because the conclusion was used as if it were an assumption.
+
+---
+
+### what a proof of an implication is really doing
+
+most first theorems in this course look like implications:
+
+$$P \implies Q$$
+
+to prove that, you are not showing that $P$ is true in the universe. you are showing
+that **if** $P$ is true, then $Q$ must follow.
+
+that distinction matters a lot. suppose the theorem says:
+
+> if $n$ is even, then $n^2$ is even.
+
+the proof begins by assuming $n$ is even. not because we know every integer is even,
+but because that is the hypothesis we have been offered. from there you use the definition
+of even:
+
+$$n = 2k \text{ for some integer } k$$
+
+then
+
+$$n^2 = (2k)^2 = 4k^2 = 2(2k^2)$$
+
+and since $2k^2$ is an integer, $n^2$ is even.
+
+notice the shape. assume the hypothesis. unpack the definition. do algebra that keeps
+track of what must remain an integer. arrive at the conclusion.
+
+that shape shows up constantly.
+
+---
+
+### the hidden role of definitions
+
+proofs in early chapters often feel underwhelming once written out. "that was it?"
+
+usually the answer is yes. the hard part was not some clever manipulation. the hard part
+was knowing which definition to expand and what form of the definition would actually move
+the argument.
+
+even means $2k$. odd means $2k + 1$. injective means equal outputs force equal inputs.
+subset means every element on the left is also on the right.
+
+pause here. when a proof feels impossible, there is a decent chance the next move is not
+to be more inventive. it is to write down the exact definition of the word that is carrying
+the statement.
+
+---
+
+### a proof is a controlled path
+
+I like thinking of a proof as a path with guardrails. the theorem tells you where you may
+start and where you must end. the definitions tell you what moves are legal in between.
+
+good proofs rarely feel like random inspiration after the fact. they feel constrained.
+once you know the hypotheses, the conclusion, and the relevant definitions, the search
+space gets much smaller.
+
+that is also why reading proofs carefully matters. a proof is not just a certificate that
+the theorem is true. it is an example of how those constraints were navigated.
+
+---
+
+### what this does not cover yet
+
+this note only sets up the basic grammar. it does not yet say how negation works for
+quantified statements, why contrapositive proofs are equivalent to direct proofs, or how
+truth tables fit into the picture.
+
+those come next. but I wanted to start here because the habit of asking "what kind of
+statement is this" shows up before every single proof technique.
