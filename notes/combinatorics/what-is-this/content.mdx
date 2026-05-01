@@ -1,50 +1,81 @@
 ---
 title: "what this is"
-description: "a note on what combinatorics is, before the definitions start"
+description: "why combinatorics is worth studying before the formulas begin"
 week: 0.5
 ---
 
-combinatorics looks simple at first. how many ways can you arrange $n$ things.
-how many subsets does a set of size $n$ have. easy questions with short answers.
+combinatorics is the part of mathematics that asks what can happen when the world is
+finite.
 
-then the problems get stranger. you're not counting arrangements anymore, you're
-counting something whose count reveals a structural fact about the objects themselves.
-the number of spanning trees in a complete graph is $n^{n-2}$, which seems like
-it should be a coincidence but isn't. the number of ways to tile a $2 \times n$
-board with dominoes follows a fibonacci recurrence, which seems like it should be
-surprising but becomes obvious once you see it the right way.
+how many routes are there through a city grid? how many ways can a group be arranged?
+when is a task impossible? how much structure is forced once there are enough objects
+in too few places?
 
-that shift, from "how many" to "why that number, and what does it tell us," is
-what these notes are about.
+at first, this sounds like arithmetic. count the things, get the answer, move on. but
+the longer I sit with combinatorics, the more it feels like a subject about seeing.
+you learn to look at a messy collection of possibilities and ask what kind of object
+it really is.
 
----
+is it a list? a subset? a path? a coloring? a partition? a sequence? a graph?
 
-### what math 413 actually covers
-
-the course runs through several big ideas: basic counting principles (multiplication,
-addition, bijections), binomial coefficients and their identities, inclusion-exclusion,
-generating functions, recurrences, and graph theory.
-
-those topics look scattered on a syllabus. they're not. the thread connecting them
-is the idea of a bijection: if you can find a one-to-one correspondence between two
-sets, they have the same size, and you've proven a counting identity without counting.
-a lot of combinatorics is secretly finding the right bijection.
-
-generating functions are the other big unifying idea. they turn recurrences into
-algebra and make impossible-looking sums routine.
+once you choose the right description, the problem often changes completely.
 
 ---
 
-### how I'm writing these notes
+### why study it
 
-same structure as my abstract algebra notes. one idea per note, in the order the
-course covers it. I try to lead with a picture or a concrete example before giving
-the general statement.
+combinatorics is worth studying because it trains a very specific kind of precision:
+count each object once, and only once.
 
-combinatorics has a reputation for being tricks. I don't think that's quite right.
-the tricks are real, but they come from a small number of deep ideas that keep
-reappearing in different clothes. I try to name those ideas when I see them instead
-of treating each problem as its own isolated puzzle.
+that sounds modest, but it is not. it forces you to say what counts as one object,
+when two objects are different, what has been excluded, and whether your description
+has secretly counted the same thing several times.
 
-these are my notes from math 413 at uiuc. they're not a textbook. they're how I
-made sense of it.
+this habit shows up everywhere finite structure shows up. probability needs it,
+because probabilities often begin as ratios of counts. computer science needs it,
+because algorithms, graphs, strings, trees, and networks are finite objects.
+algebra and geometry use it whenever a complicated object can be encoded by simpler
+discrete data.
+
+but the deeper reason is that combinatorics has a particular kind of surprise. a
+tiling problem turns into the Fibonacci numbers. a question about handshakes becomes
+a theorem about graphs. a binomial identity becomes obvious once both sides are seen
+as counting the same set.
+
+the subject keeps showing you that a problem may have a hidden shape.
+
+---
+
+### a little history
+
+people have counted arrangements, games, and patterns for a very long time. Pascal's
+triangle appeared in several mathematical traditions before it became attached to
+Pascal's name. counting arguments were tied to gambling and probability in the work
+of Pascal and Fermat. Euler's solution of the Konigsberg bridge problem helped open
+the door to graph theory.
+
+modern combinatorics grew from many such sources: probability, recreational puzzles,
+geometry, algebra, graph theory, and later computer science. that mixed origin is
+part of the flavor of the subject. it does not feel like one straight road. it feels
+like a set of techniques that kept appearing wherever finite structure mattered.
+
+Brualdi's book begins with that variety on purpose. chessboards, magic squares,
+routes, circles, games. the point is not that all of these examples use the same
+trick. the point is that each one asks us to replace an informal situation with a
+precise finite object.
+
+---
+
+### what these notes are for
+
+these notes are my attempt to learn that replacement process slowly.
+
+I do not want the course to become a bag of formulas. formulas matter, but only after
+we understand what they are counting. so the notes will usually start with the object:
+what is being chosen, arranged, grouped, colored, or encoded?
+
+then we ask why the count is exact.
+
+that is the main promise of combinatorics. if you describe the objects clearly
+enough, a problem that first looked like a pile of cases can become something almost
+inevitable.
