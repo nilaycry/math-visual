@@ -1,0 +1,224 @@
+---
+title: "permutations as ordered choices"
+description: "how to count arrangements when order matters and objects cannot repeat"
+week: 2
+---
+
+the last note ended with a question that will keep returning: what is one object in
+the set being counted?
+
+for permutations, the answer is: an ordered list.
+
+that one word, ordered, carries the whole distinction. the list $abc$ is different
+from $bac$, even though the same three symbols appear. a permutation is not just a
+choice of objects. it is a choice of objects together with an order for them.
+
+---
+
+### ordered lists from a set
+
+let $S$ be a set with $n$ elements. an **$r$-permutation** of $S$ is an ordered
+arrangement of $r$ distinct elements of $S$.
+
+here $n,r \in \mathbb{Z}_{\ge 0}$. usually $n$ is the size of the available set, and
+$r$ is the length of the ordered list being formed.
+
+distinct matters because $S$ is a set. once an element has been used in the list, it
+cannot be used again.
+
+if $S = \{a,b,c\}$, then the $2$-permutations are
+
+$$ab,\ ac,\ ba,\ bc,\ ca,\ cb.$$
+
+the list $ab$ and the list $ba$ are different. the list $aa$ is not allowed, because
+the element $a$ cannot be selected twice from the set.
+
+we write $P(n,r)$ for the number of $r$-permutations of an $n$-element set.
+
+if $r > n$, then
+
+$$P(n,r) = 0,$$
+
+because there are not enough distinct elements to fill the list.
+
+---
+
+### the formula
+
+> **Theorem.** If $n,r \in \mathbb{Z}_{\ge 0}$ and $0 \leq r \leq n$, then
+>
+> $$P(n,r) = n(n-1)(n-2)\cdots(n-r+1).$$
+
+the proof is the multiplication principle.
+
+to build an $r$-permutation, choose the entries one position at a time. there are
+$n$ choices for the first position. after that, one element has been used, so there
+are $n-1$ choices for the second position. after two elements have been used, there
+are $n-2$ choices for the third position.
+
+continuing this way, the $r$th position has
+
+$$n-(r-1) = n-r+1$$
+
+choices. multiplying the choices gives
+
+$$n(n-1)(n-2)\cdots(n-r+1).$$
+
+the expression has $r$ factors. this is worth checking. for $r = 1$, the formula gives
+$P(n,1) = n$. for $r = n$, it gives
+
+$$P(n,n) = n(n-1)(n-2)\cdots 2 \cdot 1.$$
+
+an $n$-permutation of an $n$-element set is usually just called a permutation of the
+set.
+
+---
+
+### factorial notation
+
+for a nonnegative integer $n$, define
+
+$$n! = n(n-1)(n-2)\cdots 2 \cdot 1.$$
+
+the convention is
+
+$$0! = 1.$$
+
+this convention is not only convenient notation. it makes the formulas behave
+correctly at the edge cases. there is exactly one way to make an empty ordered list:
+choose nothing.
+
+using factorials, the permutation formula becomes
+
+$$P(n,r) = \frac{n!}{(n-r)!}.$$
+
+for example,
+
+$$P(5,4) = \frac{5!}{1!} = 120.$$
+
+there are $120$ four-letter strings that can be formed from the letters
+$a,b,c,d,e$ if no letter is used more than once.
+
+also,
+
+$$P(5,5) = \frac{5!}{0!} = 120.$$
+
+that equality is not a typo. arranging all five letters and arranging four of the five
+both give $120$ here, for different reasons.
+
+---
+
+### choosing the right object
+
+permutation formulas work only after the objects being counted have really been
+turned into ordered lists.
+
+suppose we ask:
+
+> how many seven-digit numbers can be made from the digits $1,2,\ldots,9$ with no
+> repeated digit?
+
+one object is an ordered list of seven distinct digits chosen from a nine-element set.
+so the count is
+
+$$P(9,7) = 9 \cdot 8 \cdot 7 \cdot 6 \cdot 5 \cdot 4 \cdot 3.$$
+
+now change the question:
+
+> how many seven-element subsets can be chosen from $\{1,2,\ldots,9\}$?
+
+this is not the same problem. the subset $\{1,2,3,4,5,6,7\}$ has no first digit, no
+second digit, and no order. permutations are too large a count for this question
+because each subset has been counted once for every ordering of its elements.
+
+that distinction prepares the next note. permutations count ordered selections.
+combinations count unordered selections.
+
+---
+
+### restrictions and complements
+
+many permutation problems are not just direct uses of $P(n,r)$. the formula counts
+all ordered selections of a fixed size. extra restrictions usually force one of the
+four principles from the previous note back into the problem.
+
+when a restriction appears, first decide whether it is easier to build the object
+directly or to count the complement. direct counting is useful when the restriction
+tells you which choice to make first. complements are useful when the forbidden
+configuration has a cleaner description than the allowed configurations.
+
+then ask what the restriction changes:
+
+- does it remove some choices at a particular position?
+- does it force certain objects to appear together?
+- does it split the problem into disjoint cases?
+- does it make the number of later choices depend on earlier choices?
+
+there is no rule that makes this automatic. the principles tell you what a correct
+count must look like, but practice is what teaches you which representation to try
+first.
+
+for example:
+
+> how many seven-digit numbers can be made from the digits $1,2,\ldots,9$, with no
+> repeated digit, if the digits $5$ and $6$ are not consecutive?
+
+start with all seven-digit numbers with distinct digits:
+
+$$P(9,7).$$
+
+then subtract the ones where $5$ and $6$ are consecutive. treat the adjacent pair as
+a block. there are two internal orders for the block: $56$ or $65$. once the block is
+placed, it occupies two neighboring positions among the seven positions, and there are
+$6$ possible starting positions for such a block.
+
+after choosing the ordered block and its position, the remaining five positions are
+filled by a $5$-permutation of the seven digits
+
+$$\{1,2,3,4,7,8,9\}.$$
+
+so the excluded count is
+
+$$2 \cdot 6 \cdot P(7,5).$$
+
+therefore the desired count is
+
+$$P(9,7) - 2 \cdot 6 \cdot P(7,5).$$
+
+the formula $P(n,r)$ did not disappear. it became one piece of a larger counting
+argument.
+
+---
+
+### circular arrangements
+
+so far, permutation means linear permutation: the objects sit in a row.
+
+circular arrangements change the question because rotations are considered the same.
+if six people sit around a round table, rotating everyone one seat to the left does
+not create a new seating arrangement. the relative order is the same.
+
+the easiest way to count circular permutations of $n$ distinct objects is to fix one
+object in place. after that, arrange the remaining $n-1$ objects around it:
+
+$$ (n-1)!.$$
+
+this is the same result you get from the division principle. there are $n!$ linear
+arrangements, and each circular arrangement corresponds to $n$ linear arrangements,
+one for each choice of where to begin reading the circle. since every circular
+arrangement has exactly $n$ linear descriptions,
+
+$$\frac{n!}{n} = (n-1)!.$$
+
+the equal-size condition matters. division works here because every circular
+arrangement has the same number of linear descriptions.
+
+---
+
+### what this leaves out
+
+this note only counts ordered selections from a set, where no element can repeat.
+
+the next distinction is unordered selection. when order does not matter, permutations
+overcount. the next note explains exactly how much they overcount, and that is where
+binomial coefficients first appear.

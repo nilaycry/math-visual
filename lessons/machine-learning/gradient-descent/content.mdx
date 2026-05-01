@@ -47,12 +47,12 @@ stop and think about what a derivative actually is. it is a local linear approxi
 
 we want to pick a new point `x` that makes `f(x)` strictly less than `f(x₀)`. look at the equation. to guarantee the result is smaller, we must make the term `∇f(x₀) · (x − x₀)` strictly negative.
 
-how do you make a dot product as negative as possible? you force the two vectors to point in exactly opposite directions. so the step vector `(x − x₀)` must be exactly the negative of the gradient. 
+for a fixed step length, how do you make a dot product as negative as possible? you force the two vectors to point in exactly opposite directions. so the step vector `(x − x₀)` should point in the negative gradient direction.
 
 <div className="math-highlight">x − x₀ = −α ∇f(x₀)</div>
 <div className="math-highlight">x = x₀ − α ∇f(x₀)</div>
 
-this is the update rule for gradient descent. it is not just a heuristic; it is the mathematical consequence of locally approximating the space as flat, and taking the optimal step strictly within that approximation.
+this is the update rule for gradient descent. it is not just a heuristic; it is the direction picked out by locally approximating the space as flat and asking which fixed-size step makes that approximation decrease fastest.
 
 this also completely justifies the learning rate, `α`. the Taylor expansion is only an approximation. it only holds very close to `x₀`. if you take a massive step (a huge `α`), you walk right off the edge of the approximation, and the math no longer guarantees you went down. the learning rate bounds your step strictly to the radius where the linear geometry is actually trustworthy.
 
@@ -75,14 +75,14 @@ depending on where you start, basic gradient descent finds a completely differen
 answer and usually not the deepest one. the gradient at a local minimum is zero, so
 the update rule says it's done.
 
-switch to **momentum** and drop the ball in the same spot. momentum adds an
-exponential moving average of past gradients to the update:
+switch to **momentum** and drop the ball in the same spot. momentum uses an
+exponential moving average of past gradients:
 
-<div className="math-highlight">v_t = β · v_(t-1) + ∇f(x_t)</div>
+<div className="math-highlight">v_t = β · v_(t-1) + (1 − β) · ∇f(x_t)</div>
 <div className="math-highlight">x_(t+1) = x_t − α · v_t</div>
 
-`β = 0.95` means 95% of the step comes from where you were going, 5% from the
-current gradient. the ball has inertia and can punch through shallow minima that
+`β = 0.95` means the new direction mostly remembers where you were going, with only
+a small contribution from the current gradient. the ball has inertia and can punch through shallow minima that
 would trap basic gradient descent.
 
 try the **noisy** mode. the random kick on each step is what stochastic gradient
@@ -96,11 +96,12 @@ but that's often how it goes. you use the thing that fails less often and debug 
 
 ### why it matters
 
-gradient descent is how every large neural network is trained. not a variant of
-it, not an approximation. the same update rule: compute the gradient, step
-opposite to it, repeat. the difference between the toy version here and the
-real thing is that the gradient comes from backpropagation across millions of
-parameters instead of from a two-variable formula. the geometry is the same.
+large neural networks are trained by gradient-based methods. the production algorithms
+usually have extra machinery, like minibatches, momentum, Adam, or AdamW, but the core
+move is still the one from this lesson: compute a gradient, use it to decide how the
+parameters should move, repeat. the difference between the toy version here and the
+real thing is that the gradient comes from backpropagation across millions or billions
+of parameters instead of from a two-variable formula. the geometry is the same.
 
 the loss landscape of a real network is neither convex nor cleanly non-convex.
 it has enormous flat regions, steep ridges, and saddle points. what makes

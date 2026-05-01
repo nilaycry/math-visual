@@ -1,0 +1,215 @@
+---
+title: "combinations as subsets"
+description: "how binomial coefficients count unordered selections from a finite set"
+week: 3
+---
+
+the previous note counted ordered selections. if we choose three letters from
+$\{a,b,c,d,e\}$ and write them as a list, then $abc$ and $bac$ are different
+permutations.
+
+but many counting questions do not care about the order in which the chosen objects
+are listed. if the object is the set $\{a,b,c\}$, then the six lists
+
+$$abc,\ acb,\ bac,\ bca,\ cab,\ cba$$
+
+all describe the same selection.
+
+this is the first major place where division becomes unavoidable. permutations count
+ordered descriptions. combinations count the unordered objects those descriptions
+represent.
+
+---
+
+### subsets of a fixed size
+
+let $S$ be a set with $n$ elements. an **$r$-combination** of $S$ is an $r$-element
+subset of $S$.
+
+here $n,r \in \mathbb{Z}_{\ge 0}$. the number $n$ is the size of the available set,
+and $r$ is the number of elements we want to select.
+
+the phrase "subset" is doing the work. a subset has no order and no repeated
+elements. for example, if
+
+$$S = \{a,b,c,d\},$$
+
+then $\{a,c\}$ is a $2$-combination of $S$. it is the same subset as $\{c,a\}$,
+because sets do not remember the order in which their elements are written.
+
+we write
+
+$$\binom{n}{r}$$
+
+for the number of $r$-element subsets of an $n$-element set. this symbol is read "$n$
+choose $r$."
+
+if $r > n$, then
+
+$$\binom{n}{r} = 0,$$
+
+because a set with $n$ elements does not have a subset with more than $n$ elements.
+
+---
+
+### the formula
+
+> **Theorem.** If $n,r \in \mathbb{Z}_{\ge 0}$ and $0 \leq r \leq n$, then
+>
+> $$\binom{n}{r} = \frac{n!}{r!(n-r)!}.$$
+
+the proof starts with the object that is easier to count: ordered lists.
+
+first count the $r$-permutations of an $n$-element set. there are
+
+$$P(n,r) = \frac{n!}{(n-r)!}$$
+
+of them.
+
+now ask how many ordered lists describe the same $r$-element subset. once the subset
+has been chosen, its $r$ elements can be arranged in
+
+$$r!$$
+
+orders. every $r$-element subset has exactly $r!$ ordered descriptions.
+
+so the ordered lists are partitioned into equal-size groups: one group for each
+$r$-element subset, with $r!$ lists in each group. by the division principle,
+
+$$\binom{n}{r} = \frac{P(n,r)}{r!}.$$
+
+substituting the permutation formula gives
+
+$$\binom{n}{r} = \frac{1}{r!}\cdot \frac{n!}{(n-r)!} = \frac{n!}{r!(n-r)!}.$$
+
+the formula is useful, but the argument is the important part. count ordered
+descriptions first, then divide by the number of orders that describe each unordered
+selection.
+
+---
+
+### a small example
+
+how many three-person committees can be chosen from a group of seven people?
+
+the object is not a line of three people. it is a subset of size three. if Alice, Bao,
+and Carla are on the committee, then putting their names in a different order does
+not create a new committee.
+
+so the count is
+
+$$\binom{7}{3} = \frac{7!}{3!4!}.$$
+
+canceling the common factors gives
+
+$$\binom{7}{3} = \frac{7\cdot 6\cdot 5}{3\cdot 2\cdot 1} = 35.$$
+
+another way to see the same calculation is to begin with ordered choices. there are
+
+$$7\cdot 6\cdot 5$$
+
+ways to choose a president, a secretary, and a treasurer. but a committee with no
+roles has been counted once for each ordering of its three members. since there are
+$3!$ such orderings, divide by $3!$.
+
+the words in the problem decide which count is correct. "president, secretary, and
+treasurer" creates ordered roles. "committee" creates an unordered subset.
+
+---
+
+### choosing or excluding
+
+there is a symmetry built into combinations:
+
+$$\binom{n}{r} = \binom{n}{n-r}.$$
+
+the reason is not algebra first. it is a bijection.
+
+to choose an $r$-element subset $A$ of an $n$-element set $S$ is the same as choosing
+which $n-r$ elements are left out. the complement
+
+$$S \setminus A$$
+
+has size $n-r$. this gives a one-to-one correspondence between $r$-element subsets
+and $(n-r)$-element subsets.
+
+for example, choosing $3$ people from $10$ is the same as choosing the $7$ people who
+are not selected:
+
+$$\binom{10}{3} = \binom{10}{7}.$$
+
+this identity is often a practical counting shortcut. if $r$ is close to $n$, count
+the smaller complementary choice instead.
+
+---
+
+### when order sneaks back in
+
+combination problems can become permutation problems if the chosen elements receive
+roles afterward.
+
+suppose a club has $12$ members.
+
+how many ways are there to choose a four-person planning group?
+
+the answer is
+
+$$\binom{12}{4}.$$
+
+now change the question:
+
+how many ways are there to choose a chair, a vice chair, a recorder, and a treasurer?
+
+this time the four selected people are not interchangeable. the roles make the
+selection ordered. the answer is
+
+$$P(12,4).$$
+
+there is also a two-step way to see this:
+
+$$\binom{12}{4}\cdot 4!.$$
+
+first choose the four people, then assign the four roles. this equals $P(12,4)$
+because it counts the same objects in a different order.
+
+the point is not to memorize which word always means which formula. the point is to
+identify one object in the set being counted. if swapping two selected elements
+creates a new object, use ordered choices. if it does not, use subsets.
+
+---
+
+### edge cases
+
+the formula also handles the boundary cases.
+
+there is exactly one $0$-element subset of any set: the empty set. so
+
+$$\binom{n}{0} = 1.$$
+
+there is exactly one $n$-element subset of an $n$-element set: the whole set. so
+
+$$\binom{n}{n} = 1.$$
+
+these are not artificial conventions. they are counts of actual sets.
+
+the factorial formula agrees:
+
+$$\binom{n}{0} = \frac{n!}{0!n!} = 1,$$
+
+and
+
+$$\binom{n}{n} = \frac{n!}{n!0!} = 1.$$
+
+as before, the convention $0! = 1$ keeps the edge cases aligned with the counting
+interpretation.
+
+---
+
+### what this leaves out
+
+this note counts subsets of a set. elements cannot repeat, and order does not matter.
+
+the next two notes change those assumptions. first, we will arrange objects when
+some of them are indistinguishable. then we will count selections from repeated
+types, where choosing three apples and two oranges is not the same kind of object as
+choosing five distinct elements from a set.

@@ -1,0 +1,289 @@
+---
+title: "four basic counting principles"
+description: "how addition, multiplication, subtraction, and division organize finite counting problems"
+week: 1
+---
+
+the first thing combinatorics asks you to do is easy to state:
+count the objects in a finite set.
+
+the hard part is that the set is rarely handed to you as a clean list. it is usually
+hidden inside a sentence. schedules. passwords. digit strings. baskets of fruit.
+arrangements of letters. the first job is to decide what an object is, then find a
+way to organize all of the objects without missing any and without counting any twice.
+
+the four basic counting principles are four ways to organize the description of a
+finite set. the set itself is still just a set: an unordered collection of objects.
+what changes is the structure we put on the counting problem so the size of the set
+becomes accessible.
+
+mathematically, these principles are theorems about finite sets. Brualdi calls them
+principles because they are also rules of action: they tell you what kind of counting
+move to try. the theorem behind each principle is simple, but the usefulness comes
+from recognizing when a problem has that structure.
+
+that is why they matter beyond this section. much of combinatorics is the art of
+replacing a difficult set with a better-described one: a disjoint union, a sequence
+of choices, a complement, or a collection of equal-size groups.
+
+---
+
+### the set being counted
+
+every counting problem has an underlying set, even when the problem does not name it.
+
+if the question is "how many six-symbol passwords are possible," the set is the set of
+all allowed passwords. if the question is "how many odd four-digit numbers have
+distinct digits," the set is the set of all four-digit strings satisfying those
+conditions. once that set is named, the problem becomes: find its cardinality, or
+size.
+
+that sentence matters because many incorrect counts come from losing track of the set.
+you count ordered objects when the problem asked for unordered ones. you include a
+forbidden case and forget to remove it. you split into cases that overlap.
+
+so before doing arithmetic, ask:
+
+- what is one object in the set?
+- when are two objects considered different?
+- can I count it by splitting it into non-overlapping cases?
+- can I build each object through a sequence of choices?
+- is it easier to count everything except the excluded objects?
+- have I counted labeled descriptions where each object of interest appears the same
+  number of times?
+
+the four principles answer that last question.
+
+---
+
+### addition: split into cases
+
+use addition when the set you want to count has been split into disjoint cases.
+
+> **Addition principle.** Suppose a finite set $S$ is partitioned into parts $S_1, S_2, \ldots, S_m$. Then
+>
+> $$|S| = |S_1| + |S_2| + \cdots + |S_m|.$$
+
+a partition means two things:
+
+- every object in $S$ belongs to at least one part
+- no object in $S$ belongs to more than one part
+
+both are necessary. if some object belongs to no part, you miss it. if some object
+belongs to two parts, you count it twice.
+
+the theorem behind this principle is the cardinality rule for disjoint unions. if
+$S$ is the disjoint union of $S_1, S_2, \ldots, S_m$, then counting $S$ is exactly the
+same as counting each part and adding the results. the hypotheses are doing the work:
+the parts must cover $S$, and they must not overlap.
+
+for example, suppose you want to choose one course, and your options are four math
+courses or three biology courses. if no course is listed in both piles, there are
+$4 + 3 = 7$ choices.
+
+the phrase "if no course is listed in both piles" is not decoration. it is exactly the
+disjointness condition. if a course were cross-listed as both math and biology, then
+adding $4 + 3$ would count that one course twice.
+
+the skill in using addition is not the arithmetic. it is choosing cases that are
+manageable and do not overlap.
+
+---
+
+### multiplication: make consecutive choices
+
+use multiplication when one object is built by a sequence of choices.
+
+> **Multiplication principle.** Suppose an object is determined by two choices. If the first choice has $p$ possibilities, and after each first choice the second choice has $q$ possibilities, then the total number of objects is
+>
+> $$pq.$$
+
+the important phrase is "after each first choice." the second choices do not have to
+be the same choices every time, but the number of choices must be the same.
+
+multiplication is a consequence of addition. if the first choice has possibilities
+$a_1, a_2, \ldots, a_p$, then split the set of ordered outcomes according to the first
+choice. the part starting with $a_i$ has $q$ objects. so the total is
+
+$$q + q + \cdots + q = pq.$$
+
+this is why the same-number condition matters. without it, the parts do not all have
+size $q$, so the repeated addition does not collapse to $pq$.
+
+for example, how many two-digit numbers have distinct nonzero digits?
+
+the object is an ordered pair of digits $(a,b)$, where $a$ is the tens digit and $b$ is
+the ones digit. there are $9$ choices for $a$, namely $1,2,\ldots,9$. after choosing
+$a$, there are $8$ choices for $b$, because $b$ can be any nonzero digit except $a$.
+
+so the number is
+
+$$9 \cdot 8 = 72.$$
+
+notice the order of the choices. first choose the tens digit, then the ones digit. the
+problem itself did not force that order. we chose it because it made the number of
+remaining choices easy to describe.
+
+this is a recurring move: make the most restrictive choice first when it keeps the
+later choices uniform.
+
+---
+
+### when multiplication breaks
+
+the multiplication principle is easy to misuse because many problems look like a list
+of choices but have hidden dependencies.
+
+suppose you want to count odd four-digit numbers with distinct digits. one possible
+choice order is:
+
+1. thousands digit
+2. hundreds digit
+3. tens digit
+4. ones digit
+
+the last digit has to be odd, but the number of odd digits still available depends on
+what happened earlier. if the earlier digits already used some odd digits, fewer odd
+digits remain. the number of choices for the last step is not fixed.
+
+that does not mean the problem is impossible. it means this choice order does not fit
+the multiplication principle cleanly.
+
+instead, choose the ones digit first. there are $5$ choices: $1,3,5,7,9$. after that,
+there are $8$ choices for the thousands digit, because it cannot be $0$ and cannot be
+the ones digit. then there are $8$ choices for the hundreds digit, and $7$ choices for
+the tens digit.
+
+so the count is
+
+$$5 \cdot 8 \cdot 8 \cdot 7.$$
+
+the lesson is not just the answer. the lesson is that a counting solution includes an
+order of construction. if the phrase "it depends" appears at some step, either split
+into cases or change the order of the choices.
+
+---
+
+### subtraction: count the complement
+
+sometimes the target set is harder to count directly than its complement.
+
+> **Subtraction principle.** Suppose $A$ is a subset of a finite set $U$. If $\overline{A} = U \setminus A$, then
+>
+> $$|A| = |U| - |\overline{A}|.$$
+
+think of $U$ as the universe of possible objects and $A$ as the target set. the
+complement $\overline{A}$ is the set of objects in $U$ that are not in $A$.
+
+the theorem behind this principle is the complement rule. the finite set $U$ is
+partitioned into two disjoint parts:
+
+$$U = A \cup \overline{A}.$$
+
+so the addition principle gives $|U| = |A| + |\overline{A}|$. solving for $|A|$
+gives the subtraction principle.
+
+for example, suppose passwords have length six, and each symbol is one of $36$ symbols:
+the ten digits and the twenty-six lowercase letters. how many passwords have at least
+one repeated symbol?
+
+counting repeated-symbol passwords directly is not the most efficient route because
+the repetition could happen in many overlapping ways. so count the complement.
+
+there are
+
+$$36^6$$
+
+total passwords. there are
+
+$$36 \cdot 35 \cdot 34 \cdot 33 \cdot 32 \cdot 31$$
+
+passwords with no repeated symbol, because each position must avoid all symbols used
+before it. therefore the number with at least one repeated symbol is
+
+$$36^6 - 36 \cdot 35 \cdot 34 \cdot 33 \cdot 32 \cdot 31.$$
+
+subtraction is useful when the condition in the problem says "at least one," "not all,"
+"has a repeat," or "fails to be distinct." those phrases often create overlapping cases.
+the complement often removes the overlap.
+
+---
+
+### division: forget labels evenly
+
+division appears when you have counted a larger set in which every object you actually
+care about has been counted the same number of times.
+
+> **Division principle.** Suppose a finite set $S$ is partitioned into $k$ parts, and each part has exactly $r$ objects. Then
+>
+> $$k = \frac{|S|}{r}.$$
+
+the simplest version is ordinary grouping. if there are $740$ objects and each box has
+$5$ objects, then there are $740/5$ boxes.
+
+the theorem behind this principle is the equal-size partition rule. if $S$ is divided
+into $k$ disjoint parts and every part has size $r$, then the addition principle gives
+
+$$|S| = r + r + \cdots + r = kr.$$
+
+therefore $k = |S|/r$.
+
+the more important version is about overcounting by labels.
+
+imagine arranging three different people in a row. there are $3! = 6$ ordered rows.
+but if the question only cares about the group of three people and not their order,
+then all $6$ rows represent the same group. the ordered rows are labels for one
+unordered object.
+
+later, this becomes the reason behind the formula for combinations:
+
+$$\binom{n}{r} = \frac{n(n-1)\cdots(n-r+1)}{r!}.$$
+
+we are not proving that formula yet. for now, only notice the structure. first count
+ordered selections. then divide by the number of orders that describe the same
+unordered selection.
+
+division is valid only when every real object has the same number of labels. if some
+objects have more labels than others, one clean division will not repair the count.
+
+---
+
+### a small mixed example
+
+suppose you have six oranges and nine apples, and a basket is determined only by how
+many oranges and how many apples it contains. the basket must contain at least one
+piece of fruit.
+
+how many different baskets are possible?
+
+an object is a pair
+
+$$(o,a)$$
+
+where $o$ is the number of oranges and $a$ is the number of apples. there are $7$
+choices for $o$, namely $0,1,\ldots,6$, and $10$ choices for $a$, namely $0,1,\ldots,9$.
+
+that gives $7 \cdot 10 = 70$ pairs, but one of them is the empty basket $(0,0)$.
+subtract it:
+
+$$70 - 1 = 69.$$
+
+this example uses multiplication first, then subtraction. that is normal. real counting
+problems often use more than one principle.
+
+one quiet assumption is doing a lot of work here: the oranges are indistinguishable
+from each other, and the apples are indistinguishable from each other. if the individual
+pieces of fruit were distinct, this would be a different problem with a much larger
+answer.
+
+---
+
+### what this leaves out
+
+these principles do not solve a problem by themselves. they tell you what kind of
+organization to look for.
+
+the next notes specialize them. permutations are what happen when order matters.
+combinations are what happen when order does not matter. multisets are what happen
+when repeated types are allowed. most of the formulas in the next few notes are just
+these four principles applied carefully.

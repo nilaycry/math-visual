@@ -59,6 +59,13 @@ arrange those six weights into a 2×3 grid (a matrix **W**) and both outputs fal
 
 **W** is 2×3: two rows (one per output), three columns (one per input). **x** is a 3-vector. **b** is a 2-vector. the result **ŷ** is a 2-vector. this is matrix-vector multiplication, and it's exactly what a linear layer in a neural network computes.
 
+keep the dimensions visible:
+
+- **W** has shape `outputs × inputs`
+- **x** has shape `inputs`
+- **b** has shape `outputs`
+- **ŷ** has shape `outputs`
+
 pause here. the matrix **W** isn't a new kind of thing. it's the same scalar weight `w` from part 1, generalized. each row is the weight vector for one output. the whole matrix is just several dot products stacked on top of each other, evaluated simultaneously.
 
 ---
@@ -67,7 +74,7 @@ pause here. the matrix **W** isn't a new kind of thing. it's the same scalar wei
 
 the sketch shows this concretely. three inputs on the left, two outputs on the right. each connection is a weight. the thickness shows its magnitude, the color shows its sign.
 
-drag any input slider. watch both outputs update immediately, each as the dot product of that input with its column of weights. drag a weight slider and watch how it scales one specific connection without touching the others.
+drag any input slider. watch both outputs update immediately. each output is the dot product of one row of **W** with the whole input vector **x**. a column of **W** tells you how one input contributes across all outputs. drag a weight slider and watch how it scales one specific connection without touching the others.
 
 <div className="not-prose my-8">
   <WeightMatrixSketch />

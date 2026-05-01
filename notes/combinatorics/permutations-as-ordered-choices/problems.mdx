@@ -1,0 +1,198 @@
+---
+title: "permutations as ordered choices"
+week: 2
+---
+
+### recognizing the object
+
+**1.** For each question, say whether the objects being counted are ordered lists,
+unordered selections, or something else. Do not compute the answer yet.
+
+a. How many ways are there to award gold, silver, and bronze medals to three people
+from a group of $12$ finalists?
+
+b. How many committees of $3$ people can be chosen from a group of $12$ finalists?
+
+c. How many four-letter strings can be made from the letters $a,b,c,d,e$ if no letter
+is repeated?
+
+d. How many subsets of size $4$ does $\{a,b,c,d,e\}$ have?
+
+<Solution>
+
+**the move.** decide whether position matters.
+
+a. ordered list. gold, silver, bronze are different positions.
+
+b. unordered selection. a committee has no first, second, or third member unless the
+problem adds roles.
+
+c. ordered list. strings have positions.
+
+d. unordered selection. a subset has no order.
+
+</Solution>
+
+**2.** Let $S = \{a,b,c,d\}$. List all $2$-permutations of $S$.
+
+Then explain why $ab$ and $ba$ are different objects, but $aa$ is not an object in
+this set.
+
+---
+
+### direct permutation counts
+
+**3.** Compute each quantity, and write one sentence explaining what kind of ordered
+list it counts.
+
+a. $P(8,3)$
+
+b. $P(10,10)$
+
+c. $P(6,0)$
+
+d. $P(n,1)$ for $n \in \mathbb{Z}_{\ge 0}$
+
+**4.** How many license plates can be made if a plate consists of three distinct
+uppercase letters followed by two distinct digits?
+
+Assume the letters are chosen from a $26$-letter alphabet and the digits are chosen
+from $\{0,1,\ldots,9\}$.
+
+<Solution>
+
+Choose the letters first, then the digits. The letters form a $3$-permutation of a
+$26$-element set, and the digits form a $2$-permutation of a $10$-element set.
+
+$$P(26,3)P(10,2) = (26 \cdot 25 \cdot 24)(10 \cdot 9).$$
+
+The multiplication principle applies because the letter choices and digit choices are
+independent stages.
+
+</Solution>
+
+**5.** How many injective functions $f:\{1,2,3,4\} \to \{a,b,c,d,e,f,g\}$ are there?
+
+Explain why this is a permutation problem.
+
+<Solution>
+
+An injective function assigns distinct outputs to the four inputs. Once the domain is
+ordered as $1,2,3,4$, the function is determined by the ordered list
+
+$$(f(1), f(2), f(3), f(4)).$$
+
+The entries are distinct elements of a $7$-element codomain, so the number is
+
+$$P(7,4).$$
+
+</Solution>
+
+---
+
+### restrictions
+
+**6.** How many four-digit numbers have distinct digits and no digit equal to $0$?
+
+**7.** How many four-digit numbers have distinct digits?
+
+Be careful: the first digit cannot be $0$, but the later digits can be.
+
+<Solution>
+
+Choose the thousands digit first. It has $9$ choices: $1,2,\ldots,9$.
+
+After that, choose the remaining three digits from the remaining $9$ digits, since $0$
+is now allowed but the first digit cannot be repeated. This gives
+
+$$9 \cdot P(9,3).$$
+
+Equivalently,
+
+$$9 \cdot 9 \cdot 8 \cdot 7.$$
+
+</Solution>
+
+**8.** How many five-letter strings can be made from the letters $a,b,c,d,e,f,g$ if no
+letter is repeated and the string must begin with a vowel?
+
+For this problem, take the vowels to be $a$ and $e$.
+
+**9.** How many seven-digit numbers can be made from the digits $1,2,\ldots,9$, with
+no repeated digit, if $5$ and $6$ must appear consecutively in either order?
+
+**10.** How many seven-digit numbers can be made from the digits $1,2,\ldots,9$, with
+no repeated digit, if $5$ and $6$ do not appear consecutively?
+
+<Solution>
+
+Problem 9 is the complement count used in the note. Treat $56$ or $65$ as an ordered
+block. There are $2$ internal orders for the block and $6$ possible starting positions
+for a two-position block inside a seven-position number. The remaining five positions
+are filled by a $5$-permutation of the seven digits
+
+$$\{1,2,3,4,7,8,9\}.$$
+
+So the count for Problem 9 is
+
+$$2 \cdot 6 \cdot P(7,5).$$
+
+For Problem 10, subtract from all seven-digit numbers with distinct digits:
+
+$$P(9,7) - 2 \cdot 6 \cdot P(7,5).$$
+
+</Solution>
+
+---
+
+### circular arrangements
+
+**11.** How many ways are there to seat $8$ distinct people around a round table, if
+two arrangements that differ only by rotation are considered the same?
+
+**12.** How many ways are there to seat $8$ distinct people around a round table if
+Alice and Ben must sit next to each other?
+
+<Solution>
+
+Treat Alice and Ben as one block. Then there are $7$ objects around the table: the
+block plus the other $6$ people. Circularly arranging these $7$ objects gives
+
+$$(7-1)! = 6!$$
+
+arrangements. Inside the block, Alice and Ben can appear in $2$ orders. So the total is
+
+$$2 \cdot 6!.$$
+
+</Solution>
+
+**13.** How many ways are there to seat $8$ distinct people around a round table if
+Alice and Ben must not sit next to each other?
+
+Write this as a subtraction problem.
+
+---
+
+### explain the count
+
+**14.** A student writes that the number of circular arrangements of $n$ distinct
+objects is $n!/n$ because "we divide by rotations."
+
+Explain what has to be checked before that division is valid.
+
+**15.** A student tries to count seven-digit numbers from $\{1,2,\ldots,9\}$ with no
+repeated digit and with $5$ and $6$ not consecutive by first choosing the position of
+$5$, then choosing the position of $6$, then filling the rest.
+
+Why does this approach require cases?
+
+<Solution>
+
+The number of positions available for $6$ depends on where $5$ is placed. If $5$ is in
+an endpoint position, then only one position is forbidden for $6$. If $5$ is in an
+interior position, then two positions are forbidden for $6$.
+
+So the phrase "choose the position of $6$" does not have one fixed number of choices
+unless the placement of $5$ has already been split into endpoint and interior cases.
+
+</Solution>

@@ -29,6 +29,12 @@ this looks like three layers of computation. it isn't. matrix multiplication is 
 
 this holds no matter how many matrices you stack. infinite layers of linear transformations represent nothing more than a single linear transformation. the model gains no new expressivity.
 
+adding biases does not fix the problem. a stack of affine maps still collapses to one affine map:
+
+<div className="math-highlight">A(Bx + b₁) + b₂ = (AB)x + (Ab₁ + b₂)</div>
+
+the notation gets messier, but the result is the same kind of object. it is still only one flat transformation.
+
 ---
 
 ### breaking the collapse
@@ -45,7 +51,9 @@ the fix is to insert something non-linear between the matrix multiplications, so
 
 a matrix transformation scales and rotates space. tanh bends it.
 
-specifically, `tanh(z)` compresses extreme values toward `±1`, introducing curvature. chaining matrices and activations alternately rotates, stretches, and bends the input space repeatedly. structures that can't be separated by a flat hyperplane (like two interleaved spirals) can often be unfolded by enough of these steps until a flat final layer can slice them cleanly.
+specifically, `tanh(z)` compresses extreme values toward `±1`, introducing curvature. a single linear layer can only separate data with a flat boundary. if the pattern needs a bend, like the inside-versus-outside of a circle or the alternating corners of XOR, one flat cut is not enough.
+
+chaining matrices and activations alternately rotates, stretches, and bends the input space repeatedly. structures that can't be separated by a flat hyperplane (like two interleaved spirals) can often be unfolded by enough of these steps until a flat final layer can slice them cleanly.
 
 <div className="not-prose my-8">
   <NonLinearSketch />
