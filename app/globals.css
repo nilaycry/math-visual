@@ -263,7 +263,19 @@
   overflow-x: auto;
 }
 
-/* Combinatorics note controls */
+/* Notebook note controls */
+.note-accent-abstract-linear-algebra {
+  --note-accent: #6d4fc2;
+}
+
+.note-accent-combinatorics {
+  --note-accent: #b85c1a;
+}
+
+.note-accent-math-314 {
+  --note-accent: #2f6b6f;
+}
+
 .co-note-button {
   display: inline-flex;
   align-items: center;
@@ -294,10 +306,10 @@
   align-items: center;
   gap: 7px;
   width: fit-content;
-  border: 1px solid rgba(184, 92, 26, 0.24);
+  border: 1px solid color-mix(in srgb, var(--note-accent) 24%, transparent);
   border-radius: 999px;
-  background: rgba(184, 92, 26, 0.08);
-  color: #b85c1a;
+  background: color-mix(in srgb, var(--note-accent) 8%, transparent);
+  color: var(--note-accent);
   text-decoration: none;
   font-family: inherit;
   font-size: 14px;
@@ -308,8 +320,8 @@
 }
 
 .co-note-action:hover {
-  border-color: rgba(184, 92, 26, 0.42);
-  background: rgba(184, 92, 26, 0.13);
+  border-color: color-mix(in srgb, var(--note-accent) 42%, transparent);
+  background: color-mix(in srgb, var(--note-accent) 13%, transparent);
   transform: translateY(-1px);
 }
 
@@ -324,8 +336,8 @@
 }
 
 .co-note-nav-card:hover {
-  border-color: rgba(184, 92, 26, 0.18);
-  background: rgba(184, 92, 26, 0.06);
+  border-color: color-mix(in srgb, var(--note-accent) 18%, transparent);
+  background: color-mix(in srgb, var(--note-accent) 6%, transparent);
   transform: translateY(-1px);
 }
 

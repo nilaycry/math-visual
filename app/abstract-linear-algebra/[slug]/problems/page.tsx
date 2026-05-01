@@ -6,10 +6,10 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import Solution from "@/components/Solution";
+import { ArrowLeft, List } from "lucide-react";
 
 const BG = "#f7f4ef";
 const FG = "#1c1917";
-const FAINT = "#a8a29e";
 const BORDER = "#e8e5df";
 const ACCENT = "#6d4fc2";
 
@@ -27,7 +27,7 @@ export async function generateMetadata({
   const note = getNoteBySlug(params.slug);
   if (!note) return { title: "Not Found" };
   return {
-    title: `${note.title} — problems — Math 416`,
+    title: `${note.title} - problems - Math 416`,
     description: `Practice problems for ${note.title}`,
   };
 }
@@ -57,14 +57,15 @@ export default async function ProblemsPage({
 
   return (
     <div
+      className="note-accent-abstract-linear-algebra"
       style={{
         minHeight: "100vh",
         backgroundColor: BG,
         color: FG,
       }}
     >
-      {/* ── NAVBAR ── */}
       <nav
+        className="co-note-shell-nav"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -74,22 +75,18 @@ export default async function ProblemsPage({
           margin: "0 auto",
         }}
       >
-        <Link
-          href={`/abstract-linear-algebra/${params.slug}`}
-          style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
-        >
-          ← {note.title}
+        <Link href={`/abstract-linear-algebra/${params.slug}`} className="co-note-button">
+          <ArrowLeft size={15} strokeWidth={1.9} />
+          {note.title}
         </Link>
-        <Link
-          href="/abstract-linear-algebra"
-          style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
-        >
+        <Link href="/abstract-linear-algebra" className="co-note-button">
+          <List size={15} strokeWidth={1.9} />
           notes
         </Link>
       </nav>
 
-      {/* ── HEADER ── */}
       <header
+        className="co-note-header"
         style={{
           maxWidth: 860,
           margin: "0 auto",
@@ -124,21 +121,15 @@ export default async function ProblemsPage({
         <hr style={{ border: "none", borderTop: `1px solid ${BORDER}`, marginTop: 32 }} />
       </header>
 
-      {/* ── CONTENT ── */}
       <main
+        className="co-note-main"
         style={{
           maxWidth: 860,
           margin: "0 auto",
           padding: "0 48px 80px",
         }}
       >
-        <article
-          className="notes-prose"
-          style={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            maxWidth: "none",
-          }}
-        >
+        <article className="notes-prose" style={{ maxWidth: "none" }}>
           {content}
         </article>
       </main>

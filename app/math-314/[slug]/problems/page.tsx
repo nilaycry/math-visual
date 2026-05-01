@@ -6,12 +6,12 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import Solution from "@/components/Solution";
+import { ArrowLeft, List } from "lucide-react";
 
 const COURSE = "math-314";
 
 const BG = "#f7f4ef";
 const FG = "#1c1917";
-const FAINT = "#a8a29e";
 const BORDER = "#e8e5df";
 const ACCENT = "#2f6b6f";
 
@@ -59,6 +59,7 @@ export default async function ProblemsPage({
 
   return (
     <div
+      className="note-accent-math-314"
       style={{
         minHeight: "100vh",
         backgroundColor: BG,
@@ -66,6 +67,7 @@ export default async function ProblemsPage({
       }}
     >
       <nav
+        className="co-note-shell-nav"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -75,18 +77,18 @@ export default async function ProblemsPage({
           margin: "0 auto",
         }}
       >
-        <Link
-          href={`/math-314/${params.slug}`}
-          style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
-        >
-          ← {note.title}
+        <Link href={`/math-314/${params.slug}`} className="co-note-button">
+          <ArrowLeft size={15} strokeWidth={1.9} />
+          {note.title}
         </Link>
-        <Link href="/math-314" style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}>
+        <Link href="/math-314" className="co-note-button">
+          <List size={15} strokeWidth={1.9} />
           notes
         </Link>
       </nav>
 
       <header
+        className="co-note-header"
         style={{
           maxWidth: 860,
           margin: "0 auto",
@@ -122,19 +124,14 @@ export default async function ProblemsPage({
       </header>
 
       <main
+        className="co-note-main"
         style={{
           maxWidth: 860,
           margin: "0 auto",
           padding: "0 48px 80px",
         }}
       >
-        <article
-          className="notes-prose"
-          style={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            maxWidth: "none",
-          }}
-        >
+        <article className="notes-prose" style={{ maxWidth: "none" }}>
           {content}
         </article>
       </main>

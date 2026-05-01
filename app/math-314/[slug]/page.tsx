@@ -12,6 +12,7 @@ import Link from "next/link";
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import { ArrowLeft, ArrowRight, ExternalLink, ListChecks } from "lucide-react";
 
 const COURSE = "math-314";
 
@@ -70,6 +71,7 @@ export default async function NotePage({
 
   return (
     <div
+      className="note-accent-math-314"
       style={{
         minHeight: "100vh",
         backgroundColor: BG,
@@ -77,6 +79,7 @@ export default async function NotePage({
       }}
     >
       <nav
+        className="co-note-shell-nav"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -86,20 +89,23 @@ export default async function NotePage({
           margin: "0 auto",
         }}
       >
-        <Link href="/math-314" style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}>
-          ← notes
+        <Link href="/math-314" className="co-note-button">
+          <ArrowLeft size={15} strokeWidth={1.9} />
+          notes
         </Link>
         <a
           href="https://github.com/nilaycry"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: FAINT, textDecoration: "none", fontSize: 14 }}
+          className="co-note-button"
         >
+          <ExternalLink size={15} strokeWidth={1.9} />
           github
         </a>
       </nav>
 
       <header
+        className="co-note-header"
         style={{
           maxWidth: 860,
           margin: "0 auto",
@@ -138,35 +144,30 @@ export default async function NotePage({
       </header>
 
       <main
+        className="co-note-main"
         style={{
           maxWidth: 860,
           margin: "0 auto",
           padding: "0 48px 48px",
         }}
       >
-        <article
-          className="notes-prose"
-          style={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            maxWidth: "none",
-          }}
-        >
+        <article className="notes-prose" style={{ maxWidth: "none" }}>
           {content}
         </article>
 
         {noteHasProblems && (
           <div style={{ marginTop: 48 }}>
-            <Link
-              href={`/math-314/${params.slug}/problems`}
-              style={{ fontSize: 14, fontWeight: 500, color: ACCENT, textDecoration: "none" }}
-            >
-              problems →
+            <Link href={`/math-314/${params.slug}/problems`} className="co-note-action">
+              <ListChecks size={16} strokeWidth={1.9} />
+              problems
+              <ArrowRight size={15} strokeWidth={1.9} />
             </Link>
           </div>
         )}
       </main>
 
       <footer
+        className="co-note-footer"
         style={{
           maxWidth: 860,
           margin: "0 auto",
@@ -179,15 +180,16 @@ export default async function NotePage({
         {prevNote ? (
           <Link
             href={`/math-314/${prevNote.slug}`}
-            style={{
-              textDecoration: "none",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
+            className="co-note-nav-card"
+            style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}
           >
-            <span style={{ fontSize: 11, color: FAINT, marginBottom: 4 }}>← previous</span>
-            <span style={{ fontSize: 14, fontWeight: 500, color: MUTED }}>{prevNote.title}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, color: FAINT, marginBottom: 5, lineHeight: 1.2 }}>
+              <ArrowLeft size={13} strokeWidth={1.9} />
+              previous
+            </span>
+            <span style={{ fontSize: 14, fontWeight: 500, color: MUTED, lineHeight: 1.35 }}>
+              {prevNote.title}
+            </span>
           </Link>
         ) : (
           <div />
@@ -195,15 +197,16 @@ export default async function NotePage({
         {nextNote ? (
           <Link
             href={`/math-314/${nextNote.slug}`}
-            style={{
-              textDecoration: "none",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-            }}
+            className="co-note-nav-card"
+            style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", textAlign: "right" }}
           >
-            <span style={{ fontSize: 11, color: FAINT, marginBottom: 4 }}>next →</span>
-            <span style={{ fontSize: 14, fontWeight: 500, color: MUTED }}>{nextNote.title}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, color: FAINT, marginBottom: 5, lineHeight: 1.2 }}>
+              next
+              <ArrowRight size={13} strokeWidth={1.9} />
+            </span>
+            <span style={{ fontSize: 14, fontWeight: 500, color: MUTED, lineHeight: 1.35 }}>
+              {nextNote.title}
+            </span>
           </Link>
         ) : (
           <div />

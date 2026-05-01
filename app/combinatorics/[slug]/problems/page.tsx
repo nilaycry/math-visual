@@ -59,6 +59,7 @@ export default async function ProblemsPage({
 
   return (
     <div
+      className="note-accent-combinatorics"
       style={{
         minHeight: "100vh",
         backgroundColor: BG,

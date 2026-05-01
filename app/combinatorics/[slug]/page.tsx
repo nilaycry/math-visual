@@ -64,6 +64,7 @@ export default async function NotePage({
 
   return (
     <div
+      className="note-accent-combinatorics"
       style={{
         minHeight: "100vh",
         backgroundColor: BG,
