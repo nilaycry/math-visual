@@ -1,0 +1,209 @@
+---
+title: "combinations as subsets"
+week: 3
+---
+
+### recognizing the object
+
+**1.** For each question, say whether the objects being counted are unordered subsets,
+ordered lists, or a two-stage object built from both. Do not compute the answer yet.
+
+a. How many four-person committees can be chosen from a class of $18$ students?
+
+b. How many ways are there to choose a chair, a vice chair, a secretary, and a
+treasurer from a class of $18$ students?
+
+c. How many five-element subsets does $\{1,2,3,4,5,6,7,8\}$ have?
+
+d. How many ways are there to choose five students from a class of $18$, then line
+them up for a photo?
+
+<Solution>
+
+**the move.** ask whether swapping two chosen objects changes the outcome.
+
+a. unordered subset. A committee has no internal order.
+
+b. ordered list. The roles make the selected students distinguishable.
+
+c. unordered subset. A subset has no order.
+
+d. two-stage object. First choose an unordered subset of size $5$, then order its
+elements in a line.
+
+</Solution>
+
+**2.** Let $S = \{a,b,c,d,e\}$. List all $2$-element subsets of $S$.
+
+Then explain why $\{a,c\}$ and $\{c,a\}$ are the same object, but $ac$ and $ca$ are
+different ordered descriptions.
+
+---
+
+### direct combination counts
+
+**3.** Compute each quantity.
+
+a. $\binom{8}{3}$
+
+b. $\binom{9}{0}$
+
+c. $\binom{9}{9}$
+
+d. $\binom{10}{1}$
+
+For parts b, c, and d, also explain the counting meaning of the answer.
+
+**4.** How many three-person committees can be chosen from a group of $11$ people?
+
+Then explain why dividing $P(11,3)$ by $3!$ gives the same answer.
+
+<Solution>
+
+A three-person committee is an unordered subset of size $3$ from an $11$-element set,
+so the count is
+
+$$\binom{11}{3} = \frac{11!}{3!8!} = 165.$$
+
+If we begin with ordered choices, there are $P(11,3)$ ordered lists of three distinct
+people. Each committee appears in exactly $3!$ orders, so dividing by $3!$ gives
+
+$$\frac{P(11,3)}{3!} = \binom{11}{3}.$$
+
+</Solution>
+
+**5.** How many $4$-element subsets does an $11$-element set have?
+
+Write the answer in binomial notation and as a factorial expression.
+
+**6.** A box contains $9$ distinct books. How many ways are there to choose $4$ of
+them to carry home?
+
+Explain why this is not a permutation problem.
+
+---
+
+### overcounting by order
+
+**7.** Explain why
+
+$$P(n,r) = \binom{n}{r}r!$$
+
+counts the same set of objects in two different ways.
+
+Your explanation should name the set being counted.
+
+**8.** How many five-letter strings can be made from the letters
+$\{a,b,c,d,e,f,g,h\}$ if no letter is repeated?
+
+Compute the answer in two ways:
+
+a. as a permutation count
+
+b. as a combination count followed by an ordering count
+
+<Solution>
+
+The strings are ordered lists of length $5$ with distinct entries from an $8$-element
+set.
+
+As a permutation count, the answer is
+
+$$P(8,5).$$
+
+As a two-stage count, first choose which $5$ letters appear, then arrange them:
+
+$$\binom{8}{5}5!.$$
+
+These are equal because they count the same set of strings.
+
+</Solution>
+
+**9.** A photographer chooses $6$ students from a class of $15$ and then places them
+in a row.
+
+a. Write a counting formula for the number of possible photos.
+
+b. Explain why both
+
+$$P(15,6)$$
+
+and
+
+$$\binom{15}{6}6!$$
+
+count the same objects.
+
+**10.** A student says that the number of five-letter strings from
+$\{a,b,c,d,e,f,g,h\}$ with no repeated letters is just $\binom{8}{5}$ because "you are
+choosing five letters."
+
+What has the student failed to notice?
+
+---
+
+### symmetry and complementary choice
+
+**11.** Compute $\binom{12}{9}$ by using the identity
+
+$$\binom{n}{r} = \binom{n}{n-r}.$$
+
+Why is this easier than expanding $\binom{12}{9}$ directly?
+
+<Solution>
+
+Use complementary choice:
+
+$$\binom{12}{9} = \binom{12}{3} = \frac{12 \cdot 11 \cdot 10}{3 \cdot 2 \cdot 1} = 220.$$
+
+This is easier because choosing $9$ elements to include is equivalent to choosing the
+$3$ elements to leave out.
+
+</Solution>
+
+**12.** Give a counting explanation for the identity
+
+$$\binom{n}{n-1} = n.$$
+
+Do not use factorial algebra alone.
+
+**13.** In a club with $14$ members, how many $11$-person committees are possible?
+
+Solve this by turning it into a problem about excluded members.
+
+**14.** Let $S$ be an $n$-element set. Explain why the map
+
+$$A \mapsto S \setminus A$$
+
+is a bijection from the set of all $r$-element subsets of $S$ to the set of all
+$(n-r)$-element subsets of $S$.
+
+---
+
+### when roles change the problem
+
+**15.** A department has $10$ faculty members.
+
+a. How many ways are there to choose a hiring committee of $4$ faculty members?
+
+b. How many ways are there to choose a chair, a vice chair, a secretary, and a
+treasurer from the same department?
+
+c. Explain in one sentence why the answers to parts a and b are different.
+
+**16.** A student says that the number of ways to choose a chair, a vice chair, a
+secretary, and a treasurer from $10$ people is $\binom{10}{4}$ because "you are still
+choosing $4$ people."
+
+What has the student failed to notice?
+
+<Solution>
+
+The student has ignored that the four selected people receive distinct roles. Once the
+roles are assigned, swapping two of the selected people usually changes the outcome.
+
+So the object being counted is not just a $4$-element subset. It is an ordered
+assignment of four distinct positions, so the correct count is $P(10,4)$, or
+equivalently $\binom{10}{4}4!$.
+
+</Solution>

@@ -6,18 +6,19 @@ week: 3
 
 the previous note counted ordered selections. if we choose three letters from
 $\{a,b,c,d,e\}$ and write them as a list, then $abc$ and $bac$ are different
-permutations.
+objects, because the positions are different.
 
-but many counting questions do not care about the order in which the chosen objects
-are listed. if the object is the set $\{a,b,c\}$, then the six lists
+now change the object. suppose we only care which three letters were chosen.
+
+then
 
 $$abc,\ acb,\ bac,\ bca,\ cab,\ cba$$
 
-all describe the same selection.
+are not six different selections. they are six ordered descriptions of the same
+subset $\{a,b,c\}$.
 
-this is the first major place where division becomes unavoidable. permutations count
-ordered descriptions. combinations count the unordered objects those descriptions
-represent.
+that is the whole shift in this note. permutations count ordered lists. combinations
+count subsets, where order has been forgotten.
 
 ---
 
@@ -49,6 +50,31 @@ if $r > n$, then
 $$\binom{n}{r} = 0,$$
 
 because a set with $n$ elements does not have a subset with more than $n$ elements.
+
+it is also useful to name the whole family of $r$-element subsets:
+
+$$\binom{S}{r} = \{A \subseteq S : |A| = r\}.$$
+
+then $\binom{n}{r}$ is the cardinality of $\binom{S}{r}$ whenever $|S| = n$.
+
+---
+
+### ordered descriptions versus subsets
+
+the formula for combinations is really a statement about overcounting.
+
+if $A \subseteq S$ and $|A| = r$, then the elements of $A$ can be written in $r!$
+different orders. each such order is an $r$-permutation of $S$.
+
+so one subset does not correspond to one ordered list. it corresponds to exactly
+$r!$ ordered lists.
+
+for example, if $A = \{a,c,d\}$, then the ordered descriptions are
+
+$$acd,\ adc,\ cad,\ cda,\ dac,\ dca.$$
+
+this is why permutation counts are too large for subset problems. they count the same
+unordered object once for each ordering of its elements.
 
 ---
 
@@ -88,7 +114,7 @@ selection.
 
 ---
 
-### a small example
+### a first example
 
 how many three-person committees can be chosen from a group of seven people?
 
@@ -114,6 +140,31 @@ $3!$ such orderings, divide by $3!$.
 
 the words in the problem decide which count is correct. "president, secretary, and
 treasurer" creates ordered roles. "committee" creates an unordered subset.
+
+---
+
+### choosing and then ordering
+
+there is a useful reverse viewpoint:
+
+$$P(n,r) = \binom{n}{r}r!.$$
+
+first choose the $r$ elements, then order them.
+
+this identity is not new mathematics. it is the same count read in the opposite
+direction. sometimes it is the cleanest way to move from a subset problem to an
+ordered-list problem.
+
+for example, the number of five-letter strings with distinct letters chosen from an
+eight-letter set is
+
+$$\binom{8}{5}5!,$$
+
+because we first choose which five letters appear, then arrange those five letters in
+the five positions.
+
+the same count could also be written as $P(8,5)$. the two expressions agree because
+they count the same set of strings.
 
 ---
 
@@ -143,7 +194,7 @@ the smaller complementary choice instead.
 
 ---
 
-### when order sneaks back in
+### when order changes the object
 
 combination problems can become permutation problems if the chosen elements receive
 roles afterward.
@@ -209,7 +260,6 @@ interpretation.
 
 this note counts subsets of a set. elements cannot repeat, and order does not matter.
 
-the next two notes change those assumptions. first, we will arrange objects when
-some of them are indistinguishable. then we will count selections from repeated
-types, where choosing three apples and two oranges is not the same kind of object as
-choosing five distinct elements from a set.
+the next note changes the first assumption. we will still care about arrangements, but
+some objects will be indistinguishable, so swapping two equal symbols will no longer
+create a new permutation.
