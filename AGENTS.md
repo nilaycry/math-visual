@@ -125,6 +125,7 @@ Start from `docs/templates/note-content.mdx` and `docs/templates/problems.mdx` w
 - Load KaTeX in the course layout.
 - Use `$...$` for inline math and `$$...$$` for display math.
 - Never split inline math across line breaks in MDX.
+- Use the shared `.co-note-*` control classes and course accent classes for note navigation, problem links, and action buttons. Keep button behavior consistent across Math 314, abstract linear algebra, and combinatorics.
 
 ## Course-specific docs
 
@@ -132,6 +133,7 @@ Course-specific docs are allowed, but they are references, not global project ru
 
 Current course-specific docs:
 
+- `docs/combinatorics-textbook-outline.md`
 - `docs/math-314-workflow.md`
 - `docs/math-314-textbook-outline.md`
 - `docs/math-314-prose-style.md`

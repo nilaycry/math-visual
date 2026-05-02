@@ -16,8 +16,8 @@ For a new course note:
 
 ```text
 Read AGENTS.md and docs/content-workflow.md. Add a note for <course> on <topic>.
-Use the early abstract linear algebra notes as the style anchor. Add problems if
-they would help, then run npm run build.
+Use the nearest course notes as the style anchor. Follow any course-specific
+note-first loop before adding problems, then run npm run build.
 ```
 
 For revision:
@@ -46,6 +46,7 @@ Preserve the existing route structure and voice. Run npm run build.
 ## Note checklist
 
 - Read the first abstract linear algebra notes before drafting.
+- For course sequences with a note-first loop, draft and revise the note before adding a problem set.
 - Keep titles lowercase.
 - Start from the mathematical distinction that matters, not broad motivation.
 - Define symbols before using them.
