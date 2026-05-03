@@ -14,6 +14,7 @@ export default function HomePage() {
   const allNotes = getAllNotes();
   const allComboNotes = getAllNotes("combinatorics");
   const all314Notes = getAllNotes("math-314");
+  const allRealAnalysisNotes = getAllNotes("real-analysis");
   const latestLesson = allLessons[allLessons.length - 1];
   const latestComboNote = allComboNotes.filter((n) => n.week >= 1).at(-1);
   const latest314Note = all314Notes.filter((n) => n.week >= 1).at(-1);
@@ -72,13 +73,24 @@ export default function HomePage() {
       count: all314Notes.filter((n) => n.week >= 1).length,
       unit: "note",
     },
+    {
+      href: "/real-analysis",
+      tag: "real analysis",
+      title: "where limits become exact",
+      description:
+        "completeness, convergence, continuity, and the proof language underneath calculus.",
+      accent: "#9a4f3d",
+      count: allRealAnalysisNotes.filter((n) => n.week >= 1).length,
+      unit: "note",
+    },
   ];
 
   const totalLessons = allLessons.length;
   const totalNotes =
     getAllNotes().length +
     allComboNotes.filter((n) => n.week >= 1).length +
-    all314Notes.filter((n) => n.week >= 1).length;
+    all314Notes.filter((n) => n.week >= 1).length +
+    allRealAnalysisNotes.filter((n) => n.week >= 1).length;
 
   const currentlyOpen = [
     latestComboNote && {
@@ -362,6 +374,139 @@ export default function HomePage() {
         </section>
 
         {/* ── SUBJECTS ── */}
+        <section
+          id="explore"
+          className="subjects-section"
+          style={{
+            maxWidth: 1200,
+            margin: "0 auto",
+            padding: "32px 48px 100px",
+          }}
+        >
+          {/* ── LESSONS ── */}
+          <div style={{ marginBottom: 72 }}>
+            <div style={{ marginBottom: 28, position: "relative", zIndex: 10 }}>
+              <h2
+                style={{
+                  fontSize: 11,
+                  fontWeight: 500,
+                  color: "#888",
+                  textTransform: "uppercase" as const,
+                  letterSpacing: "0.14em",
+                  margin: "0 0 8px 0",
+                }}
+              >
+                lessons
+              </h2>
+              <p style={{ fontSize: 13, color: "#999", margin: 0, lineHeight: 1.6 }}>
+                interactive structural anchors. building the geometric intuition before trusting the algebra.
+              </p>
+            </div>
+            <div
+              className="subjects-grid"
+              style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}
+            >
+              {lessons.map((subject) => (
+                <Link key={subject.href} href={subject.href} style={{ textDecoration: "none", color: "inherit" }}>
+                  <div
+                    className="lesson-card"
+                    style={{
+                      backgroundColor: "rgba(255,255,255,0.02)",
+                      border: "0.5px solid rgba(255,255,255,0.08)",
+                      borderRadius: 12,
+                      padding: "28px 28px 24px",
+                      cursor: "pointer",
+                      height: "100%",
+                      boxSizing: "border-box",
+                      "--hover-border": `${subject.accent}55`,
+                      "--hover-glow": `${subject.accent}33`,
+                    } as React.CSSProperties}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                      <span style={{ fontSize: 11, fontWeight: 500, color: subject.accent, opacity: 0.8, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
+                        {subject.tag}
+                      </span>
+                      <span style={{ fontSize: 11, color: "#888", letterSpacing: "0.05em" }}>
+                        {subject.count} {subject.count === 1 ? "lesson" : "lessons"}
+                      </span>
+                    </div>
+                    <h3 style={{ fontSize: 17, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 10, lineHeight: 1.3, marginTop: 0 }}>
+                      {subject.title}
+                    </h3>
+                    <span style={{ fontSize: 13, fontWeight: 400, color: "#999", lineHeight: 1.6, display: "block" }}>
+                      {subject.description}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* ── DIVIDER ── */}
+          <div style={{ borderTop: "1px solid #161616", marginBottom: 72 }} />
+
+          {/* ── COURSE NOTES ── */}
+          <div>
+            <div style={{ marginBottom: 28, position: "relative", zIndex: 10 }}>
+              <h2
+                style={{
+                  fontSize: 11,
+                  fontWeight: 500,
+                  color: "#888",
+                  textTransform: "uppercase" as const,
+                  letterSpacing: "0.14em",
+                  margin: "0 0 8px 0",
+                }}
+              >
+                notebooks
+              </h2>
+              <p style={{ fontSize: 13, color: "#999", margin: 0, lineHeight: 1.6 }}>
+                written in real time, one definition at a time. sequential, honest about what&apos;s hard.
+              </p>
+            </div>
+            <div
+              className="subjects-grid"
+              style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}
+            >
+              {courseNotes.map((subject) => (
+                <Link key={subject.href} href={subject.href} style={{ textDecoration: "none", color: "inherit" }}>
+                  <div
+                    className="lesson-card"
+                    style={{
+                      backgroundColor: "rgba(255,255,255,0.015)",
+                      border: "0.5px solid rgba(255,255,255,0.06)",
+                      borderRadius: 12,
+                      padding: "28px 28px 24px",
+                      cursor: "pointer",
+                      height: "100%",
+                      boxSizing: "border-box",
+                      "--hover-border": `${subject.accent}55`,
+                      "--hover-glow": `${subject.accent}33`,
+                    } as React.CSSProperties}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                      <span style={{ fontSize: 11, fontWeight: 500, color: subject.accent, opacity: 0.8, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
+                        {subject.tag}
+                      </span>
+                      <span style={{ fontSize: 11, color: "#555", letterSpacing: "0.05em" }}>
+                        {subject.count > 0
+                          ? `${subject.count} ${subject.count === 1 ? "note" : "notes"}`
+                          : "in progress"}
+                      </span>
+                    </div>
+                    <h3 style={{ fontSize: 17, fontWeight: 500, color: "#d8d8d8", display: "block", marginBottom: 10, lineHeight: 1.3, marginTop: 0 }}>
+                      {subject.title}
+                    </h3>
+                    <span style={{ fontSize: 13, fontWeight: 400, color: "#999", lineHeight: 1.6, display: "block" }}>
+                      {subject.description}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* CURRENTLY OPEN */}
         <section
           className="studio-section"
@@ -510,139 +655,6 @@ export default function HomePage() {
                 </div>
               </Link>
             ))}
-          </div>
-        </section>
-
-        <section
-          id="explore"
-          className="subjects-section"
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            padding: "32px 48px 100px",
-          }}
-        >
-          {/* ── LESSONS ── */}
-          <div style={{ marginBottom: 72 }}>
-            <div style={{ marginBottom: 28, position: "relative", zIndex: 10 }}>
-              <h2
-                style={{
-                  fontSize: 11,
-                  fontWeight: 500,
-                  color: "#888",
-                  textTransform: "uppercase" as const,
-                  letterSpacing: "0.14em",
-                  margin: "0 0 8px 0",
-                }}
-              >
-                lessons
-              </h2>
-              <p style={{ fontSize: 13, color: "#999", margin: 0, lineHeight: 1.6 }}>
-                interactive structural anchors. building the geometric intuition before trusting the algebra.
-              </p>
-            </div>
-            <div
-              className="subjects-grid"
-              style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}
-            >
-              {lessons.map((subject) => (
-                <Link key={subject.href} href={subject.href} style={{ textDecoration: "none", color: "inherit" }}>
-                  <div
-                    className="lesson-card"
-                    style={{
-                      backgroundColor: "rgba(255,255,255,0.02)",
-                      border: "0.5px solid rgba(255,255,255,0.08)",
-                      borderRadius: 12,
-                      padding: "28px 28px 24px",
-                      cursor: "pointer",
-                      height: "100%",
-                      boxSizing: "border-box",
-                      "--hover-border": `${subject.accent}55`,
-                      "--hover-glow": `${subject.accent}33`,
-                    } as React.CSSProperties}
-                  >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-                      <span style={{ fontSize: 11, fontWeight: 500, color: subject.accent, opacity: 0.8, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
-                        {subject.tag}
-                      </span>
-                      <span style={{ fontSize: 11, color: "#888", letterSpacing: "0.05em" }}>
-                        {subject.count} {subject.count === 1 ? "lesson" : "lessons"}
-                      </span>
-                    </div>
-                    <h3 style={{ fontSize: 17, fontWeight: 500, color: "#e8e8e8", display: "block", marginBottom: 10, lineHeight: 1.3, marginTop: 0 }}>
-                      {subject.title}
-                    </h3>
-                    <span style={{ fontSize: 13, fontWeight: 400, color: "#999", lineHeight: 1.6, display: "block" }}>
-                      {subject.description}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* ── DIVIDER ── */}
-          <div style={{ borderTop: "1px solid #161616", marginBottom: 72 }} />
-
-          {/* ── COURSE NOTES ── */}
-          <div>
-            <div style={{ marginBottom: 28, position: "relative", zIndex: 10 }}>
-              <h2
-                style={{
-                  fontSize: 11,
-                  fontWeight: 500,
-                  color: "#888",
-                  textTransform: "uppercase" as const,
-                  letterSpacing: "0.14em",
-                  margin: "0 0 8px 0",
-                }}
-              >
-                notebooks
-              </h2>
-              <p style={{ fontSize: 13, color: "#999", margin: 0, lineHeight: 1.6 }}>
-                written in real time, one definition at a time. sequential, honest about what&apos;s hard.
-              </p>
-            </div>
-            <div
-              className="subjects-grid"
-              style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}
-            >
-              {courseNotes.map((subject) => (
-                <Link key={subject.href} href={subject.href} style={{ textDecoration: "none", color: "inherit" }}>
-                  <div
-                    className="lesson-card"
-                    style={{
-                      backgroundColor: "rgba(255,255,255,0.015)",
-                      border: "0.5px solid rgba(255,255,255,0.06)",
-                      borderRadius: 12,
-                      padding: "28px 28px 24px",
-                      cursor: "pointer",
-                      height: "100%",
-                      boxSizing: "border-box",
-                      "--hover-border": `${subject.accent}55`,
-                      "--hover-glow": `${subject.accent}33`,
-                    } as React.CSSProperties}
-                  >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-                      <span style={{ fontSize: 11, fontWeight: 500, color: subject.accent, opacity: 0.8, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>
-                        {subject.tag}
-                      </span>
-                      <span style={{ fontSize: 11, color: "#555", letterSpacing: "0.05em" }}>
-                        {subject.count > 0
-                          ? `${subject.count} ${subject.count === 1 ? "note" : "notes"}`
-                          : "in progress"}
-                      </span>
-                    </div>
-                    <h3 style={{ fontSize: 17, fontWeight: 500, color: "#d8d8d8", display: "block", marginBottom: 10, lineHeight: 1.3, marginTop: 0 }}>
-                      {subject.title}
-                    </h3>
-                    <span style={{ fontSize: 13, fontWeight: 400, color: "#999", lineHeight: 1.6, display: "block" }}>
-                      {subject.description}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
           </div>
         </section>
 

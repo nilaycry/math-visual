@@ -1,0 +1,128 @@
+---
+title: "the least upper bound property"
+description: "the completeness statement that quietly supports the real line"
+week: 1
+---
+
+one of the fastest ways to tell whether a course has shifted from calculus to analysis
+is that the real numbers stop being treated as obvious.
+
+in calculus, $\mathbb{R}$ is usually the background. points move along it, functions live
+on it, intervals sit inside it. in analysis, we eventually have to say what property of
+$\mathbb{R}$ makes those arguments work.
+
+one answer is completeness, and the first concrete form of completeness is the least
+upper bound property.
+
+I like starting here because it makes the course honest early. if later theorems about
+limits are going to lean on something special about $\mathbb{R}$, I would rather name
+that special thing now than keep treating the real line like a magical backdrop.
+
+---
+
+### the definition
+
+let $S \subseteq \mathbb{R}$. an **upper bound** for $S$ is a real number $M$ such that
+
+$$x \le M \quad \text{for every } x \in S.$$
+
+the set $S$ is **bounded above** if it has at least one upper bound.
+
+a **least upper bound** of $S$ is an upper bound $u$ such that every upper bound $M$ of
+$S$ satisfies
+
+$$u \le M.$$
+
+in other words, $u$ is the smallest number that still stays above the whole set. we
+usually call it the **supremum** and write $u = \sup S$.
+
+---
+
+### the property itself
+
+the **least upper bound property** says:
+
+> **Definition.** Every nonempty subset of $\mathbb{R}$ that is bounded above has a least upper bound in $\mathbb{R}$.
+
+this statement is not true in every ordered number system. that is why it matters. it is
+not just a vocabulary word. it is a structural guarantee.
+
+when I first saw this definition, it looked too formal to be important. but analysis
+keeps coming back to exactly this kind of guarantee: if a set is pushing upward toward a
+boundary, $\mathbb{R}$ does not make you guess whether that boundary exists.
+
+---
+
+### first examples
+
+consider the interval
+
+$$S = (0,1).$$
+
+the number $1$ is an upper bound. so is $2$, or $100$. but the least upper bound is $1$,
+even though $1 \notin S$.
+
+that example matters because it separates two ideas that are easy to blur:
+
+- a maximum element of the set
+- the least upper bound of the set
+
+here the set has no maximum, but it still has a supremum.
+
+that distinction took me a second the first time I saw it. "largest element" and "best
+upper bound" sound almost identical in conversation, but analysis needs them separated
+completely.
+
+---
+
+### why this is the right place to start
+
+later, when a sequence converges or a monotone bounded sequence has a limit, the proof
+often builds a set of partial information and then asks for the best possible boundary
+point. the supremum is that boundary point.
+
+so even before the full epsilon language arrives, this property tells us something about
+how $\mathbb{R}$ behaves: bounded data does not leave us with a gap right where the next
+number ought to be.
+
+to me, that is the real point of the note. the supremum is not just a definition to
+memorize. it is one of the first signs that completeness is a usable mathematical
+promise.
+
+---
+
+### proof shape to practice
+
+when working with suprema, a common proof pattern is to show two facts:
+
+> **Claim.** To prove that a number $u$ is $\sup S$, it is enough to show:
+>
+> 1. $u$ is an upper bound for $S$.
+> 2. Every number smaller than $u$ fails to be an upper bound for $S$.
+
+the first part says $u$ is high enough. the second part says it is not unnecessarily
+higher than it needs to be.
+
+that second sentence is often where the real work is. you usually pick an arbitrary
+$v < u$ and then produce some element of $S$ with
+
+$$v < x \le u.$$
+
+that single move shows $v$ was too small to control the set.
+
+I find this worth pausing on because it is a proof shape that comes back a lot. analysis
+often proves an extremal statement by showing that anything slightly smaller or slightly
+larger breaks.
+
+---
+
+### what this leaves out
+
+this note only sets the scaffold.
+
+the next pass can add:
+
+- examples from $\mathbb{Q}$ where the property fails
+- the connection to decimal expansions and gaps
+- the monotone convergence theorem as a first real application
+- exercises that distinguish supremum from maximum and upper bound

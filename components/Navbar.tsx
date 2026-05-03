@@ -14,7 +14,8 @@ export default function Navbar() {
     pathname === "/graph" ||
     pathname.startsWith("/abstract-linear-algebra") ||
     pathname.startsWith("/combinatorics") ||
-    pathname.startsWith("/math-314")
+    pathname.startsWith("/math-314") ||
+    pathname.startsWith("/real-analysis")
   ) return null;
 
   const isNote = false;
