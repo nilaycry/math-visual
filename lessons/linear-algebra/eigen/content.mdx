@@ -3,13 +3,13 @@ title: "the directions a matrix can't change"
 description: "what a matrix actually does to space"
 tags: ["linear algebra"]
 displayTag: "eigenvalues"
-date: "2026-04-13"
+date: "2026-04-19"
 rigorousNote: "eigenvalues-and-eigenvectors"
 related:
   - slug: "null-space"
     note: "a zero eigenvalue means its eigenvectors are exactly the directions that get erased"
   - slug: "svd"
-    note: "SVD extends this idea to matrices that don't have eigenvectors"
+    note: "SVD asks a more flexible question when eigenvectors are not enough"
 ---
 
 import EigenSketch from '@/components/sketches/EigenSketch'
@@ -22,13 +22,18 @@ times that same vector. it seems arbitrary. why would this particular equation m
 ### the geometric picture
 
 take a 2×2 matrix and feed it every point on the unit circle. the output is an ellipse. most vectors get
-knocked off their original direction entirely. but the eigenvectors don't. they
-sit exactly along the axes of that ellipse. the matrix can only stretch them,
-not rotate them. λ is just how much.
+knocked off their original line entirely. but the eigenvectors don't. they are the
+input directions whose output still lies on the same line. the matrix can stretch
+them, shrink them, or flip them, but it does not turn them into a different direction.
+λ is just the signed scaling factor.
+
+this is not the same thing as saying eigenvectors are the axes of the output ellipse.
+that cleaner ellipse-axis story belongs to SVD. eigenvectors are about invariant lines:
+directions the matrix sends back onto themselves.
 
 the gray circle is the input. the purple ellipse is the output. the colored
-lines are eigenvectors: they pass through the transformation unchanged in
-direction. click anywhere on the unit circle to place a vector and watch where the matrix sends it. when you land on an eigenvector, the output arrow points in exactly the same direction as the input, stretched or shrunk but not rotated. any other starting point, the output swings to a different direction entirely.
+lines are eigenvector lines: they pass through the transformation unchanged as
+lines. click anywhere on the unit circle to place a vector and watch where the matrix sends it. when you land on an eigenvector, the output arrow stays on the same line as the input, possibly pointing the opposite way if the eigenvalue is negative. any other starting point, the output swings to a different line entirely.
 
 <div className="not-prose my-8">
   <EigenSketch />

@@ -1,0 +1,66 @@
+---
+title: "why the central limit theorem keeps showing up"
+description: "how repeated averaging creates stable, approximately normal behavior"
+tags: ["probability"]
+displayTag: "PART 7: LIMITS"
+date: "2026-05-09"
+related:
+  - slug: "confidence-intervals-and-tests-are-procedures"
+    note: "many inference procedures depend on the sample mean becoming predictable"
+---
+
+import CLTSketch from '@/components/sketches/CLTSketch'
+
+the central limit theorem has a reputation for being both important and annoyingly abstract.
+
+the reason it keeps returning is that averages are one of the few ways randomness becomes reliably structured.
+
+---
+
+### the statement, in spirit
+
+if you take many independent observations from the same population and average them, the sample mean becomes more stable as the sample size grows.
+
+more specifically, after centering and rescaling, the distribution of that average approaches a normal shape under broad conditions.
+
+the symbolic version matters later. the first picture is enough for now:
+
+<div className="math-highlight">sample means become less wild, and their distribution becomes more regular</div>
+
+---
+
+### the picture
+
+the striking part of the theorem is not that normal distributions exist. it is that very non-normal raw data can still produce nearly normal averages.
+
+<div className="not-prose my-8">
+  <CLTSketch />
+</div>
+
+this is why the theorem feels like a rescue mission. it takes messy source behavior and replaces it with a much more manageable large-sample picture.
+
+---
+
+### why averaging helps
+
+averaging forces many independent fluctuations to interact. unusually high draws can be offset by unusually low ones. no single observation gets to dominate forever if the sample is large enough and the population is well-behaved enough.
+
+that does not mean the original population stops mattering. it still controls the center and variance. it means the *shape* of the sampling distribution becomes less sensitive to the original details.
+
+---
+
+### why statistics leans on it so heavily
+
+confidence intervals, standard errors, z-tests, and many asymptotic arguments are easier because the sample mean eventually behaves in a nearly normal way.
+
+that does not make every interval or test automatically trustworthy. it does explain why introductory statistics keeps returning to averages.
+
+the sample mean is one of the cleanest bridges from raw randomness to usable inference.
+
+---
+
+### what this does not cover yet
+
+this lesson is avoiding formal conditions and proofs. heavy tails, dependence, and small-sample behavior all complicate the story.
+
+for now, the central fact is enough: the theorem keeps showing up because repeated averaging turns many difficult distributions into one familiar large-sample picture.

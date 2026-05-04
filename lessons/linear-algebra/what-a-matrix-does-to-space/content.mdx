@@ -1,0 +1,102 @@
+---
+title: "what a matrix does to space"
+description: "the opening picture: columns, grids, and transformations"
+tags: ["linear algebra"]
+displayTag: "transforms"
+date: "2026-04-11"
+related:
+  - slug: "vectors-columns-rows"
+    note: "after the grid picture, this separates vectors from their coordinate descriptions"
+  - slug: "null-space"
+    note: "once a matrix acts on space, null space is the part of the input it collapses"
+---
+
+import MatrixActionSketch from '@/components/sketches/MatrixActionSketch'
+
+the most useful first sentence about a matrix is not "a matrix is a rectangular array
+of numbers." that sentence is true, but it hides the point.
+
+a matrix is an action on space.
+
+it takes an input vector and sends it to an output vector. if you feed it every point
+in the plane, it moves the whole plane at once. lines stay lines. the origin stays fixed.
+the grid may stretch, shear, rotate, or collapse, but the movement has a rigid kind of
+honesty: once you know where the basis vectors go, you know everything.
+
+---
+
+### the columns tell you where the basis goes
+
+Take a matrix
+
+<div className="math-highlight">A = [ a  b ; c  d ]</div>
+
+The first column is where `e1 = (1,0)` goes:
+
+<div className="math-highlight">A e_1 = [ a ; c ]</div>
+
+The second column is where `e2 = (0,1)` goes:
+
+<div className="math-highlight">A e_2 = [ b ; d ]</div>
+
+That is not a coincidence. It is the reason columns matter. The columns are the
+images of the standard basis vectors.
+
+Once those two arrows are known, every other vector follows. If
+`x = x1 e1 + x2 e2`, then
+
+<div className="math-highlight">A x = x_1 A e_1 + x_2 A e_2</div>
+
+The matrix does not need a separate rule for every point. It only needs the images
+of the basis vectors, then linearity fills in the rest.
+
+---
+
+### the sketch
+
+Move the entries of the matrix and watch the blue grid. The teal arrow is the first
+column, where `e1` lands. The orange arrow is the second column, where `e2` lands.
+
+<div className="not-prose my-8">
+  <MatrixActionSketch />
+</div>
+
+If the two column arrows point in genuinely different directions, their combinations
+fill the plane. If they line up, the whole plane collapses onto a line. If one column
+vanishes, one basis direction has been erased.
+
+That is the geometric source of a lot of later vocabulary. Rank asks how many output
+directions survive. The null space asks which input directions are sent to zero.
+Invertibility asks whether the motion can be undone.
+
+---
+
+### multiplication means doing actions in sequence
+
+Matrix multiplication is usually taught as a bookkeeping rule. Row times column, entry
+by entry. That is one way to compute it, but it is not the best way to remember what
+it is doing.
+
+If `B` acts first, and `A` acts second, then `AB` is the single action that does both:
+
+<div className="math-highlight">(AB)x = A(Bx)</div>
+
+The order matters because actions happen in order. Rotate then stretch is not the same
+as stretch then rotate.
+
+That is why matrix multiplication feels less arbitrary once you think in transformations.
+The strange-looking formula is the coordinate version of composition.
+
+---
+
+### what this sets up
+
+The rest of this section keeps asking the same question from different angles:
+
+- what does a row measure?
+- what do the columns build?
+- what does the matrix erase?
+- what outputs can it reach?
+- what directions does it preserve?
+
+Most of first-course linear algebra is hiding somewhere in those five questions.

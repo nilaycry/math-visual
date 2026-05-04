@@ -1,0 +1,91 @@
+---
+title: "when eigenvectors are enough"
+description: "why diagonalization works when it works, and why SVD has to take over"
+tags: ["linear algebra"]
+displayTag: "connection"
+date: "2026-04-20"
+type: "connection"
+related:
+  - slug: "eigen"
+    note: "this starts from the invariant directions in the eigen lesson"
+  - slug: "svd"
+    note: "SVD is what remains reliable when eigenvectors are not enough"
+---
+
+eigenvectors are the dream case. a matrix may do complicated things to most vectors,
+but along an eigenvector it behaves like simple scaling:
+
+<div className="math-highlight">Av = lambda v</div>
+
+If you have enough eigenvectors to form a basis, the whole transformation becomes easy
+to understand. Every input vector can be decomposed into eigenvector directions, and
+the matrix scales each direction separately.
+
+That is diagonalization.
+
+---
+
+### what diagonalization is saying
+
+Suppose `A` has a basis of eigenvectors `v1, ..., vn`. Put those eigenvectors into
+a matrix `P`. Then
+
+<div className="math-highlight">A = P D P^{-1}</div>
+
+where `D` is diagonal and contains the eigenvalues.
+
+Read from right to left, this says:
+
+- `P^{-1}` rewrites the input in eigenvector coordinates
+- `D` scales each eigenvector coordinate independently
+- `P` moves back to the original coordinates
+
+So diagonalization is not just a computational trick. It means the matrix has a
+coordinate system where the action separates into independent one-dimensional scalings.
+
+---
+
+### why this can fail
+
+Not every matrix has enough eigenvectors.
+
+A rotation of the plane by 90 degrees has no real eigenvectors. It moves every real
+line to a different line. There is no real direction it only scales.
+
+Some matrices have repeated eigenvalues but too few independent eigenvectors. These
+are defective. They have invariant directions, but not enough to make a coordinate
+system out of them.
+
+That is the limitation of eigen-analysis: it only explains the matrix through
+directions that the matrix sends back onto themselves.
+
+---
+
+### the symmetric miracle
+
+Symmetric matrices are special. If `A = A^T`, then the spectral theorem says `A` has
+an orthonormal basis of eigenvectors.
+
+That is why symmetric matrices are so pleasant. Their eigenvectors are not merely
+available; they are perpendicular and complete. The matrix really does become
+"rotate into a good basis, scale independently, rotate back."
+
+This is also why `A^T A` shows up in SVD. No matter what `A` is, the matrix `A^T A`
+is symmetric and positive semidefinite. It has the eigenvectors we wish `A` itself
+always had.
+
+---
+
+### why SVD takes over
+
+SVD changes the question.
+
+Eigenvectors ask for input directions that come back along the same line after applying
+`A`. Singular vectors ask for input directions that become perpendicular output
+directions after applying $A$.
+
+That weaker request always succeeds.
+
+So eigenvectors are enough when the matrix has a full eigenbasis, especially in the
+symmetric case. SVD is the more durable story when the matrix rotates too much, loses
+dimensions, is rectangular, or simply refuses to be diagonalized.

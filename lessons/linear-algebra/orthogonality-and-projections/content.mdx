@@ -2,72 +2,106 @@
 title: "orthogonality and projections"
 description: "the geometry behind least squares and decomposition"
 tags: ["linear algebra"]
-date: "2026-04-16"
-draft: true
+displayTag: "geometry"
+date: "2026-04-15"
+related:
+  - slug: "dot-product-and-matrix-multiplication"
+    note: "projection is the dot product becoming geometry"
+  - slug: "what-a-matrix-can-reach"
+    note: "least squares is projection onto the column space"
 ---
 
-two vectors are orthogonal if their dot product is zero. that's the definition.
-but there's a lot packed into it, and the projection that comes with it is one
-of the most useful geometric ideas in all of linear algebra.
+import ProjectionSketch from '@/components/sketches/ProjectionSketch'
 
----
+two vectors are orthogonal if their dot product is zero. that definition is short
+enough to memorize and easy enough to use. it also hides why the idea is so powerful.
 
-### what orthogonality actually means geometrically
+orthogonality is the geometry of not contributing to a direction.
 
-[TODO: perpendicular in the geometric sense. the shadow picture: if a · b = 0,
-the shadow of a onto b has zero length. they contribute nothing to each other's
-direction. this is the right way to think about "independence" in a geometric sense,
-stronger than linear independence.]
+If `u dot v = 0`, then `u` has no shadow along `v`. Moving in the `u` direction
+does not move you forward or backward along `v`. That is stronger than just being
+different directions. It is a clean separation of information.
 
 ---
 
 ### projecting onto a vector
 
-[TODO: given a vector b and a direction u, the projection of b onto u is the
-component of b in the direction of u. formula: proj = (b·u / u·u) u.
-if u is a unit vector this simplifies to (b·u)u.
-the residual b - proj is orthogonal to u. this is the key fact.]
+Suppose you have a vector `b` and a nonzero direction `u`. The projection of `b` onto
+the line spanned by `u` is the part of `b` that lies in that direction:
 
-<div className="math-highlight">projᵤ(b) = (b·u / u·u) u</div>
+<div className="math-highlight">proj_u(b) = ((b dot u) / (u dot u)) u</div>
+
+If `u` has length 1, this becomes
+
+<div className="math-highlight">proj_u(b) = (b dot u) u</div>
+
+The leftover piece
+
+<div className="math-highlight">b - proj_u(b)</div>
+
+is perpendicular to `u`. That is the whole point. Projection splits a vector into
+one part along the subspace and one part orthogonal to it.
+
+---
+
+### the closest point picture
+
+Move the point `b`. The teal vector is its projection onto the blue line. The orange
+dashed segment is the error.
+
+<div className="not-prose my-8">
+  <ProjectionSketch />
+</div>
+
+The shortest error meets the line at a right angle. If the error were not perpendicular,
+you could slide a little farther along the line and make it shorter.
+
+That one sentence is the geometric heart of least squares.
 
 ---
 
 ### projecting onto a subspace
 
-[TODO: the natural extension. given a subspace (spanned by some columns of a
-matrix A), the projection of b onto that subspace is the closest point in the
-subspace to b. closest means the residual is orthogonal to every vector in the
-subspace. this gives Aᵀ(b - Ax) = 0, which rearranges to the normal equations:
-AᵀAx = Aᵀb.
+Now replace the line with a subspace `W`. The projection of `b` onto `W` is the closest
+vector in `W` to `b`.
 
-pause here moment: this is where least squares comes from. when Ax = b has no
-solution (overdetermined system), the best you can do is minimize the residual.
-the minimum is exactly the projection.]
+If the columns of a matrix `A` span `W`, then every vector in `W` has the form `Ax`.
+So finding the closest point in `W` means finding the `x` that makes `Ax` as close as
+possible to `b`.
 
-<div className="math-highlight">AᵀAx = Aᵀb</div>
+At the best choice, the residual is orthogonal to every column of `A`:
 
----
+<div className="math-highlight">A^T(b - Ax) = 0</div>
 
-### orthogonal bases and why they're nice
+Rearranging gives the normal equations:
 
-[TODO: if you have an orthogonal basis, projecting onto a subspace becomes
-trivial — each coordinate is just a dot product with the corresponding basis vector.
-no matrix inversion needed. this is why orthogonal bases are so useful in practice.
-Gram-Schmidt is the process of building one from any basis.]
+<div className="math-highlight">A^T A x = A^T b</div>
+
+This is not a formula that appears from nowhere. It is the condition "the error is
+perpendicular to every direction you were allowed to use."
 
 ---
 
-### the picture
+### why orthogonal bases are nice
 
-[TODO: sketch idea — 2D or 3D. show a vector b, a subspace (line or plane),
-the projection onto it, and the residual perpendicular to it. interactive:
-drag b around, watch the projection update. Type B sketch.]
+If a basis is orthogonal, projecting becomes almost embarrassingly simple. You can
+measure each coordinate with a dot product, one direction at a time, without solving
+a tangled system.
+
+That is why Gram-Schmidt exists. It takes a basis that spans the right subspace and
+turns it into an orthogonal basis for the same subspace. The span stays the same, but
+the coordinates become easier to read.
+
+This also explains why SVD and Fourier series feel so clean. Both are built around
+orthogonal directions, so the pieces do not interfere with one another.
 
 ---
 
 ### what this connects to
 
-[TODO: least squares regression is projection onto the column space of the
-design matrix. PCA finds an orthogonal basis for the directions of maximum
-variance. SVD builds on orthogonal decompositions. Fourier series is projection
-onto an orthogonal basis of sinusoids — point to that lesson.]
+Least squares regression is projection onto the column space of the design matrix.
+PCA chooses orthogonal directions that capture the most variance. SVD builds a whole
+matrix out of orthogonal input and output directions.
+
+The next missing idea is the column space itself: what outputs a matrix can actually
+reach.

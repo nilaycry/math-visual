@@ -23,6 +23,14 @@ const ResNetSketch = dynamic(() => import("@/components/sketches/ResNetSketch"),
 const PrefaceSketch = dynamic(() => import("@/components/sketches/PrefaceSketch"), { ssr: false });
 const WeightMatrixSketch = dynamic(() => import("@/components/sketches/WeightMatrixSketch"), { ssr: false });
 const NetworkAnatomySketch = dynamic(() => import("@/components/sketches/NetworkAnatomySketch"), { ssr: false });
+const ExpectationSketch = dynamic(() => import("@/components/sketches/ExpectationSketch"), { ssr: false });
+const ConditioningSketch = dynamic(() => import("@/components/sketches/ConditioningSketch"), { ssr: false });
+const SamplingSketch = dynamic(() => import("@/components/sketches/SamplingSketch"), { ssr: false });
+const CLTSketch = dynamic(() => import("@/components/sketches/CLTSketch"), { ssr: false });
+const ConfidenceIntervalSketch = dynamic(() => import("@/components/sketches/ConfidenceIntervalSketch"), { ssr: false });
+const MatrixActionSketch = dynamic(() => import("@/components/sketches/MatrixActionSketch"), { ssr: false });
+const ProjectionSketch = dynamic(() => import("@/components/sketches/ProjectionSketch"), { ssr: false });
+const ReachabilitySketch = dynamic(() => import("@/components/sketches/ReachabilitySketch"), { ssr: false });
 
 const components = {
   FourierSketch,
@@ -40,6 +48,14 @@ const components = {
   PrefaceSketch,
   WeightMatrixSketch,
   NetworkAnatomySketch,
+  ExpectationSketch,
+  ConditioningSketch,
+  SamplingSketch,
+  CLTSketch,
+  ConfidenceIntervalSketch,
+  MatrixActionSketch,
+  ProjectionSketch,
+  ReachabilitySketch,
   NetworkAnatomy: NetworkAnatomySketch,
   MatrixVectorVisual,
 };
@@ -91,6 +107,7 @@ export default async function LessonPage({
   const currentIndex = allLessons.findIndex((l) => l.slug === params.slug);
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+  const isProbabilityLesson = lesson.subject === "probability";
 
   // subject directory name maps directly to URL (e.g. "linear-algebra" -> "/linear-algebra")
   const backHref = lesson.subject ? `/${lesson.subject}` : "/";
@@ -125,9 +142,70 @@ export default async function LessonPage({
         .rigorous-link:hover .rigorous-border {
           border-left-color: #9B7FDD !important;
         }
+        .prob-lesson-shell::before {
+          content: "";
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(circle at 14% 18%, rgba(232,160,32,0.05) 0%, rgba(232,160,32,0) 22%),
+            radial-gradient(circle at 84% 30%, rgba(93,202,165,0.04) 0%, rgba(93,202,165,0) 20%),
+            radial-gradient(circle at 55% 75%, rgba(96,165,250,0.03) 0%, rgba(96,165,250,0) 24%);
+          z-index: 0;
+        }
+        .prob-lesson-shell::after {
+          content: "";
+          position: fixed;
+          inset: 0;
+          opacity: 0.14;
+          pointer-events: none;
+          background-image: radial-gradient(rgba(255,255,255,0.15) 0.7px, transparent 0.7px);
+          background-size: 26px 26px;
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0.26), rgba(0,0,0,0.08) 28%, rgba(0,0,0,0.18) 72%, rgba(0,0,0,0.3));
+          -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.26), rgba(0,0,0,0.08) 28%, rgba(0,0,0,0.18) 72%, rgba(0,0,0,0.3));
+          z-index: 0;
+        }
+        .prob-tag {
+          color: #d0a158 !important;
+        }
+        .prob-divider {
+          position: relative;
+        }
+        .prob-divider::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          width: 124px;
+          bottom: -1px;
+          height: 1px;
+          background: repeating-linear-gradient(90deg, rgba(232,160,32,0.45) 0 2px, rgba(232,160,32,0) 2px 13px);
+        }
+        .prob-prose .math-highlight {
+          background: linear-gradient(135deg, #1d1624 0%, #141016 100%);
+          border: 1px solid rgba(232,160,32,0.18);
+          border-left: 3px solid #e8a020;
+          color: #f4dfbf;
+          box-shadow: 0 18px 40px -34px rgba(232,160,32,0.34);
+        }
+        .prob-prose h3 {
+          color: #f4efe3;
+        }
+        .prob-prose p {
+          color: #b5b0a6;
+        }
       `}</style>
 
-      <div style={{ minHeight: "100vh", backgroundColor: "#0a0a0a", color: "#e8e8e8" }}>
+      <div
+        className={isProbabilityLesson ? "prob-lesson-shell" : undefined}
+        style={{
+          minHeight: "100vh",
+          background: isProbabilityLesson
+            ? "radial-gradient(circle at top, rgba(26, 22, 15, 0.52) 0%, rgba(10,10,10,1) 38%), #0a0a0a"
+            : "#0a0a0a",
+          color: "#e8e8e8",
+          position: "relative",
+        }}
+      >
         {/* ── TWO-COLUMN LAYOUT ── */}
         <div
           className="lesson-layout"
@@ -138,6 +216,8 @@ export default async function LessonPage({
             display: "flex",
             gap: 80,
             alignItems: "flex-start",
+            position: "relative",
+            zIndex: 1,
           }}
         >
           {/* ── MAIN PROSE COLUMN ── */}
@@ -155,6 +235,7 @@ export default async function LessonPage({
                 {lesson.tags.map((tag) => (
                   <span
                     key={tag}
+                    className={isProbabilityLesson ? "prob-tag" : undefined}
                     style={{
                       fontSize: 11,
                       fontWeight: 400,
@@ -184,11 +265,14 @@ export default async function LessonPage({
               <p style={{ fontSize: 16, color: "#888", lineHeight: 1.6, margin: 0 }}>
                 {lesson.description}
               </p>
-              <hr style={{ border: "none", borderTop: "1px solid #1e1e1e", marginTop: 32 }} />
+              <hr
+                className={isProbabilityLesson ? "prob-divider" : undefined}
+                style={{ border: "none", borderTop: "1px solid #1e1e1e", marginTop: 32 }}
+              />
             </header>
 
             {/* MDX Content */}
-            <article className="prose">{content}</article>
+            <article className={`prose${isProbabilityLesson ? " prob-prose" : ""}`}>{content}</article>
 
             {/* Prev / Next navigation */}
             <nav
@@ -197,7 +281,7 @@ export default async function LessonPage({
                 justifyContent: "space-between",
                 marginTop: 64,
                 paddingTop: 32,
-                borderTop: "1px solid #1a1a1a",
+                borderTop: isProbabilityLesson ? "1px solid rgba(232,160,32,0.12)" : "1px solid #1a1a1a",
               }}
             >
               {prevLesson ? (
@@ -255,7 +339,7 @@ export default async function LessonPage({
                 <span style={{ fontSize: 10, color: "#444", textTransform: "uppercase", letterSpacing: "0.12em", display: "block", marginBottom: 6 }}>
                   type
                 </span>
-                <span style={{ fontSize: 12, color: "#888", letterSpacing: "0.04em", fontWeight: 500, background: "rgba(255,255,255,0.03)", padding: "4px 10px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.05)" }}>
+                <span style={{ fontSize: 12, color: isProbabilityLesson ? "#d6c3a2" : "#888", letterSpacing: "0.04em", fontWeight: 500, background: isProbabilityLesson ? "rgba(232,160,32,0.06)" : "rgba(255,255,255,0.03)", padding: "4px 10px", borderRadius: 6, border: isProbabilityLesson ? "1px solid rgba(232,160,32,0.14)" : "1px solid rgba(255,255,255,0.05)" }}>
                   {lesson.lessonType}
                 </span>
               </div>

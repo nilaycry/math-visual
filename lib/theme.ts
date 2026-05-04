@@ -18,6 +18,16 @@ export const TOPIC_COLORS: Record<string, string> = {
   "PART 8: DEEP ARCHITECTURES": "#14b8a6",  // Green
   "PART 9: SIGNAL PROCESSING": "#f59e0b",   // Orange-amber
   "PREFACE": "#a1a1aa", // Zinc
+
+  // Probability
+  "PART 1: FOUNDATIONS": "#5B8DD9",
+  "PART 2: DISTRIBUTIONS": "#5DCAA5",
+  "PART 3: EXPECTATION": "#E8A020",
+  "PART 4: VARIANCE": "#E05A7A",
+  "PART 5: CONDITIONING": "#9B7FDD",
+  "PART 6: SAMPLING": "#14b8a6",
+  "PART 7: LIMITS": "#60a5fa",
+  "PART 8: INFERENCE": "#f97316",
 };
 
 export function getThemeAccent(tag: string, defaultColor: string = "#7F77DD"): string {

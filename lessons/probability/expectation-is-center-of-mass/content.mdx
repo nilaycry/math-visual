@@ -1,0 +1,76 @@
+---
+title: "expectation is center of mass"
+description: "weighted average as balance, before it becomes a formula to memorize"
+tags: ["probability"]
+displayTag: "PART 3: EXPECTATION"
+date: "2026-05-05"
+related:
+  - slug: "variance-measures-deviation-with-structure"
+    note: "after the center is clear, the next question is how far values sit from it"
+---
+
+import ExpectationSketch from '@/components/sketches/ExpectationSketch'
+
+expectation is usually introduced as a formula. that is backwards.
+
+the formula matters, but it is compressing a picture that is easier to trust if you see it first.
+
+---
+
+### the setup
+
+suppose a random variable `X` can take values `x_1, x_2, ..., x_n` with probabilities `p_1, p_2, ..., p_n`.
+
+then the expectation is
+
+<div className="math-highlight">E[X] = Σ x_i p_i</div>
+
+that expression is not arbitrary. it is the same calculation you would do to find the balance point of weighted masses sitting on a number line.
+
+---
+
+### the picture
+
+each possible value of `X` is a location. its probability is the weight placed there.
+
+<div className="not-prose my-8">
+  <ExpectationSketch />
+</div>
+
+when more weight shifts to the right, the balance point shifts right. when weight collects on the left, the balance point moves left. expectation is not "the value you are guaranteed to get." it is the center that makes the weighted picture balance.
+
+that is why expectation can land somewhere the variable never actually takes. if a distribution puts equal mass on `0` and `1`, the expectation is `0.5`, even though `0.5` never occurs. balance points do not need to coincide with occupied positions.
+
+---
+
+### linearity is the real superpower
+
+the deepest reason expectation shows up everywhere is not just that it is interpretable. it also behaves beautifully with addition:
+
+<div className="math-highlight">E[X + Y] = E[X] + E[Y]</div>
+
+this does not require independence. that is one of the first places probability becomes more generous than intuition expects.
+
+when you average a sum, you can split the average apart. later, this is what makes sample means, estimators, and many limit results manageable at all.
+
+---
+
+### why it matters
+
+expectation is the reference point for almost every later quantity.
+
+- variance measures distance from it
+- covariance compares joint deviation around it
+- estimators get judged by where their expectation lands
+
+if you keep the balance-point picture alive, the formulas stay connected to something visible.
+
+---
+
+### what this does not cover yet
+
+this lesson is staying discrete on purpose and is not dwelling on integrals yet. the continuous formula is the same idea with infinitely many weighted locations:
+
+<div className="math-highlight">E[X] = ∫ x f(x) dx</div>
+
+the picture does not change. only the bookkeeping does.

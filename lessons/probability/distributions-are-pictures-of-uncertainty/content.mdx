@@ -1,0 +1,67 @@
+---
+title: "distributions are pictures of uncertainty"
+description: "pmfs, pdfs, and cdfs as different views of the same uncertainty"
+tags: ["probability"]
+displayTag: "PART 2: DISTRIBUTIONS"
+date: "2026-05-04"
+related:
+  - slug: "randomness-as-a-map"
+    note: "the distribution is what you get after a random variable maps outcomes to values"
+  - slug: "expectation-is-center-of-mass"
+    note: "once the shape is visible, the next step is locating its balance point"
+---
+
+after you choose a random variable, the next question is not "what formula do i use?"
+
+it is: what values does this variable tend to take, and how much probability sits on each?
+
+---
+
+### three views of the same object
+
+for a discrete random variable, a **probability mass function** lists point probabilities:
+
+<div className="math-highlight">p(x) = P(X = x)</div>
+
+for a continuous random variable, a **probability density function** is different. the density is not itself a probability at a single point. probabilities come from area:
+
+<div className="math-highlight">P(a ≤ X ≤ b) = ∫[a,b] f(x) dx</div>
+
+the **cumulative distribution function** works for both cases:
+
+<div className="math-highlight">F(x) = P(X ≤ x)</div>
+
+these are not competing definitions. they are different ways of looking at the same uncertainty.
+
+---
+
+### what each picture is good for
+
+the pmf is local. it answers "what happens exactly at this value?"
+
+the pdf is geometric. it answers "where is the density concentrated?"
+
+the cdf is accumulative. it answers "how much probability has piled up by the time i get here?"
+
+that is why the cdf often feels calmer than the density. it can only move upward. it does not oscillate between local spikes and empty regions. it records accumulation directly.
+
+---
+
+### the useful distinction
+
+students often say "the probability is high here" when they really mean one of two different things.
+
+- in a discrete setting, they may mean the point mass is high there
+- in a continuous setting, they may mean the density is high there
+
+those are not interchangeable statements. continuous variables do not assign positive probability to single points in the same way discrete variables do.
+
+if you keep that distinction clear early, a lot of later confusion around densities disappears.
+
+---
+
+### what this does not cover yet
+
+this lesson is deliberately skipping named families like binomial or normal. those matter, but they are examples of the bigger idea, not the idea itself.
+
+for now, the goal is to see a distribution as a shape of uncertainty, and the pmf, pdf, and cdf as different windows onto that shape.

@@ -1,0 +1,84 @@
+---
+title: "randomness as a map"
+description: "outcomes, events, and random variables as measurement rules rather than mysterious numbers"
+tags: ["probability"]
+displayTag: "PART 1: FOUNDATIONS"
+date: "2026-05-03"
+related:
+  - slug: "distributions-are-pictures-of-uncertainty"
+    note: "once a random variable exists, the next question is what shape its values take"
+---
+
+when a probability course says "let `X` be the number of heads," it can sound like the experiment itself has already become a number.
+
+it hasn't. the number comes later.
+
+first you have an experiment. then that experiment gives you a set of possible outcomes. only after that do you decide what you want to measure.
+
+---
+
+### the setup
+
+imagine a simple experiment: flip two coins.
+
+the experiment does not yet give you "the number of heads." it gives you one result from a small list of possible results.
+
+in this case, the set of possible outcomes is:
+
+<div className="math-highlight">&#123;HH, HT, TH, TT&#125;</div>
+
+that is the first layer. the experiment comes with a set of possible outcomes, and when you actually perform it, one of those outcomes happens.
+
+that is different from a measurement. `HH` is an outcome. `2` is a measurement you might later attach to it.
+
+probability already has things to say at this level. you can ask whether you got at least one head. you can ask whether the flips matched. those are yes-or-no questions about the outcome, and each one picks out part of the outcome space.
+
+the next layer is where the numbers appear.
+
+and this is exactly why the extra layer is needed. the same experiment can be measured in several different ways.
+
+you could count heads. you could record whether there was at least one head. you could record whether the two flips matched. same underlying experiment. different quantity each time.
+
+probability needs a way to say which quantity you decided to look at. that is what the random variable is for.
+
+---
+
+### the map
+
+let `X` be the number of heads.
+
+then:
+
+<div className="math-highlight">X(HH) = 2, X(HT) = 1, X(TH) = 1, X(TT) = 0</div>
+
+this is what a random variable is. it is not "the randomness itself." it is the measurement rule you chose.
+
+it takes each possible outcome and assigns it a value.
+
+the distinction is small, but it matters. first there is the world of outcomes. then there is the measured quantity living on top of it.
+
+when a course moves too fast, those layers get collapsed together. then the formulas start to feel like they are manipulating numbers in the dark. they aren't. the numbers came from a map.
+
+---
+
+### why this matters
+
+once that split is clear, later ideas stop sounding arbitrary.
+
+a distribution is not attached directly to "two coin flips" in some vague global sense. it is attached to the values produced by the measurement you chose.
+
+if `X` counts heads, you get one distribution. if `Y` records whether the flips matched, you get a different one.
+
+same experiment underneath. different map, different probabilistic object.
+
+that is why this definition exists. not to make the notation fancy. to separate the raw source of randomness from the particular feature of it that you want to study.
+
+expectation and variance come later. when they do, they will belong to the random variable, not to the experiment in the abstract.
+
+---
+
+### what this does not cover yet
+
+this lesson is avoiding formal probability axioms on purpose. it is also postponing density functions and continuous random variables.
+
+for now, the important move is simpler: the experiment is not the number. the number is something you build on top of the experiment so the uncertainty becomes measurable.

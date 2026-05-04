@@ -3,8 +3,7 @@ title: "rotate, stretch, rotate"
 description: "the three hidden steps inside every matrix"
 tags: ["linear algebra"]
 displayTag: "decomposition"
-date: "2026-04-15"
-rigorousNote: "singular-value-decomposition"
+date: "2026-04-21"
 related:
   - slug: "eigen"
     note: "eigendecomposition is what SVD reduces to when the matrix is symmetric"
@@ -14,9 +13,14 @@ related:
 
 import SVDSketch from '@/components/sketches/SVDSketch'
 
-in the eigen lesson I said a matrix turns the unit circle into an ellipse, and eigenvectors sit along the ellipse's axes. that's the right picture, but it only works cleanly when the matrix has two real eigenvectors. rotation has none. most matrices don't have the right eigenvectors to tell the full story.
+Every 2D matrix sends the unit circle to an ellipse or to a collapsed version of one.
+That ellipse has axes. The input directions that land on those axes are usually not
+eigenvectors.
 
-SVD is the fuller story. it works for every matrix, and when I first saw it I found the fact that it always works more surprising than the decomposition itself.
+That is the point of SVD. Eigenvectors ask for directions that come back along the
+same line. SVD asks for directions that become the clean axes of the output ellipse.
+That request is more flexible, so it works for every matrix. When I first saw SVD, I
+found the fact that it always works more surprising than the decomposition itself.
 
 ---
 

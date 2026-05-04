@@ -1,0 +1,80 @@
+---
+title: "conditioning changes the world"
+description: "conditional probability, independence, and bayes as reweighted space"
+tags: ["probability"]
+displayTag: "PART 5: CONDITIONING"
+date: "2026-05-07"
+related:
+  - slug: "sampling-is-where-statistics-begins"
+    note: "sampling language becomes much easier once conditional structure feels geometric"
+---
+
+import ConditioningSketch from '@/components/sketches/ConditioningSketch'
+
+conditional probability is often taught as a formula you plug into after the fact.
+
+the better picture is harsher and cleaner: once you condition, you are not in the old world anymore.
+
+---
+
+### the formula
+
+if `P(B) > 0`, then
+
+<div className="math-highlight">P(A | B) = P(A ∩ B) / P(B)</div>
+
+students usually memorize the division and move on. what the denominator is doing is the important part.
+
+conditioning on `B` means only outcomes inside `B` are still visible. the old sample space gets cut down, and then the remaining probabilities are rescaled so they add up to `1` again.
+
+---
+
+### the picture
+
+the numerator says how much of the old world belonged to both `A` and `B`.
+
+the denominator says how much world is left after restricting to `B`.
+
+<div className="not-prose my-8">
+  <ConditioningSketch />
+</div>
+
+once that restriction happens, the proportions inside `B` matter more than the absolute areas from the original picture.
+
+this is why conditioning often feels unintuitive at first. it changes the reference frame.
+
+---
+
+### independence is the case where nothing changes
+
+events `A` and `B` are independent when learning one does not change the probability of the other:
+
+<div className="math-highlight">P(A | B) = P(A)</div>
+
+equivalently,
+
+<div className="math-highlight">P(A ∩ B) = P(A)P(B)</div>
+
+that equation is not the definition you should start with. the better starting sentence is: knowledge of `B` leaves the probability of `A` untouched.
+
+the product rule is what that sentence turns into algebraically.
+
+---
+
+### where bayes lives
+
+bayes' rule is just the same relationship solved in the other direction:
+
+<div className="math-highlight">P(A | B) = P(B | A)P(A) / P(B)</div>
+
+it is useful because it tells you how to reverse the conditioning when one direction is easier to model than the other.
+
+but the spirit is unchanged. conditioning still means the world has been cut down and renormalized.
+
+---
+
+### what this does not cover yet
+
+this lesson is keeping everything event-based. conditional expectation is a deeper version of the same idea, and it deserves its own treatment later.
+
+for now, the main shift is enough: conditioning is not a decorative extra label. it changes the space you are living in.

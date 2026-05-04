@@ -1,0 +1,65 @@
+---
+title: "confidence intervals and tests are procedures"
+description: "what repeated-sampling inference is actually claiming, and what it is not"
+tags: ["probability"]
+displayTag: "PART 8: INFERENCE"
+date: "2026-05-10"
+related:
+  - slug: "sampling-is-where-statistics-begins"
+    note: "intervals and tests only make sense once repeated sampling is the background picture"
+  - slug: "why-the-central-limit-theorem-keeps-showing-up"
+    note: "large-sample normality is one reason these procedures become usable"
+---
+
+import ConfidenceIntervalSketch from '@/components/sketches/ConfidenceIntervalSketch'
+
+inference is where probability language starts getting misread in very specific ways.
+
+the fix is not more slogans. it is remembering that a confidence interval or hypothesis test is a rule applied repeatedly to fresh samples.
+
+---
+
+### confidence intervals are about the method
+
+a `95%` confidence interval does **not** mean "there is a 95% chance the true parameter is in this specific realized interval."
+
+once the sample is drawn, the interval is fixed. the unknown parameter is not wobbling around inside it.
+
+the right statement is procedural:
+
+<div className="math-highlight">if we repeat the sampling-and-interval-building process many times, about 95% of those intervals will cover the true parameter</div>
+
+<div className="not-prose my-8">
+  <ConfidenceIntervalSketch />
+</div>
+
+that is why the level belongs to the method, not to your emotional certainty about one dataset.
+
+---
+
+### hypothesis tests are decision rules too
+
+a test sets up a null model, chooses a statistic, and asks whether the observed value would be unusual if the null were true.
+
+the resulting p-value is not the probability that the null hypothesis is true. it is the probability, under the null model, of seeing data at least as extreme as what was observed.
+
+that sounds like a technical distinction. it is actually the whole meaning.
+
+---
+
+### why the repeated-sampling picture matters
+
+both intervals and tests are built to control long-run error behavior.
+
+- confidence procedures aim for a target coverage rate
+- tests aim for controlled false-positive rates under the null
+
+if you forget the repetition story, those procedures start sounding like they are making direct epistemic claims they were never designed to make.
+
+---
+
+### what this does not cover yet
+
+this lesson is stopping short of derivations, power, and alternative testing frameworks.
+
+the main thing to keep is the interpretation discipline: confidence intervals and tests are not mystical truth-detectors. they are procedures with long-run operating behavior.

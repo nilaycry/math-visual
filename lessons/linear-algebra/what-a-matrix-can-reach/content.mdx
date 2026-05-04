@@ -1,0 +1,99 @@
+---
+title: "what a matrix can reach"
+description: "column space, rank, and the outputs Ax can possibly hit"
+tags: ["linear algebra"]
+displayTag: "rank"
+date: "2026-04-17"
+related:
+  - slug: "null-space"
+    note: "null space is what gets erased; column space is what survives as output"
+  - slug: "eight-ways-to-say-invertible"
+    note: "invertibility needs both no erased directions and enough reachable outputs"
+---
+
+import ReachabilitySketch from '@/components/sketches/ReachabilitySketch'
+
+the null space asks which inputs get sent to zero. that is only half the story.
+
+the other half is: which outputs can the matrix actually produce?
+
+Given a matrix `A`, the set of all possible outputs `Ax` is called the column space
+of `A`. It is also called the image or range of `A`.
+
+<div className="math-highlight">Col(A) = all outputs Ax</div>
+
+The name "column space" is not decorative. Since `Ax` is a linear combination of the
+columns of `A`, the possible outputs are exactly the span of the columns.
+
+---
+
+### columns are output directions
+
+For a 2 by 2 matrix,
+
+<div className="math-highlight">Ax = x_1(col 1) + x_2(col 2)</div>
+
+The entries of `x` are the weights. The columns are the directions you are allowed to
+combine.
+
+If the two columns point in different directions, their combinations fill the plane.
+If the two columns point along the same line, their combinations only reach that line.
+No choice of `x` can escape it.
+
+That is what rank measures: the dimension of the column space.
+
+---
+
+### the sketch
+
+Move the matrix entries and the target point `b`. When the matrix is full rank, the
+whole output plane is reachable. When the columns line up, the reachable set collapses
+to a line.
+
+<div className="not-prose my-8">
+  <ReachabilitySketch />
+</div>
+
+The question `Ax = b` is now visual: is the target point `b` inside the column space?
+If yes, there is at least one solution. If no, there is no exact solution, only a
+closest point.
+
+That closest point is the projection from the previous lesson.
+
+---
+
+### rank is the size of the reachable world
+
+Rank is not just a number produced by row reduction. It is the dimension of the output
+space the matrix can actually reach.
+
+A rank 2 matrix from `R^2` to `R^2` reaches the whole plane. A rank 1 matrix reaches
+only a line. A rank 0 matrix reaches only the origin.
+
+For an `m` by `n` matrix, the rank is at most both `m` and `n`. You cannot reach more
+independent output directions than there are rows, and you cannot build more independent
+directions than there are columns to combine.
+
+---
+
+### how this pairs with null space
+
+Null space counts destroyed input directions. Column space counts surviving output
+directions.
+
+Rank-nullity says these account for the whole input:
+
+<div className="math-highlight">rank(A) + nullity(A) = number of columns of A</div>
+
+This is one of the cleanest structural facts in the subject. A matrix has a certain
+number of input dimensions to spend. Some become real output directions. The rest are
+collapsed to zero.
+
+---
+
+### what this connects to
+
+Invertibility, for square matrices, means two things happen at once: the null space is
+trivial, and the column space reaches every output. The invertible matrix theorem is
+the big compression of those equivalent ways of saying "nothing was lost, and nothing
+is missing."

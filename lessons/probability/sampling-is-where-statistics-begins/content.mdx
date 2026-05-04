@@ -1,0 +1,71 @@
+---
+title: "sampling is where statistics begins"
+description: "population, sample, statistic, and repeated sampling as the bridge into inference"
+tags: ["probability"]
+displayTag: "PART 6: SAMPLING"
+date: "2026-05-08"
+related:
+  - slug: "why-the-central-limit-theorem-keeps-showing-up"
+    note: "the central limit theorem is really a statement about repeated sampling"
+---
+
+import SamplingSketch from '@/components/sketches/SamplingSketch'
+
+probability can live comfortably without data.
+
+statistics starts the moment you stop asking about one abstract random variable and start asking what happens when you observe one sample from a larger population.
+
+---
+
+### the cast of characters
+
+the **population** is the larger process or collection you care about.
+
+the **sample** is the finite subset you actually get to see.
+
+a **statistic** is any function of the sample. the sample mean is a statistic. the sample variance is a statistic. so is the maximum, the median, or the number of values above a threshold.
+
+the shift into statistics happens because the statistic is itself random before the sample is drawn.
+
+---
+
+### one sample is not the whole story
+
+if you draw a sample of size `n`, compute its mean, and stop there, you have one number.
+
+but the deeper object is the process that could have produced many such samples. every fresh sample would lead to a slightly different statistic.
+
+<div className="not-prose my-8">
+  <SamplingSketch />
+</div>
+
+the picture worth keeping is this: the population has a shape, individual samples wobble around inside it, and the statistics built from those samples have a distribution of their own.
+
+that last object is the real plot of introductory statistics.
+
+---
+
+### why sampling variability matters
+
+if two students each collect data from the same underlying population, they should not expect identical sample means. variation across samples is not a mistake in the theory. it is the thing the theory is built to quantify.
+
+without sampling variability, there would be no need for confidence intervals, hypothesis tests, or asymptotics. one sample would already reveal the truth exactly.
+
+---
+
+### the first mental split to protect
+
+there are now two distributions on stage:
+
+- the distribution of the raw population values
+- the distribution of a statistic across repeated samples
+
+those are not the same object, and many later confusions come from swapping them without noticing.
+
+---
+
+### what this does not cover yet
+
+this lesson is not yet proving how the sample mean behaves or how its variability scales with `n`.
+
+the important thing for now is simpler: inference is not built on one dataset in isolation. it is built on the imagined repetition of the sampling process that produced it.

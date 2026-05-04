@@ -3,7 +3,7 @@ title: "row vectors are linear functions"
 description: "not vectors written sideways, something else entirely"
 tags: ["linear algebra"]
 displayTag: "connection"
-date: "2026-04-16"
+date: "2026-04-13"
 type: "connection"
 related:
   - slug: "dot-product-and-matrix-multiplication"
@@ -65,14 +65,16 @@ a point that was one unit from the origin has coordinate 1/2 in the new system.
 it shrinks in coordinate space because the basis unit grew.
 
 now take a linear function that returns 1 for a unit x-input. in the new basis,
-a one-unit input is twice as large as before, so the function needs half the coefficient
-to return the same value. its coordinate halves when the basis doubles.
+a coordinate value of 1 means twice the old input. to describe the same function in
+the new coordinate, the coefficient has to double: `2 * (new coordinate)` gives the
+old value. covector coordinates scale with the basis change, while vector coordinates
+scale against it.
 
 column vector coordinates and row vector coordinates transform in opposite directions
 under a basis change. physicists call these contravariant and covariant. the names are
 intimidating but the idea is just: when the ruler gets longer, point coordinates go
-down, and function coefficients go down too. both shrink, but for different reasons,
-and when you compose them the changes cancel, which is why the function value stays fixed.
+down and function coefficients go up. when you compose them the changes cancel, which
+is why the function value stays fixed.
 
 ---
 

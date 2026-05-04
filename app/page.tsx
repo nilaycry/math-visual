@@ -15,6 +15,7 @@ export default function HomePage() {
   const allComboNotes = getAllNotes("combinatorics");
   const all314Notes = getAllNotes("math-314");
   const allRealAnalysisNotes = getAllNotes("real-analysis");
+  const allProbabilityLessons = allLessons.filter((l) => l.tags.includes("probability"));
   const latestLesson = allLessons[allLessons.length - 1];
   const latestComboNote = allComboNotes.filter((n) => n.week >= 1).at(-1);
   const latest314Note = all314Notes.filter((n) => n.week >= 1).at(-1);
@@ -38,6 +39,16 @@ export default function HomePage() {
         "gradient descent, backpropagation, and the math that actually drives how neural networks train",
       accent: "#5DCAA5",
       count: allLessons.filter((l) => l.tags.includes("machine learning")).length,
+      unit: "lesson",
+    },
+    {
+      href: "/probability",
+      tag: "probability",
+      title: "uncertainty, before it turns procedural",
+      description:
+        "a visual companion for stat 400: random variables, sampling, and inference built from the pictures first",
+      accent: "#E8A020",
+      count: allProbabilityLessons.length,
       unit: "lesson",
     },
   ];
@@ -404,7 +415,7 @@ export default function HomePage() {
             </div>
             <div
               className="subjects-grid"
-              style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}
+              style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 16 }}
             >
               {lessons.map((subject) => (
                 <Link key={subject.href} href={subject.href} style={{ textDecoration: "none", color: "inherit" }}>
