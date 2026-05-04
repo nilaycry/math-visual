@@ -23,6 +23,13 @@ Do not guess the pattern. Copy the nearest existing page, lesson, note, or compo
 
 Use `npm run dev:clean` when the dev server reports missing generated chunks from `.next`.
 
+## Publishing rule
+
+When the user asks to commit and push changes, check the resulting Vercel build/deployment
+with the Vercel plugin after pushing. If the build fails, inspect the Vercel logs, fix the
+problem, commit the fix, push again, and repeat until the Vercel build succeeds. If Vercel
+access is unavailable, say that explicitly instead of treating the push as fully verified.
+
 ## Technical defaults
 
 - Prefer server components unless a file needs browser state, effects, event handlers, or p5.
