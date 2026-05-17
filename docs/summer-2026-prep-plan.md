@@ -16,8 +16,8 @@ Current source PDFs:
 - `C:\dev\notebook\sources\416 springer.pdf`
 
 The Math 314 textbook is the course-shaped roadmap. The Math 314 reference is
-the deeper proof-method backup. The 416 text is Axler's *Linear Algebra Done
-Right*, which should drive the abstract linear algebra sequence.
+the deeper proof-method backup. The 416 textbook should drive the abstract
+linear algebra sequence.
 
 ## the basic loop
 
@@ -123,7 +123,7 @@ Site queue:
 
 Work to do:
 
-- revise problem sets after doing Axler exercises
+- revise problem sets after doing textbook exercises
 - add more "find the false proof" problems
 - add one checkpoint problem set after `rank-nullity`
 - make sure every note has at least one exercise that forces the exact definition
@@ -165,7 +165,7 @@ What has to be solid:
 - diagonalization as choosing a basis where the operator becomes simple
 
 Do not rush this phase. It is better to understand chapters 1 to 3 deeply than
-to skim all of Axler.
+to skim the whole textbook.
 
 ## phase 4: optional preview
 
@@ -192,7 +192,7 @@ visual intuition sequence.
 Use one notebook per source.
 
 - `Math 314 scratch`
-- `Math 416 Axler scratch`
+- `Math 416 scratch`
 - `Problem attempts`
 - `Questions to resolve`
 

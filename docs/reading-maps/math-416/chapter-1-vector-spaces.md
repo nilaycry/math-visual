@@ -1,7 +1,6 @@
 # chapter 1 reading map: vector spaces
 
-Source: `C:\dev\notebook\sources\416 springer.pdf`, Chapter 1 of Axler's
-*Linear Algebra Done Right*.
+Source: `C:\dev\notebook\sources\416 springer.pdf`, Chapter 1.
 
 Use this while reading the chapter once. It is a map of what matters, not a
 replacement for the text. The point of the first read is to make the objects feel
@@ -44,7 +43,7 @@ Important objects:
 - coordinatewise addition
 - scalar multiplication
 
-Do not get stuck trying to visualize high-dimensional spaces. Axler's point is
+Do not get stuck trying to visualize high-dimensional spaces. The point is
 that the algebra still works even when the picture disappears.
 
 ### 1B: definition of vector space
@@ -424,7 +423,7 @@ on whether complex scalar multiplication stays inside the set.
 
 ### trap 3: confusing the scalar zero and vector zero
 
-Axler uses `0` for both. Context decides which one is meant.
+The text uses `0` for both. Context decides which one is meant.
 
 When stuck, ask: is this object supposed to be in `F` or in `V`?
 

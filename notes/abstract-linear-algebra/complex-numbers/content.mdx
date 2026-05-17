@@ -1,12 +1,12 @@
 ---
 title: "complex numbers"
-description: "why Axler starts with C, and what structure it adds to R^2"
+description: "why C appears before vector spaces, and what structure it adds to R^2"
 week: 0.75
 ---
 
-Axler starts with complex numbers because the scalars in this course are not always real
-numbers. Sometimes the scalars are complex numbers, and that changes which vector spaces
-and linear maps behave cleanly.
+Complex numbers appear before vector spaces because the scalars in this course are not
+always real numbers. Sometimes the scalars are complex numbers, and that changes which
+vector spaces and linear maps behave cleanly.
 
 The first thing to get straight is this: as a set, $\mathbb{C}$ is basically $\mathbb{R}^2$.
 A complex number is an ordered pair of real numbers, but written in a way that remembers
@@ -29,7 +29,7 @@ The new thing is multiplication.
 
 ### the definition
 
-Axler defines addition and multiplication in $\mathbb{C}$ by
+The textbook defines addition and multiplication in $\mathbb{C}$ by
 
 $$
 (a + bi) + (c + di) = (a + c) + (b + d)i
@@ -98,11 +98,11 @@ $$
 
 These are equal because multiplication and addition in $\mathbb{R}$ are commutative.
 
-That proof is a template. When Axler lists the properties of complex arithmetic, the point
+That proof is a template. When the textbook lists the properties of complex arithmetic, the point
 is not that they are mysterious new facts. The point is that the definitions of complex
 addition and multiplication were engineered so the familiar real-number rules survive.
 
-The properties Axler records are:
+The properties recorded are:
 
 - commutativity of addition and multiplication
 - associativity of addition and multiplication
@@ -143,7 +143,7 @@ $$
 (a + bi)(a - bi) = a^2 + b^2.
 $$
 
-The number $a - bi$ is called the complex conjugate of $a + bi$. Axler has not made
+The number $a - bi$ is called the complex conjugate of $a + bi$. The textbook has not made
 conjugation a major object yet, but this inverse formula is already using it.
 
 This is the main proof burden for saying $\mathbb{C}$ is a field: every nonzero complex
@@ -153,7 +153,7 @@ number has a multiplicative inverse.
 
 ### subtraction and division are defined from inverses
 
-Axler is careful about this.
+The textbook is careful about this.
 
 Subtraction is not a new primitive operation. It is addition of the additive inverse:
 
@@ -176,12 +176,12 @@ Subtraction and division come afterward.
 
 ### the notation F
 
-Throughout Axler, $\mathbb{F}$ means either $\mathbb{R}$ or $\mathbb{C}$.
+Throughout the text, $\mathbb{F}$ means either $\mathbb{R}$ or $\mathbb{C}$.
 
 Elements of $\mathbb{F}$ are called scalars.
 
 That convention lets one theorem cover both real and complex vector spaces. If a proof only
-uses the shared field properties of $\mathbb{R}$ and $\mathbb{C}$, Axler can state it over
+uses the shared field properties of $\mathbb{R}$ and $\mathbb{C}$, the result can be stated over
 $\mathbb{F}$ and avoid proving it twice.
 
 When the difference matters, the text will say so. Later, many spectral results behave more
@@ -205,5 +205,4 @@ The takeaway is:
 - $\mathbb{F}$ means "use either $\mathbb{R}$ or $\mathbb{C}$ as the scalars"
 
 The next definition, vector space, depends on this setup. Before asking what a vector is,
-Axler first fixes what kind of numbers are allowed to scale it.
-
+the text first fixes what kind of numbers are allowed to scale it.
