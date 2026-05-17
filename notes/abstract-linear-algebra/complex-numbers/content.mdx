@@ -75,8 +75,20 @@ vector space.
 
 ### properties inherited from R
 
-The basic algebraic properties of $\mathbb{C}$ come from the corresponding properties of
-$\mathbb{R}$.
+After defining addition and multiplication, the textbook records a list of properties of
+complex arithmetic. These are not extra definitions. They are theorems about the operations
+we just defined.
+
+The reason they are true is that the operations on $\mathbb{C}$ were built out of the
+operations on $\mathbb{R}$. In that sense, the algebraic properties of $\mathbb{C}$ are
+inherited from the corresponding properties of $\mathbb{R}$.
+
+> **Theorem.** Complex addition and multiplication are commutative and associative,
+> have identities and inverses in the expected places, and multiplication distributes over
+> addition.
+
+This theorem is really several smaller theorems bundled together. Each one has to be
+proved from the definitions of complex addition and multiplication.
 
 For example, to prove multiplication is commutative, write
 
@@ -98,11 +110,12 @@ $$
 
 These are equal because multiplication and addition in $\mathbb{R}$ are commutative.
 
-That proof is a template. When the textbook lists the properties of complex arithmetic, the point
-is not that they are mysterious new facts. The point is that the definitions of complex
-addition and multiplication were engineered so the familiar real-number rules survive.
+That proof is a template. You expand both sides using the definition in $\mathbb{C}$, then
+reduce the claim to a fact already known in $\mathbb{R}$. For associativity, the bookkeeping
+is longer, but the logic is the same: expand, regroup real terms using associativity and
+distributivity in $\mathbb{R}$, then compare real and imaginary parts.
 
-The properties recorded are:
+The theorem includes:
 
 - commutativity of addition and multiplication
 - associativity of addition and multiplication
@@ -112,7 +125,8 @@ The properties recorded are:
 - distributivity
 
 Those are exactly the kinds of properties a scalar system needs before it can act on vector
-spaces.
+spaces. Later, when $\mathbb{C}$ is allowed to be the scalar field, all of these properties
+are already available as proved facts, not assumptions being made again.
 
 ---
 
