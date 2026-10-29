@@ -172,6 +172,29 @@ export default function AbstractAlgebraPage() {
           </div>
         </section>
 
+        {/* ── COURSE MAP ── */}
+        <div
+          className="aa-content"
+          style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px 56px" }}
+        >
+          <Link href="/abstract-linear-algebra/idea-tree" style={{ textDecoration: "none", color: "inherit", display: "block", maxWidth: 560 }}>
+            <div
+              className="aa-companion-card"
+              style={{ border: `1px solid ${BORDER}`, borderRadius: 8, padding: "18px 20px", cursor: "pointer" }}
+            >
+              <span style={{ fontSize: 11, color: ACCENT, textTransform: "uppercase", letterSpacing: "0.14em", display: "block", marginBottom: 8 }}>
+                course map
+              </span>
+              <span style={{ fontSize: 14, fontWeight: 400, color: FG, display: "block", marginBottom: 6 }}>
+                the course as a tree →
+              </span>
+              <span style={{ fontSize: 12, color: FAINT, lineHeight: 1.6 }}>
+                one sentence, five questions, and the places where different branches turn out to be the same idea.
+              </span>
+            </div>
+          </Link>
+        </div>
+
         {/* ── COMPANIONS ── */}
         {companions.length > 0 && (
           <div

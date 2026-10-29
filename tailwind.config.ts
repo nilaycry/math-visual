@@ -7,9 +7,18 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  // idea tree unit colors are picked from data at runtime, so keep them in the build
+  safelist: [{ pattern: /^(bg|text)-it-u[1-5]$/ }],
   theme: {
     extend: {
       colors: {
+        // idea tree (app/abstract-linear-algebra/idea-tree), values live in components/idea-tree/idea-tree.css
+        it: Object.fromEntries(
+          ["bg", "surface", "fg", "muted", "line", "soft", "accent", "accentsoft", "u1", "u2", "u3", "u4", "u5"].map((k) => [
+            k,
+            `rgb(var(--it-${k}) / <alpha-value>)`,
+          ])
+        ),
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: "hsl(var(--card))",

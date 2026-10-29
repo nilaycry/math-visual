@@ -1,0 +1,71 @@
+/* idea tree palette: the cream notebook look of the abstract linear algebra notes */
+.it-root {
+  --it-bg: 247 244 239;
+  --it-surface: 255 253 249;
+  --it-fg: 28 25 23;
+  --it-muted: 120 113 108;
+  --it-line: 214 209 201;
+  --it-soft: 236 232 225;
+  --it-accent: 109 79 194;
+  --it-accentsoft: 236 230 249;
+  --it-u1: 107 101 96;
+  --it-u2: 47 125 109;
+  --it-u3: 61 90 158;
+  --it-u4: 176 112 30;
+  --it-u5: 168 69 107;
+  background: rgb(var(--it-bg));
+  color: rgb(var(--it-fg));
+  color-scheme: light;
+}
+
+/* graph paper behind the tree */
+.it-paper {
+  background-color: rgb(var(--it-surface));
+  background-image: linear-gradient(rgb(var(--it-soft)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--it-soft)) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* bridges draw themselves in when a set is picked */
+.it-bridge {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: it-draw 0.7s ease-out forwards;
+}
+@keyframes it-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .it-bridge {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* outline connectors on narrow screens */
+.it-branch > .it-twig {
+  position: relative;
+  padding-left: 16px;
+}
+.it-branch > .it-twig::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -8px;
+  bottom: 0;
+  border-left: 1.5px solid rgb(var(--it-line));
+}
+.it-branch > .it-twig:last-child::before {
+  bottom: auto;
+  height: 30px;
+}
+.it-branch > .it-twig::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22px;
+  width: 12px;
+  border-top: 1.5px solid rgb(var(--it-line));
+}
